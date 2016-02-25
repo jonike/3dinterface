@@ -18,7 +18,7 @@ try {
 webpack({
     entry: path.join(__dirname, 'src/l3dp.ts'),
     output: {
-        filename: path.join(__dirname, './build/l3dp.js'),
+        filename: path.join(__dirname, './lib/l3dp.js'),
         libraryTarget: 'commonjs'
     },
     target: 'node',

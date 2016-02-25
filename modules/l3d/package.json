@@ -8,6 +8,6 @@
     "three": "^0.71.0",
     "mth":"file:../mth"
   },
-  "main": "./build/l3d.js",
-  "typings": "./build/src/l3d.d.ts"
+  "main": "./lib/l3d.js",
+  "typings": "./lib/src/l3d.d.ts"
 }

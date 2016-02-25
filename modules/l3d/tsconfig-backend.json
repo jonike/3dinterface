@@ -3,7 +3,7 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "outDir":"./build",
+        "outDir":"./lib",
         "sourceMap": true,
         "declaration":true,
         "rootDir":"./",
@@ -11,7 +11,7 @@
     },
     "exclude":[
         "node_modules",
-        "build",
+        "lib",
         "typings/typings/browser",
         "typings/typings/browser.d.ts"
     ],

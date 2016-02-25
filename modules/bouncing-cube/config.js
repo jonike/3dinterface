@@ -4,7 +4,7 @@ var path = require('path');
 webpack({
     entry: path.join(__dirname, 'src/main.ts'),
     output: {
-        filename: path.join(__dirname, '../server/build/static/js/bouncing.min.js'),
+        filename: path.join(__dirname, '../server/lib/static/js/bouncing.min.js'),
     },
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']

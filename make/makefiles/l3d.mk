@@ -1,4 +1,4 @@
-L3D_DEPENDENCY=$(MODULES)/l3d/build/.dirstamp
+L3D_DEPENDENCY=$(MODULES)/l3d/lib/.dirstamp
 l3d: $(L3D_DEPENDENCY)
 
 $(MODULES)/l3d/typings: $(MODULES)/l3d/typings/typings/.dirstamp $(MODULES)/l3d/typings/custom/.dirstamp
@@ -19,7 +19,7 @@ $(MODULES)/l3d/node_modules/.dirstamp: $(MODULES)/l3d/package.json $(MTH_COMMONJ
 	@$(CD) $(MODULES)/l3d/ && $(NPM_UNINSTALL) mth && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/l3d/build/.dirstamp: $(call FIND,$(MODULES)/l3d/src/,*) $(MODULES)/l3d/node_modules/.dirstamp $(MODULES)/l3d/tsconfig-backend.json $(MODULES)/l3d/backend.config.js $(MODULES)/l3d/typings/typings/.dirstamp $(MODULES)/l3d/typings/custom/.dirstamp
+$(MODULES)/l3d/lib/.dirstamp: $(call FIND,$(MODULES)/l3d/src/,*) $(MODULES)/l3d/node_modules/.dirstamp $(MODULES)/l3d/tsconfig-backend.json $(MODULES)/l3d/backend.config.js $(MODULES)/l3d/typings/typings/.dirstamp $(MODULES)/l3d/typings/custom/.dirstamp
 	@$(call LOG_BUILDING,l3d)
 	@$(NODE) $(MODULES)/l3d/backend.config.js
 	@$(TOUCH_DIRSTAMP)
@@ -27,9 +27,9 @@ $(MODULES)/l3d/build/.dirstamp: $(call FIND,$(MODULES)/l3d/src/,*) $(MODULES)/l3
 
 clean-l3d:
 	@$(RMRF) \
-		$(MODULES)/l3d/build \
+		$(MODULES)/l3d/lib \
 		$(MODULES)/l3d/node_modules \
 		$(MODULES)/l3d/typings/typings \
 		$(MODULES)/l3d/typings/custom \
-		$(MODULES)/server/build/static/js/l3d.js \
-		$(MODULES)/server/build/static/js/l3d.js.map
+		$(MODULES)/server/lib/static/js/l3d.js \
+		$(MODULES)/server/lib/static/js/l3d.js.map

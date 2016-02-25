@@ -1,6 +1,6 @@
 {
   "name": "config",
   "version": "1.0.0",
-  "main":"./build/config.js",
-  "typings":"./build/config.d.ts"
+  "main":"./lib/config.js",
+  "typings":"./lib/config.d.ts"
 }

@@ -9,7 +9,7 @@
     },
     "exclude":[
         "node_modules",
-        "build",
+        "lib",
         "typings/typings/browser",
         "typings/typings/browser.d.ts"
     ],

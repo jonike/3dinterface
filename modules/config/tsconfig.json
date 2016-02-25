@@ -4,10 +4,10 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "declaration":true,
-        "outDir":"./build/",
+        "outDir":"./lib/",
         "sourceMap": true,
         "rootDir":"./",
         "noEmitOnError":true
     },
-    "exclude":["build", "typings/browser", "typings/browser.d.ts"]
+    "exclude":["lib", "typings/browser", "typings/browser.d.ts"]
 }

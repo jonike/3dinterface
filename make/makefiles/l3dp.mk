@@ -1,4 +1,4 @@
-L3DP_DEPENDENCY=$(MODULES)/l3dp/build/.dirstamp
+L3DP_DEPENDENCY=$(MODULES)/l3dp/lib/.dirstamp
 l3dp: $(L3DP_DEPENDENCY)
 
 $(MODULES)/l3dp/typings: $(MODULES)/l3dp/typings/typings/.dirstamp $(MODULES)/l3dp/typings/custom/.dirstamp
@@ -19,7 +19,7 @@ $(MODULES)/l3dp/node_modules/.dirstamp: $(MODULES)/l3dp/package.json $(L3D_DEPEN
 	@$(CD) $(MODULES)/l3dp/ && $(NPM_UNINSTALL) config l3d mth && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/l3dp/build/.dirstamp: $(call FIND,$(MODULES)/l3dp/src/,*) $(MODULES)/l3dp/node_modules/.dirstamp $(MODULES)/l3dp/tsconfig-backend.json $(MODULES)/l3dp/backend.config.js $(MODULES)/l3dp/typings
+$(MODULES)/l3dp/lib/.dirstamp: $(call FIND,$(MODULES)/l3dp/src/,*) $(MODULES)/l3dp/node_modules/.dirstamp $(MODULES)/l3dp/tsconfig-backend.json $(MODULES)/l3dp/backend.config.js $(MODULES)/l3dp/typings
 	@$(call LOG_BUILDING,l3dp)
 	@$(NODE) $(MODULES)/l3dp/backend.config.js
 	@$(TOUCH_DIRSTAMP)
@@ -27,9 +27,9 @@ $(MODULES)/l3dp/build/.dirstamp: $(call FIND,$(MODULES)/l3dp/src/,*) $(MODULES)/
 
 clean-l3dp:
 	@$(RMRF) \
-		$(MODULES)/l3dp/build \
+		$(MODULES)/l3dp/lib \
 		$(MODULES)/l3dp/node_modules \
 		$(MODULES)/l3dp/typings/typings \
 		$(MODULES)/l3dp/typings/custom \
-		$(MODULES)/server/build/static/js/l3dp.js \
-		$(MODULES)/server/build/static/js/l3dp.js.map
+		$(MODULES)/server/lib/static/js/l3dp.js \
+		$(MODULES)/server/lib/static/js/l3dp.js.map

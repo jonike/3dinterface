@@ -1,7 +1,7 @@
-CONFIG_DEPENDENCY=$(MODULES)/config/build/.dirstamp
+CONFIG_DEPENDENCY=$(MODULES)/config/lib/.dirstamp
 config: $(CONFIG_DEPENDENCY)
 
-$(MODULES)/config/build/.dirstamp:  $(MODULES)/config/config.ts $(MODULES)/config/package.json $(MODULES)/config/tsconfig.json
+$(MODULES)/config/lib/.dirstamp:  $(MODULES)/config/config.ts $(MODULES)/config/package.json $(MODULES)/config/tsconfig.json
 	@$(call LOG_BUILDING,config)
 	@$(CD) $(MODULES)/config/ && $(TSC)
 	@$(TOUCH_DIRSTAMP)
@@ -9,6 +9,6 @@ $(MODULES)/config/build/.dirstamp:  $(MODULES)/config/config.ts $(MODULES)/confi
 
 clean-config:
 	@$(RMRF) \
-		$(MODULES)/config/build \
-		$(MODULES)/server/build/static/js/config.js \
-		$(MODULES)/server/build/static/js/config.js.map
+		$(MODULES)/config/lib \
+		$(MODULES)/server/lib/static/js/config.js \
+		$(MODULES)/server/lib/static/js/config.js.map
