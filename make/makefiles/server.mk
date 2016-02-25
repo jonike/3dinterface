@@ -1,72 +1,72 @@
-src/server/typings: src/server/typings/typings/.dirstamp src/server/typings/custom/.dirstamp
+$(MODULES)/server/typings: $(MODULES)/server/typings/typings/.dirstamp $(MODULES)/server/typings/custom/.dirstamp
 
-src/server/typings/typings/.dirstamp: src/server/typings/typings.json
+$(MODULES)/server/typings/typings/.dirstamp: $(MODULES)/server/typings/typings.json
 	@$(call LOG_TYPINGS,server)
-	@$(CD) src/server/typings && $(TYPINGS) install
+	@$(CD) $(MODULES)/server/typings && $(TYPINGS) install
 	@$(TOUCH_DIRSTAMP)
 
-src/server/typings/custom/.dirstamp: ./custom_typings/*
+$(MODULES)/server/typings/custom/.dirstamp: ./custom_typings/*
 	@$(call LOG_CUSTOM,server)
-	@$(MKDIRP) src/server/typings/custom/
-	@$(MERGE) custom_typings src/server/typings/custom
+	@$(MKDIRP) $(MODULES)/server/typings/custom/
+	@$(MERGE) custom_typings $(MODULES)/server/typings/custom
 	@$(TOUCH_DIRSTAMP)
 
-src/server/node_modules/.dirstamp: src/server/package.json $(L3D_DEPENDENCY) $(L3DP_DEPENDENCY) $(CONFIG_DEPENDENCY) $(MTH_DEPENDENCY)
+$(MODULES)/server/node_modules/.dirstamp: $(MODULES)/server/package.json $(L3D_DEPENDENCY) $(L3DP_DEPENDENCY) $(CONFIG_DEPENDENCY) $(MTH_DEPENDENCY)
 	@$(call LOG_DEPENDENCIES,server)
-	@$(CD) src/server/ && $(NPM_UNINSTALL) l3d l3dp config mth && $(NPM_INSTALL)
+	@$(CD) $(MODULES)/server/ && $(NPM_UNINSTALL) l3d l3dp config mth && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-src/server/build/.dirstamp: $(call FIND,src/server/src/,*.ts) $(call FIND,src/server/src,*.jade) src/server/node_modules/.dirstamp src/server/typings
+$(MODULES)/server/build/.dirstamp: $(call FIND,$(MODULES)/server/src/,*.ts) $(call FIND,$(MODULES)/server/src,*.jade) $(MODULES)/server/node_modules/.dirstamp $(MODULES)/server/typings
 	@$(call LOG_BUILDING,server)
-	@$(CD) src/server/ && $(TSC)
+	@$(CD) $(MODULES)/server/ && $(TSC)
 	@$(TOUCH_DIRSTAMP)
 	@$(call LOG_BUILT,server)
 
-src/server/build/views/.dirstamp: src/server/src/views/*
+$(MODULES)/server/build/views/.dirstamp: $(MODULES)/server/src/views/*
 	@$(ECHO) $(STYLE_PREPARE)Installing views of "server"$(COLOR_DEFAULT)
-	@$(MKDIRP) src/server/build/views/
-	@$(MERGE) src/server/src/views src/server/build/views
+	@$(MKDIRP) $(MODULES)/server/build/views/
+	@$(MERGE) $(MODULES)/server/src/views $(MODULES)/server/build/views
 	@$(TOUCH_DIRSTAMP)
 
-src/server/build/static/.dirstamp: static/*
+$(MODULES)/server/build/static/.dirstamp: static/*
 	@$(ECHO) $(STYLE_PREPARE)Installing static files of "server"$(COLOR_DEFAULT)
-	@$(MKDIRP) src/server/build/static/
-	@$(MERGE) static/ src/server/build/static/
+	@$(MKDIRP) $(MODULES)/server/build/static/
+	@$(MERGE) static/ $(MODULES)/server/build/static/
 	@$(TOUCH_DIRSTAMP)
 
-src/server/build/controllers/%/views: src/server/src/controllers/%/views
+$(MODULES)/server/build/controllers/%/views: $(MODULES)/server/src/controllers/%/views
 	@$(MKDIRP) $@
 	@$(MERGE) $< $@
 	@$(TOUCH_DIRSTAMP)
 
-SRC_VIEWS=$(wildcard src/server/src/controllers/*/views)
-OBJ_VIEWS=$(subst src/controllers/,build/controllers/,$(SRC_VIEWS))
+SRC_VIEWS=$(wildcard $(MODULES)/server/src/controllers/*/views)
+OBJ_VIEWS=$(subst $(MODULES)/controllers/,build/controllers/,$(SRC_VIEWS))
 
 views: $(OBJ_VIEWS)
 
-src/server/build/static/js/l3d.js: ./src/l3d/build/.dirstamp src/l3d/frontend.config.js
-	@$(CD) src/l3d/ && $(NODE) frontend.config.js
+$(MODULES)/server/build/static/js/l3d.js: ./$(MODULES)/l3d/build/.dirstamp $(MODULES)/l3d/frontend.config.js
+	@$(CD) $(MODULES)/l3d/ && $(NODE) frontend.config.js
 
-src/server/build/static/js/l3dp.js: ./src/l3dp/build/.dirstamp src/l3dp/frontend.config.js
-	@$(CD) src/l3dp/ && $(NODE) frontend.config.js
+$(MODULES)/server/build/static/js/l3dp.js: ./$(MODULES)/l3dp/build/.dirstamp $(MODULES)/l3dp/frontend.config.js
+	@$(CD) $(MODULES)/l3dp/ && $(NODE) frontend.config.js
 
-src/server/build/static/js/config.js: ./src/config/build/.dirstamp src/config/config.js
-	@$(CD) src/config/ && $(NODE) config.js
+$(MODULES)/server/build/static/js/config.js: ./$(MODULES)/config/build/.dirstamp $(MODULES)/config/config.js
+	@$(CD) $(MODULES)/config/ && $(NODE) config.js
 
-src/server/build/static/js/mth.js: ./src/mth/build/.dirstamp src/mth/config.js
-	@$(CD) src/mth/ && $(NODE) config.js
+$(MODULES)/server/build/static/js/mth.js: ./$(MODULES)/mth/build/.dirstamp $(MODULES)/mth/config.js
+	@$(CD) $(MODULES)/mth/ && $(NODE) config.js
 
-server: src/server/build/.dirstamp src/server/build/views/.dirstamp src/server/build/static/.dirstamp $(OBJ_VIEWS) src/server/build/static/js/l3d.js src/server/build/static/js/l3dp.js src/server/build/static/js/config.js src/server/build/static/js/mth.js src/server/build/static/js/demo.js
+server: $(MODULES)/server/build/.dirstamp $(MODULES)/server/build/views/.dirstamp $(MODULES)/server/build/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/build/static/js/l3d.js $(MODULES)/server/build/static/js/l3dp.js $(MODULES)/server/build/static/js/config.js $(MODULES)/server/build/static/js/mth.js $(MODULES)/server/build/static/js/demo.js
 
 test-server: server
-	@$(CD) src/server/build/ && $(NODE) server.js --nolisten
+	@$(CD) $(MODULES)/server/build/ && $(NODE) server.js --nolisten
 
 run-server: server
-	@$(CD) src/server/build && $(NODE) server.js
+	@$(CD) $(MODULES)/server/build && $(NODE) server.js
 
 clean-server:
 	@$(RMRF) \
-		src/server/node_modules \
-		src/server/typings/typings \
-		src/server/typings/custom \
-		src/server/build
+		$(MODULES)/server/node_modules \
+		$(MODULES)/server/typings/typings \
+		$(MODULES)/server/typings/custom \
+		$(MODULES)/server/build

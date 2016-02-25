@@ -1,29 +1,29 @@
-MTH_COMMONJS_DEPENDENCY=src/mth/build/.dirstamp
+MTH_COMMONJS_DEPENDENCY=$(MODULES)/mth/build/.dirstamp
 mth: $(MTH_COMMONJS_DEPENDENCY)
 
-src/mth/typings/.dirstamp: src/mth/typings.json
+$(MODULES)/mth/typings/.dirstamp: $(MODULES)/mth/typings.json
 	@$(call LOG_TYPINGS,mth)
-	@$(CD) src/mth/ && $(TYPINGS) install
+	@$(CD) $(MODULES)/mth/ && $(TYPINGS) install
 	@$(TOUCH_DIRSTAMP)
 
-src/mth/node_modules/.dirstamp: src/mth/package.json
+$(MODULES)/mth/node_modules/.dirstamp: $(MODULES)/mth/package.json
 	@$(call LOG_DEPENDENCIES,mth)
-	@$(CD) src/mth/ && $(NPM_INSTALL)
+	@$(CD) $(MODULES)/mth/ && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-src/mth/build/.dirstamp: $(call FIND,src/mth/src/,*.ts) src/mth/package.json src/mth/tsconfig.json src/mth/typings/.dirstamp src/mth/node_modules/.dirstamp
+$(MODULES)/mth/build/.dirstamp: $(call FIND,$(MODULES)/mth/src/,*.ts) $(MODULES)/mth/package.json $(MODULES)/mth/tsconfig.json $(MODULES)/mth/typings/.dirstamp $(MODULES)/mth/node_modules/.dirstamp
 	@$(call LOG_BUILDING,mth)
-	@$(CD) src/mth/ && $(TSC)
+	@$(CD) $(MODULES)/mth/ && $(TSC)
 	@$(TOUCH_DIRSTAMP)
 	@$(call LOG_BUILT,mth)
 
 test-mth: $(MTH_COMMONJS_DEPENDENCY)
-	@$(NODEUNIT) src/mth/build/src/tests/main.js
+	@$(NODEUNIT) $(MODULES)/mth/build/$(MODULES)/tests/main.js
 
 clean-mth:
 	@$(RMRF) \
-		src/mth/typings \
-		src/mth/build \
-		src/mth/node_modules \
-		src/server/build/static/js/mth.js \
-		src/server/build/static/js/mth.js.map
+		$(MODULES)/mth/typings \
+		$(MODULES)/mth/build \
+		$(MODULES)/mth/node_modules \
+		$(MODULES)/server/build/static/js/mth.js \
+		$(MODULES)/server/build/static/js/mth.js.map
