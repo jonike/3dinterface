@@ -56,7 +56,12 @@ $(MODULES)/server/lib/static/js/config.js: ./$(MODULES)/config/lib/.dirstamp $(M
 $(MODULES)/server/lib/static/js/mth.js: ./$(MODULES)/mth/lib/.dirstamp $(MODULES)/mth/config.js
 	@$(CD) $(MODULES)/mth/ && $(NODE) config.js
 
-server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js
+$(MODULES)/server/lib/generated/.dirstamp:
+	@$(MKDIRP) $(MODULES)/server/lib/generated/
+	@$(MERGE) generated $(MODULES)/server/lib/generated/
+	@$(TOUCH_DIRSTAMP)
+
+server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/generated/.dirstamp
 
 test-server: server
 	@$(CD) $(MODULES)/server/lib/ && $(NODE) server.js --nolisten

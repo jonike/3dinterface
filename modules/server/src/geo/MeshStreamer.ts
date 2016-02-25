@@ -18,9 +18,9 @@ module geo {
     function readIt(sceneNumber : number, recoId : number) : {index : number, area : number}[] {
         var toZip = {
             triangles :
-                JSON.parse(fs.readFileSync('./geo/generated/scene' + sceneNumber + '/triangles' + recoId + '.json', 'utf-8')),
+                JSON.parse(fs.readFileSync('./generated/scene-info/scene' + sceneNumber + '/triangles' + recoId + '.json', 'utf-8')),
             areas :
-                JSON.parse(fs.readFileSync('./geo/generated/scene' + sceneNumber + '/areas' + recoId + '.json', 'utf-8'))
+                JSON.parse(fs.readFileSync('./generated/scene-info/scene' + sceneNumber + '/areas' + recoId + '.json', 'utf-8'))
         };
 
         var ret : {index: number, area: number}[] = [];
@@ -51,9 +51,9 @@ module geo {
     try
     {
         var predictionTables = [
-            JSON.parse(fs.readFileSync('./geo/mat1.json', 'utf-8')),
-            JSON.parse(fs.readFileSync('./geo/mat2.json', 'utf-8')),
-            JSON.parse(fs.readFileSync('./geo/mat3.json', 'utf-8')),
+            JSON.parse(fs.readFileSync('./generated/prefetch-info/mat1.json', 'utf-8')),
+            JSON.parse(fs.readFileSync('./generated/prefetch-info/mat2.json', 'utf-8')),
+            JSON.parse(fs.readFileSync('./generated/prefetch-info/mat3.json', 'utf-8')),
             [[1,1],
                 [1,2]]
         ];
