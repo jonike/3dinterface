@@ -18,7 +18,7 @@ $(MODULES)/mth/lib/.dirstamp: $(call FIND,$(MODULES)/mth/src/,*.ts) $(MODULES)/m
 	@$(call LOG_BUILT,mth)
 
 test-mth: $(MTH_COMMONJS_DEPENDENCY)
-	@$(NODEUNIT) $(MODULES)/mth/lib/$(MODULES)/tests/main.js
+	@$(NODEUNIT) $(MODULES)/mth/lib/src/tests/main.js
 
 clean-mth:
 	@$(RMRF) \
