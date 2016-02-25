@@ -1,3 +1,4 @@
+import * as config from 'config';
 import * as THREE from 'three';
 import * as mth from 'mth';
 
@@ -35,7 +36,7 @@ module l3d {
         /**
          * Default prefetching policy
          */
-        prefetchType : string;
+        prefetchType : config.PrefetchingPolicy;
 
         /**
          * Array for recommendations
@@ -55,7 +56,7 @@ module l3d {
             this.clickableObjects = [];
             this.camera = null;
             this.loader = null;
-            this.prefetchType = 'NV-PN';
+            this.prefetchType = config.PrefetchingPolicy.NV_PN;
             this.recommendations = [];
             this.onLoad = [];
 
@@ -89,7 +90,7 @@ module l3d {
          * Loads the models from the scene
          * @param prefetch prefetching policy
          */
-        load(prefetch : string) {
+        load(prefetch : config.PrefetchingPolicy, lowRes : boolean) {
 
             // Nothing to load for an empty scene
 

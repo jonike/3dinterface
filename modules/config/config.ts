@@ -34,6 +34,13 @@ module config {
 
     }
 
+    export enum PrefetchingPolicy {
+        NV_PN,
+        V_PP,
+        V_PD,
+        V_PP_PD
+    }
+
     export interface ExpConfig {
 
         scene : Scene;
@@ -41,6 +48,13 @@ module config {
         coinConfig ?: CoinConfig;
 
         recommendationStyle : RecommendationStyle;
+
+    }
+
+    export interface LoadingConfig {
+
+        prefetchingPolicy : PrefetchingPolicy;
+        lowRes ?: boolean;
 
     }
 

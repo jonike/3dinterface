@@ -1,3 +1,5 @@
+import * as config from 'config';
+
 import { MeshStreamer } from '../MeshStreamer';
 import { ConfigGenerator } from './ConfigGenerator';
 import { NV_PN_Generator } from './NV_PN';
@@ -17,13 +19,13 @@ module geo {
          * @param streamer Reference to the mesh streamer
          * @return An instance of one of the subclasses of {@link ConfigGenerator}
          */
-        static createConfigFromString(prefetchingPolicy : string, streamer : MeshStreamer) : ConfigGenerator {
+        static createConfigFromPolicy(prefetchingPolicy : config.PrefetchingPolicy, streamer : MeshStreamer) : ConfigGenerator {
 
             switch (prefetchingPolicy) {
-                case 'NV-PN'  : return new NV_PN_Generator(streamer);
-                case 'V-PD'   : return new V_PD_Generator(streamer);
-                case 'V-PP'   : return new V_PP_Generator(streamer);
-                case 'V-PP-PD': return new V_PP_PD_Generator(streamer);
+                case config.PrefetchingPolicy.NV_PN  : return new NV_PN_Generator(streamer);
+                case config.PrefetchingPolicy.V_PD   : return new V_PD_Generator(streamer);
+                case config.PrefetchingPolicy.V_PP   : return new V_PP_Generator(streamer);
+                case config.PrefetchingPolicy.V_PP_PD: return new V_PP_PD_Generator(streamer);
                 default:
                     log.warning('Warning : prefetch type not recognized, using default');
                     return new ConfigGenerator(streamer);
@@ -34,7 +36,7 @@ module geo {
 
     }
 
-    export var createConfigFromString = Dummy.createConfigFromString;
+    export var createConfigFromPolicy = Dummy.createConfigFromPolicy;
 
 }
 

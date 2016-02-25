@@ -6,6 +6,7 @@ import * as Config from 'config';
 declare var Stats : any;
 
 declare var CONFIG : Config.ExpConfig;
+declare var LOADING_CONFIG : Config.LoadingConfig;
 
 $(function() {
 
@@ -83,7 +84,7 @@ $(function() {
         // Initialize scene
 
         scene = l3dp.createSceneFromConfig(CONFIG);
-        scene.load('NV-PN');
+        scene.load(LOADING_CONFIG.prefetchingPolicy, LOADING_CONFIG.lowRes);
 
         // scene = new GLOB.SceneClass();
         scene.addEventListener('onload', function() { loadingCanvas.clear(); });

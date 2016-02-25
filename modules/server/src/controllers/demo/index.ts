@@ -30,15 +30,28 @@ export function demo(req : express.Request, res : express.Response, render : Fun
         case '2': recommendationStyle = config.RecommendationStyle.ArrowRecommendation;    break;
     }
 
-    res.locals.prefetch = req.query.prefetch;
-
     let conf : config.ExpConfig = {
         scene: scene,
         coinConfig: coinConfig,
         recommendationStyle: recommendationStyle
     };
 
+    let prefetchingPolicy : config.PrefetchingPolicy;
+
+    switch (req.query.prefetch) {
+        case 'NV-PN'  : prefetchingPolicy = config.PrefetchingPolicy.NV_PN;   break;
+        case 'V-PD'   : prefetchingPolicy = config.PrefetchingPolicy.V_PD;    break;
+        case 'V-PP'   : prefetchingPolicy = config.PrefetchingPolicy.V_PP;    break;
+        case 'V-PP+PD': prefetchingPolicy = config.PrefetchingPolicy.V_PP_PD; break;
+    }
+
+    let loadingConf : config.LoadingConfig = {
+        prefetchingPolicy : prefetchingPolicy,
+        lowRes : req.query.lowres === 'on'
+    }
+
     res.locals.config = JSON.stringify(conf);
+    res.locals.loadingConfig = JSON.stringify(loadingConf);
 
     render('demo.jade');
 };
