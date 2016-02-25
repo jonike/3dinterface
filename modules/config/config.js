@@ -35,6 +35,7 @@ webpack({
 
     }
 }, function(err, stats) {
-    if (err !== null)
-        process.stderr.write(stats.toString('errors-only') + '\n');
+    var log = stats.toString('errors-only');
+    if (log.length !== 0)
+        process.stderr.write(log + '\n');
 });
