@@ -40,7 +40,7 @@ $(MODULES)/server/lib/controllers/%/views: $(MODULES)/server/src/controllers/%/v
 	@$(TOUCH_DIRSTAMP)
 
 SRC_VIEWS=$(wildcard $(MODULES)/server/src/controllers/*/views)
-OBJ_VIEWS=$(subst $(MODULES)/controllers/,lib/controllers/,$(SRC_VIEWS))
+OBJ_VIEWS=$(subst src/controllers/,lib/controllers/,$(SRC_VIEWS))
 
 views: $(OBJ_VIEWS)
 
