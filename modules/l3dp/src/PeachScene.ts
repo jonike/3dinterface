@@ -99,18 +99,6 @@ module l3dp {
 
         }
 
-        addRecommendations(ClassToInstanciate : any, width : number, height : number) : l3d.BaseRecommendation[] {
-
-            return super.addRecommendations(ClassToInstanciate, width, height, 0.2);
-
-        }
-
-        createRecommendation(ClassToInstanciate : any, width : number, height : number, id : number) {
-
-            return super.createRecommendation(ClassToInstanciate, width, height, id, 0.2);
-
-        }
-
         getRawRecommendations() : l3d.CameraItf[] {
             return RecommendationData.peachRecommendations;
         }
