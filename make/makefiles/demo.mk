@@ -15,9 +15,9 @@ $(MODULES)/demo/typings/custom/.dirstamp: $(CUSTOM_TYPINGS_SRC)
 $(MODULES)/demo/typings/.dirstamp: $(MODULES)/demo/typings/typings/.dirstamp $(MODULES)/demo/typings/custom/.dirstamp
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/demo/node_modules/.dirstamp: $(MODULES)/demo/package.json $(L3D_DEPENDENCY) $(L3DP_DEPENDENCY)
+$(MODULES)/demo/node_modules/.dirstamp: $(MODULES)/demo/package.json $(L3D_DEPENDENCY) $(L3DP_DEPENDENCY) $(CONFIG_DEPENDENCY)
 	@$(call LOG_DEPENDENCIES,demo)
-	@$(CD) $(MODULES)/demo/ && $(NPM_UNINSTALL) l3d l3dp && $(NPM_INSTALL)
+	@$(CD) $(MODULES)/demo/ && $(NPM_UNINSTALL) config l3d l3dp && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
 $(MODULES)/server/lib/static/js/demo.js: $(MODULES)/demo/main.ts $(MODULES)/demo/node_modules/.dirstamp $(MODULES)/demo/tsconfig.json $(MODULES)/demo/typings/.dirstamp $(MODULES)/demo/config.js $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/mth.js
