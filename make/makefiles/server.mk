@@ -23,13 +23,13 @@ $(MODULES)/server/lib/.dirstamp: $(call FIND,$(MODULES)/server/src/,*.ts) $(call
 	@$(call LOG_BUILT,server)
 
 $(MODULES)/server/lib/views/.dirstamp: $(MODULES)/server/src/views/*
-	@$(ECHO) $(STYLE_PREPARE)Installing views of "server"$(COLOR_DEFAULT)
+	@$(ECHO) $(STYLE_PREPARE)Installing views of \"server\"$(COLOR_DEFAULT)
 	@$(MKDIRP) $(MODULES)/server/lib/views/
 	@$(MERGE) $(MODULES)/server/src/views $(MODULES)/server/lib/views
 	@$(TOUCH_DIRSTAMP)
 
 $(MODULES)/server/lib/static/.dirstamp: static/*
-	@$(ECHO) $(STYLE_PREPARE)Installing static files of "server"$(COLOR_DEFAULT)
+	@$(ECHO) $(STYLE_PREPARE)Installing static files of \"server\"$(COLOR_DEFAULT)
 	@$(MKDIRP) $(MODULES)/server/lib/static/
 	@$(MERGE) static/ $(MODULES)/server/lib/static/
 	@$(TOUCH_DIRSTAMP)
