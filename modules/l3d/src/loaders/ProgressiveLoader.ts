@@ -1,3 +1,4 @@
+import * as config from 'config';
 import * as THREE from 'three';
 import * as io from 'socket.io';
 import * as mth from 'mth';
@@ -252,7 +253,7 @@ module l3d {
         /**
          * Indicates which type of prefetch is used
          */
-        prefetch : string;
+        prefetch : config.PrefetchingPolicy;
 
         /**
          * Stores the materials
@@ -270,7 +271,7 @@ module l3d {
          * order)
          * @param {function} callback callback to call on the objects when they're created
          */
-        constructor(path : string, scene : THREE.Scene, camera : PointerCamera, callback : Function, log : Function, laggy : boolean, prefetch : string) {
+        constructor(path : string, scene : THREE.Scene, camera : PointerCamera, callback : Function, log : Function, laggy : boolean, prefetch : config.PrefetchingPolicy) {
 
             this.objPath = path;
             this.texturesPath = path.substring(0, path.lastIndexOf('/')) + '/';

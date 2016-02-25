@@ -1,3 +1,4 @@
+import * as config from 'config';
 import * as THREE from 'three';
 import * as l3d from 'l3d';
 import * as mth from 'mth';
@@ -11,10 +12,6 @@ module l3dp {
 
     export class BobombScene extends SceneWithCoins {
 
-        prefetchType : string;
-        loader : l3d.ProgressiveLoader;
-        camera : l3d.PointerCamera;
-
         constructor() {
             super();
         }
@@ -26,7 +23,7 @@ module l3dp {
 
         }
 
-        load(prefetch : string, lowRes = false) {
+        load(prefetch : config.PrefetchingPolicy, lowRes = false) {
 
             if (prefetch !== undefined) {
                 this.prefetchType = prefetch;

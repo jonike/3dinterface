@@ -1,3 +1,4 @@
+import * as config from 'config';
 import * as fs from 'fs';
 import * as THREE from 'three';
 import * as l3d from 'l3d';
@@ -9,7 +10,7 @@ import { Vector, Sendable, CameraItf, Frustum, Data, Plane } from './Interfaces'
 import { MeshContainer } from './MeshContainer';
 import { Transformation } from './Transformation';
 import { ConfigGenerator, Config } from './ConfigGenerators/ConfigGenerator';
-import { createConfigFromString } from './ConfigGenerators/createConfigFromString';
+import { createConfigFromPolicy } from './ConfigGenerators/createConfigFromPolicy';
 
 import { Meshes } from './loadMeshes';
 
@@ -322,7 +323,7 @@ module geo {
 
             this.socket = socket;
 
-            socket.on('request', (path : string, laggy : boolean, prefetch : string) => {
+            socket.on('request', (path : string, laggy : boolean, prefetch : config.PrefetchingPolicy) => {
 
                 if (laggy === true) {
                     this.chunk = 1;
@@ -354,8 +355,8 @@ module geo {
                         this.predictionTable = predictionTables[3];
                 };
 
-                log.debug('Prefetch is : ' + prefetch);
-                this.generator = createConfigFromString(prefetch, this);
+                log.debug('Prefetch is : ' + config.PrefetchingPolicy[prefetch]);
+                this.generator = createConfigFromPolicy(prefetch, this);
                 this.backupGenerator = new ConfigGenerator(this);
 
                 if (this.mesh === undefined) {

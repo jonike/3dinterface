@@ -1,3 +1,4 @@
+import * as config from 'config';
 import * as THREE from 'three';
 import * as l3d from 'l3d';
 import * as mth from 'mth';
@@ -22,7 +23,7 @@ module l3dp {
 
         }
 
-        load(prefetch : string) {
+        load(prefetch : config.PrefetchingPolicy) {
 
             if (prefetch !== undefined) {
                 this.prefetchType = prefetch;

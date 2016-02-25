@@ -6,7 +6,8 @@
     "socket.io-client": "1.3.5",
     "source-map-support": "^0.4.0",
     "three": "^0.71.0",
-    "mth":"file:../mth"
+    "mth":"file:../mth",
+    "config":"../config"
   },
   "main": "./lib/l3d.js",
   "typings": "./lib/src/l3d.d.ts"
