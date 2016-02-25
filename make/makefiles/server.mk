@@ -28,10 +28,10 @@ src/server/build/views/.dirstamp: src/server/src/views/*
 	@$(MERGE) src/server/src/views src/server/build/views
 	@$(TOUCH_DIRSTAMP)
 
-src/server/build/static/.dirstamp: src/static/*
+src/server/build/static/.dirstamp: static/*
 	@$(ECHO) $(STYLE_PREPARE)Installing static files of "server"$(COLOR_DEFAULT)
 	@$(MKDIRP) src/server/build/static/
-	@$(MERGE) src/static/ src/server/build/static/
+	@$(MERGE) static/ src/server/build/static/
 	@$(TOUCH_DIRSTAMP)
 
 src/server/build/controllers/%/views: src/server/src/controllers/%/views
@@ -66,4 +66,7 @@ run-server: server
 
 clean-server:
 	@$(RMRF) \
+		src/server/node_modules \
+		src/server/typings/typings \
+		src/server/typings/custom \
 		src/server/build
