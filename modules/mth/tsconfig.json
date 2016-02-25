@@ -1,0 +1,20 @@
+{
+    "compilerOptions" : {
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "declaration":true,
+        "outDir":"./lib/",
+        "sourceMap": true,
+        "rootDir":"./",
+        "noEmitOnError":true
+    },
+    "exclude":[
+        "lib",
+        "typings/browser",
+        "typings/browser.d.ts"
+    ],
+    "globFiles":[
+        "typings/*.d.ts"
+    ]
+}

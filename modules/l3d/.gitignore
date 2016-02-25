@@ -1,0 +1,5 @@
+obj
+lib-*
+node_modules
+typings
+

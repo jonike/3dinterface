@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outDir": "./lib/",
+        "sourceMap": true,
+        "noEmitOnError":true
+    },
+    "exclude": [
+        "node_modules",
+        "lib",
+        "views",
+        "static",
+        "typings/typings/browser",
+        "typings/typings/browser.d.ts"
+    ],
+    "filesGlob": [
+        "./typings/*.d.ts"
+    ]
+}

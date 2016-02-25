@@ -3,3 +3,4 @@ typings
 build
 doc/
 .changed.json
+lib

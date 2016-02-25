@@ -1,0 +1,12 @@
+{
+  "name": "mth",
+  "version": "1.0.0",
+  "main":"./lib/src/mth.js",
+  "typings":"./lib/src/mth.d.ts",
+  "dependencies":{
+    "three":"*"
+  },
+  "devDependencies":{
+    "nodeunit":"*"
+  }
+}

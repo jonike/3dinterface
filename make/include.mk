@@ -1,5 +1,7 @@
 CUSTOM_TYPINGS_SRC=$(wildcard custom_typings/*) $(wildcard custom_typings/*/*)
 
+include ./make/utils/define-path.mk
+
 include ./make/makefiles/config.mk
 include ./make/makefiles/mth.mk
 include ./make/makefiles/l3d.mk
