@@ -17,6 +17,9 @@ $(MODULES)/mth/lib/.dirstamp: $(call FIND,$(MODULES)/mth/src/,*.ts) $(MODULES)/m
 	@$(TOUCH_DIRSTAMP)
 	@$(call LOG_BUILT,mth)
 
+$(MODULES)/mth/bin/mth.js: $(call FIND,$(MODULES)/mth/src/,*.ts) $(MODULES)/mth/package.json $(MODULES)/mth/tsconfig.json $(MODULES)/mth/typings/.dirstamp $(MODULES)/mth/node_modules/.dirstamp
+	@$(CD) $(MODULES)/mth/ && $(NODE) config.js
+
 test-mth: $(MTH_COMMONJS_DEPENDENCY)
 	@$(NODEUNIT) $(MODULES)/mth/lib/src/tests/main.js
 

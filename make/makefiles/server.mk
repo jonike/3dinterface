@@ -50,15 +50,12 @@ $(MODULES)/server/lib/static/js/l3d.js: ./$(MODULES)/l3d/lib/.dirstamp $(MODULES
 $(MODULES)/server/lib/static/js/l3dp.js: ./$(MODULES)/l3dp/lib/.dirstamp $(MODULES)/l3dp/frontend.config.js
 	@$(CD) $(MODULES)/l3dp/ && $(NODE) frontend.config.js
 
-$(MODULES)/server/lib/static/js/mth.js: ./$(MODULES)/mth/lib/.dirstamp $(MODULES)/mth/config.js
-	@$(CD) $(MODULES)/mth/ && $(NODE) config.js
-
 $(MODULES)/server/lib/generated/.dirstamp:
 	@$(MKDIRP) $(MODULES)/server/lib/generated/
 	@$(MERGE) generated $(MODULES)/server/lib/generated/
 	@$(TOUCH_DIRSTAMP)
 
-server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/generated/.dirstamp $(MODULES)/server/lib/static/js/bouncing.min.js
+server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/generated/.dirstamp $(MODULES)/server/lib/static/js/bouncing.min.js $(MODULES)/server/lib/static/js/mth.js
 
 # Apps
 $(MODULES)/server/lib/static/js/config.js: $(MODULES)/config/bin/config.js
@@ -66,6 +63,10 @@ $(MODULES)/server/lib/static/js/config.js: $(MODULES)/config/bin/config.js
 
 $(MODULES)/server/lib/static/js/bouncing.min.js: $(MODULES)/bouncing-cube/bin/bouncing.min.js
 	@$(MERGE) $(MODULES)/bouncing-cube/bin/ $(MODULES)/server/lib/static/js
+
+$(MODULES)/server/lib/static/js/mth.js: $(MODULES)/mth/bin/mth.js
+	@$(CD) $(MODULES)/mth/ && $(NODE) config.js
+
 
 test-server: server
 	@$(CD) $(MODULES)/server/lib/ && $(NODE) server.js --nolisten
