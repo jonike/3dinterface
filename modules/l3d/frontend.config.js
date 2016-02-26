@@ -6,7 +6,7 @@ webpack({
     output: {
         libraryTarget: 'var',
         library: 'l3d',
-        filename: path.join(__dirname, '../server/lib/static/js/l3d.js'),
+        filename: path.join(__dirname, './bin/l3d.js'),
     },
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']

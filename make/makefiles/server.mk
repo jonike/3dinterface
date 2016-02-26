@@ -44,9 +44,6 @@ OBJ_VIEWS=$(subst src/controllers/,lib/controllers/,$(SRC_VIEWS))
 
 views: $(OBJ_VIEWS)
 
-$(MODULES)/server/lib/static/js/l3d.js: ./$(MODULES)/l3d/lib/.dirstamp $(MODULES)/l3d/frontend.config.js
-	@$(CD) $(MODULES)/l3d/ && $(NODE) frontend.config.js
-
 $(MODULES)/server/lib/static/js/l3dp.js: ./$(MODULES)/l3dp/lib/.dirstamp $(MODULES)/l3dp/frontend.config.js
 	@$(CD) $(MODULES)/l3dp/ && $(NODE) frontend.config.js
 
@@ -74,6 +71,9 @@ $(MODULES)/server/lib/static/js/mth.js: $(MODULES)/mth/bin/mth.js
 $(MODULES)/server/lib/static/js/demo.js: $(MODULES)/demo/bin/demo.js
 	@$(MERGE) $(MODULES)/demo/bin/ $(MODULES)/server/lib/static/js
 
+# L3D
+$(MODULES)/server/lib/static/js/l3d.js: $(MODULES)/l3d/bin/l3d.js
+	@$(MERGE) $(MODULES)/l3d/bin/ $(MODULES)/server/lib/static/js
 
 test-server: server
 	@$(CD) $(MODULES)/server/lib/ && $(NODE) server.js --nolisten
