@@ -401,7 +401,7 @@ module l3d {
 
             if (this.t > 1) {
                 this.movingHermite = false;
-                this.recommendationClicked = null;
+                // this.recommendationClicked = null;
                 this.anglesFromVectors();
             }
         }
@@ -471,6 +471,10 @@ module l3d {
             if (this.motion.moveBackward) {direction.sub(mth.mul(forward, speed)); this.changed = true;}
             if (this.motion.moveLeft)     {direction.add(mth.mul(left,    speed)); this.changed = true;}
             if (this.motion.moveRight)    {direction.sub(mth.mul(left,    speed)); this.changed = true;}
+
+            if (this.changed && this.recommendationClicked !== null) {
+                this.recommendationClicked = null;
+            }
 
             if (!this.collisions || !this.isColliding(direction)) {
                 this.position.add(direction);
@@ -568,7 +572,10 @@ module l3d {
         moveHermite(recommendation : TargetMove, toSave ?: boolean, recommendationId ?: number) : void;
         moveHermite(recommendation : any, toSave = true, recommendationId ?: number) : void {
 
-            this.recommendationClicked = recommendationId;
+            if (typeof recommendationId === 'number') {
+                //  this.loader.recommendationClicked(recommendationId);
+                this.recommendationClicked = recommendationId;
+            }
 
             var otherCamera = recommendation.camera || recommendation;
 

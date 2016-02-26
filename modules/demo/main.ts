@@ -167,7 +167,7 @@ $(function() {
             };
 
             a.onClick = function() {
-                camera.moveHermite(a.camera);
+                camera.moveHermite(a.camera, true, scene.recommendations.indexOf(a));
             }
 
             objectClicker.objects.push(a);

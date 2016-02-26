@@ -336,6 +336,12 @@ module l3d {
 
         }
 
+        recommendationClicked(recommendationId ?: number) {
+
+            this.socket.emit('reco', recommendationId);
+
+        }
+
         /**
          * Starts the loading of the mesh
          */
