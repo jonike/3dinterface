@@ -1,7 +1,7 @@
 MERGE=make\utils\windows\merge
-TOUCH_DIRSTAMP=copy /b $@+,,
+TOUCH_DIRSTAMP=make\utils\windows\touch $@
 MKDIRP=make\utils\windows\mkdirp
-RMRF=rd /s /q
+RMRF=make\utils\windows\rmrf
 DEVNULL=NUL
 ECHO=echo
 FIND=$(shell dir /s /b $1\$2)
