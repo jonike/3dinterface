@@ -4,13 +4,13 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "outDir": "./lib/",
+        "outDir": "./bin/",
         "sourceMap": true,
         "noEmitOnError":true
     },
     "exclude": [
         "node_modules",
-        "lib",
+        "bin",
         "views",
         "static",
         "typings/typings/browser",

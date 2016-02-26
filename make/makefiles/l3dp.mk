@@ -34,6 +34,4 @@ clean-l3dp:
 		$(MODULES)/l3dp/bin \
 		$(MODULES)/l3dp/node_modules \
 		$(MODULES)/l3dp/typings/typings \
-		$(MODULES)/l3dp/typings/custom \
-		$(MODULES)/server/lib/static/js/l3dp.js \
-		$(MODULES)/server/lib/static/js/l3dp.js.map
+		$(MODULES)/l3dp/typings/custom

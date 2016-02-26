@@ -34,6 +34,4 @@ clean-l3d:
 		$(MODULES)/l3d/bin \
 		$(MODULES)/l3d/node_modules \
 		$(MODULES)/l3d/typings/typings \
-		$(MODULES)/l3d/typings/custom \
-		$(MODULES)/server/lib/static/js/l3d.js \
-		$(MODULES)/server/lib/static/js/l3d.js.map
+		$(MODULES)/l3d/typings/custom

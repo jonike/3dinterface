@@ -28,6 +28,4 @@ clean-mth:
 		$(MODULES)/mth/typings \
 		$(MODULES)/mth/lib \
 		$(MODULES)/mth/bin \
-		$(MODULES)/mth/node_modules \
-		$(MODULES)/server/lib/static/js/mth.js \
-		$(MODULES)/server/lib/static/js/mth.js.map
+		$(MODULES)/mth/node_modules
