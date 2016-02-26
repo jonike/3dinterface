@@ -56,6 +56,7 @@ module geo {
 
             this.transformation = transfo;
 
+            this.recommendations = [];
             this.meshes = [];
             this.vertices = [];
             this.faces = [];
