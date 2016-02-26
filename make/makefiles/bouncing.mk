@@ -30,6 +30,4 @@ clean-bouncing-cube:
 		$(MODULES)/bouncing-cube/bin \
 		$(MODULES)/bouncing-cube/node_modules \
 		$(MODULES)/bouncing-cube/typings/custom \
-		$(MODULES)/bouncing-cube/typings/typings \
-		$(MODULES)/server/lib/static/js/bouncing.min.js \
-		$(MODULES)/server/lib/static/js/bouncing.min.js.map
+		$(MODULES)/bouncing-cube/typings/typings

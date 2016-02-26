@@ -14,6 +14,4 @@ $(MODULES)/config/bin/config.js: $(MODULES)/config/config.ts $(MODULES)/config/p
 clean-config:
 	@$(RMRF) \
 		$(MODULES)/config/lib \
-		$(MODULES)/config/bin \
-		$(MODULES)/server/lib/static/js/config.js \
-		$(MODULES)/server/lib/static/js/config.js.map
+		$(MODULES)/config/bin

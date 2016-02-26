@@ -16,75 +16,75 @@ $(MODULES)/server/node_modules/.dirstamp: $(MODULES)/server/package.json $(L3D_D
 	@$(CD) $(MODULES)/server/ && $(NPM_UNINSTALL) l3d l3dp config mth && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/server/lib/.dirstamp: $(call FIND,$(MODULES)/server/src/,*.ts) $(call FIND,$(MODULES)/server/src,*.jade) $(MODULES)/server/node_modules/.dirstamp $(MODULES)/server/typings
+$(MODULES)/server/bin/.dirstamp: $(call FIND,$(MODULES)/server/src/,*.ts) $(call FIND,$(MODULES)/server/src,*.jade) $(MODULES)/server/node_modules/.dirstamp $(MODULES)/server/typings
 	@$(call LOG_BUILDING,server)
 	@$(CD) $(MODULES)/server/ && $(TSC)
 	@$(TOUCH_DIRSTAMP)
 	@$(call LOG_BUILT,server)
 
-$(MODULES)/server/lib/views/.dirstamp: $(MODULES)/server/src/views/*
+$(MODULES)/server/bin/views/.dirstamp: $(MODULES)/server/src/views/*
 	@$(ECHO) $(STYLE_PREPARE)Installing views of \"server\"$(COLOR_DEFAULT)
-	@$(MKDIRP) $(MODULES)/server/lib/views/
-	@$(MERGE) $(MODULES)/server/src/views $(MODULES)/server/lib/views
+	@$(MKDIRP) $(MODULES)/server/bin/views/
+	@$(MERGE) $(MODULES)/server/src/views $(MODULES)/server/bin/views
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/server/lib/static/.dirstamp: static/*
+$(MODULES)/server/bin/static/.dirstamp: static/*
 	@$(ECHO) $(STYLE_PREPARE)Installing static files of \"server\"$(COLOR_DEFAULT)
-	@$(MKDIRP) $(MODULES)/server/lib/static/
-	@$(MERGE) static/ $(MODULES)/server/lib/static/
+	@$(MKDIRP) $(MODULES)/server/bin/static/
+	@$(MERGE) static/ $(MODULES)/server/bin/static/
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/server/lib/controllers/%/views: $(MODULES)/server/src/controllers/%/views
+$(MODULES)/server/bin/controllers/%/views: $(MODULES)/server/src/controllers/%/views
 	@$(MKDIRP) $@
 	@$(MERGE) $< $@
 	@$(TOUCH_DIRSTAMP)
 
 SRC_VIEWS=$(wildcard $(MODULES)/server/src/controllers/*/views)
-OBJ_VIEWS=$(subst src/controllers/,lib/controllers/,$(SRC_VIEWS))
+OBJ_VIEWS=$(subst src/controllers/,bin/controllers/,$(SRC_VIEWS))
 
 views: $(OBJ_VIEWS)
 
-$(MODULES)/server/lib/generated/.dirstamp:
-	@$(MKDIRP) $(MODULES)/server/lib/generated/
-	@$(MERGE) generated $(MODULES)/server/lib/generated/
+$(MODULES)/server/bin/generated/.dirstamp:
+	@$(MKDIRP) $(MODULES)/server/bin/generated/
+	@$(MERGE) generated $(MODULES)/server/bin/generated/
 	@$(TOUCH_DIRSTAMP)
 
-server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/generated/.dirstamp $(MODULES)/server/lib/static/js/bouncing.min.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js
+server: $(MODULES)/server/bin/.dirstamp $(MODULES)/server/bin/views/.dirstamp $(MODULES)/server/bin/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/bin/static/js/l3d.js $(MODULES)/server/bin/static/js/l3dp.js $(MODULES)/server/bin/static/js/config.js $(MODULES)/server/bin/static/js/mth.js $(MODULES)/server/bin/static/js/demo.js $(MODULES)/server/bin/generated/.dirstamp $(MODULES)/server/bin/static/js/bouncing.min.js $(MODULES)/server/bin/static/js/mth.js $(MODULES)/server/bin/static/js/config.js $(MODULES)/server/bin/static/js/demo.js $(MODULES)/server/bin/static/js/l3d.js $(MODULES)/server/bin/static/js/l3dp.js
 
 # APPS
 # CONFIG
-$(MODULES)/server/lib/static/js/config.js: $(MODULES)/config/bin/config.js
-	@$(MERGE) $(MODULES)/config/bin/ $(MODULES)/server/lib/static/js
+$(MODULES)/server/bin/static/js/config.js: $(MODULES)/config/bin/config.js
+	@$(MERGE) $(MODULES)/config/bin/ $(MODULES)/server/bin/static/js
 
 # BOUNCING-CUBE
-$(MODULES)/server/lib/static/js/bouncing.min.js: $(MODULES)/bouncing-cube/bin/bouncing.min.js
-	@$(MERGE) $(MODULES)/bouncing-cube/bin/ $(MODULES)/server/lib/static/js
+$(MODULES)/server/bin/static/js/bouncing.min.js: $(MODULES)/bouncing-cube/bin/bouncing.min.js
+	@$(MERGE) $(MODULES)/bouncing-cube/bin/ $(MODULES)/server/bin/static/js
 
 # MTH
-$(MODULES)/server/lib/static/js/mth.js: $(MODULES)/mth/bin/mth.js
-	@$(MERGE) $(MODULES)/mth/bin/ $(MODULES)/server/lib/static/js
+$(MODULES)/server/bin/static/js/mth.js: $(MODULES)/mth/bin/mth.js
+	@$(MERGE) $(MODULES)/mth/bin/ $(MODULES)/server/bin/static/js
 
 # DEMO
-$(MODULES)/server/lib/static/js/demo.js: $(MODULES)/demo/bin/demo.js
-	@$(MERGE) $(MODULES)/demo/bin/ $(MODULES)/server/lib/static/js
+$(MODULES)/server/bin/static/js/demo.js: $(MODULES)/demo/bin/demo.js
+	@$(MERGE) $(MODULES)/demo/bin/ $(MODULES)/server/bin/static/js
 
 # L3D
-$(MODULES)/server/lib/static/js/l3d.js: $(MODULES)/l3d/bin/l3d.js
-	@$(MERGE) $(MODULES)/l3d/bin/ $(MODULES)/server/lib/static/js
+$(MODULES)/server/bin/static/js/l3d.js: $(MODULES)/l3d/bin/l3d.js
+	@$(MERGE) $(MODULES)/l3d/bin/ $(MODULES)/server/bin/static/js
 
 # L3DP
-$(MODULES)/server/lib/static/js/l3dp.js: $(MODULES)/l3dp/bin/l3dp.js
-	@$(MERGE) $(MODULES)/l3dp/bin/ $(MODULES)/server/lib/static/js
+$(MODULES)/server/bin/static/js/l3dp.js: $(MODULES)/l3dp/bin/l3dp.js
+	@$(MERGE) $(MODULES)/l3dp/bin/ $(MODULES)/server/bin/static/js
 
 test-server: server
-	@$(CD) $(MODULES)/server/lib/ && $(NODE) server.js --nolisten
+	@$(CD) $(MODULES)/server/bin/ && $(NODE) server.js --nolisten
 
 run-server: server
-	@$(CD) $(MODULES)/server/lib && $(NODE) server.js
+	@$(CD) $(MODULES)/server/bin && $(NODE_OUTPUT) server.js
 
 clean-server:
 	@$(RMRF) \
 		$(MODULES)/server/node_modules \
 		$(MODULES)/server/typings/typings \
 		$(MODULES)/server/typings/custom \
-		$(MODULES)/server/lib
+		$(MODULES)/server/bin
