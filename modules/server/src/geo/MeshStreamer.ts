@@ -389,12 +389,6 @@ module geo {
 
             });
 
-            socket.on('reco', (recoId : number) => {
-
-                this.previousReco = recoId + 1;
-
-            });
-
             socket.on('next', (_camera? : any[]) => {
 
                 var oldTime = Date.now();
@@ -421,6 +415,12 @@ module geo {
                     };
 
                     var recommendationClicked = _camera[2];
+
+                    if (recommendationClicked !== null) {
+
+                        this.previousReco = recommendationClicked;
+
+                    }
 
                     for (let i = 3; i < _camera.length; i++) {
 

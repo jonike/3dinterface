@@ -54,26 +54,32 @@ server: $(MODULES)/server/bin/.dirstamp $(MODULES)/server/bin/views/.dirstamp $(
 # APPS
 # CONFIG
 $(MODULES)/server/bin/static/js/config.js: $(MODULES)/config/bin/config.js
+	@$(MKDIRP) $(MODULES)/server/bin/static/js
 	@$(MERGE) $(MODULES)/config/bin/ $(MODULES)/server/bin/static/js
 
 # BOUNCING-CUBE
 $(MODULES)/server/bin/static/js/bouncing.min.js: $(MODULES)/bouncing-cube/bin/bouncing.min.js
+	@$(MKDIRP) $(MODULES)/server/bin/static/js
 	@$(MERGE) $(MODULES)/bouncing-cube/bin/ $(MODULES)/server/bin/static/js
 
 # MTH
 $(MODULES)/server/bin/static/js/mth.js: $(MODULES)/mth/bin/mth.js
+	@$(MKDIRP) $(MODULES)/server/bin/static/js
 	@$(MERGE) $(MODULES)/mth/bin/ $(MODULES)/server/bin/static/js
 
 # DEMO
 $(MODULES)/server/bin/static/js/demo.js: $(MODULES)/demo/bin/demo.js
+	@$(MKDIRP) $(MODULES)/server/bin/static/js
 	@$(MERGE) $(MODULES)/demo/bin/ $(MODULES)/server/bin/static/js
 
 # L3D
 $(MODULES)/server/bin/static/js/l3d.js: $(MODULES)/l3d/bin/l3d.js
+	@$(MKDIRP) $(MODULES)/server/bin/static/js
 	@$(MERGE) $(MODULES)/l3d/bin/ $(MODULES)/server/bin/static/js
 
 # L3DP
 $(MODULES)/server/bin/static/js/l3dp.js: $(MODULES)/l3dp/bin/l3dp.js
+	@$(MKDIRP) $(MODULES)/server/bin/static/js
 	@$(MERGE) $(MODULES)/l3dp/bin/ $(MODULES)/server/bin/static/js
 
 test-server: server

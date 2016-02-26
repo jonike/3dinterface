@@ -493,6 +493,7 @@ module l3d {
             this.resetPosition();
             this.moving = false;
             this.movingHermite = false;
+            this.recommendationClicked = 0;
             (new DB.Event.ResetClicked()).send();
         }
 
@@ -575,7 +576,7 @@ module l3d {
 
             if (typeof recommendationId === 'number') {
                 //  this.loader.recommendationClicked(recommendationId);
-                this.recommendationClicked = recommendationId;
+                this.recommendationClicked = recommendationId + 1;
             }
 
             var otherCamera = recommendation.camera || recommendation;
