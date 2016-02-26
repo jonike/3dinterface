@@ -44,15 +44,12 @@ OBJ_VIEWS=$(subst src/controllers/,lib/controllers/,$(SRC_VIEWS))
 
 views: $(OBJ_VIEWS)
 
-$(MODULES)/server/lib/static/js/l3dp.js: ./$(MODULES)/l3dp/lib/.dirstamp $(MODULES)/l3dp/frontend.config.js
-	@$(CD) $(MODULES)/l3dp/ && $(NODE) frontend.config.js
-
 $(MODULES)/server/lib/generated/.dirstamp:
 	@$(MKDIRP) $(MODULES)/server/lib/generated/
 	@$(MERGE) generated $(MODULES)/server/lib/generated/
 	@$(TOUCH_DIRSTAMP)
 
-server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/generated/.dirstamp $(MODULES)/server/lib/static/js/bouncing.min.js $(MODULES)/server/lib/static/js/mth.js
+server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/generated/.dirstamp $(MODULES)/server/lib/static/js/bouncing.min.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js
 
 # APPS
 # CONFIG
@@ -74,6 +71,10 @@ $(MODULES)/server/lib/static/js/demo.js: $(MODULES)/demo/bin/demo.js
 # L3D
 $(MODULES)/server/lib/static/js/l3d.js: $(MODULES)/l3d/bin/l3d.js
 	@$(MERGE) $(MODULES)/l3d/bin/ $(MODULES)/server/lib/static/js
+
+# L3DP
+$(MODULES)/server/lib/static/js/l3dp.js: $(MODULES)/l3dp/bin/l3dp.js
+	@$(MERGE) $(MODULES)/l3dp/bin/ $(MODULES)/server/lib/static/js
 
 test-server: server
 	@$(CD) $(MODULES)/server/lib/ && $(NODE) server.js --nolisten
