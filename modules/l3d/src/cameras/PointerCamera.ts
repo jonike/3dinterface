@@ -383,6 +383,7 @@ module l3d {
             if (mth.norm2(mth.diff(this.position, this.newPosition)) < 0.01 &&
                 mth.norm2(mth.diff(this.target, this.newTarget))  < 0.01) {
                 this.moving = false;
+                this.shouldLogCameraAngles = true;
                 this.anglesFromVectors();
             }
         }
@@ -401,7 +402,7 @@ module l3d {
 
             if (this.t > 1) {
                 this.movingHermite = false;
-                // this.recommendationClicked = null;
+                this.shouldLogCameraAngles = true;
                 this.anglesFromVectors();
             }
         }
