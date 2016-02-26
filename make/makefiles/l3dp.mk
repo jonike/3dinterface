@@ -31,6 +31,7 @@ $(MODULES)/l3dp/bin/l3dp.js: $(call FIND,$(MODULES)/l3dp/src/,*) $(MODULES)/l3dp
 clean-l3dp:
 	@$(RMRF) \
 		$(MODULES)/l3dp/lib \
+		$(MODULES)/l3dp/bin \
 		$(MODULES)/l3dp/node_modules \
 		$(MODULES)/l3dp/typings/typings \
 		$(MODULES)/l3dp/typings/custom \

@@ -31,6 +31,7 @@ $(MODULES)/l3d/bin/l3d.js: $(call FIND,$(MODULES)/l3d/src/,*) $(MODULES)/l3d/nod
 clean-l3d:
 	@$(RMRF) \
 		$(MODULES)/l3d/lib \
+		$(MODULES)/l3d/bin \
 		$(MODULES)/l3d/node_modules \
 		$(MODULES)/l3d/typings/typings \
 		$(MODULES)/l3d/typings/custom \

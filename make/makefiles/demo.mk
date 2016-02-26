@@ -29,6 +29,7 @@ clean-demo:
 	@$(RMRF) \
 		$(MODULES)/demo/node_modules \
 		$(MODULES)/demo/lib \
+		$(MODULES)/demo/bin \
 		$(MODULES)/demo/typings/typings \
 		$(MODULES)/demo/typings/custom \
 		$(MODULES)/server/lib/static/js/demo.js \
