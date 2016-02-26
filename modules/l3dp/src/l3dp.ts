@@ -12,7 +12,10 @@ export { logfps, resizeElements, show, hide, resetCameraAspect, appendTo } from 
 export { createSceneFromConfig } from './createFromConfig';
 export { RecommendationData } from './RecommendationData';
 
-window.containerSize = {
-    width : () => { return 1134; },
-    height: () => { return 768;  }
+// Avoid working on window if node
+if (typeof window !== 'undefined') {
+    window.containerSize = {
+        width : () => { return 1134; },
+        height: () => { return 768;  }
+    }
 }
