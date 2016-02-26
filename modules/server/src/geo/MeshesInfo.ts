@@ -1,3 +1,5 @@
+import * as l3d from 'l3d';
+import * as l3dp from 'l3dp';
 import * as mth from 'mth';
 import { Transformation } from './Transformation';
 
@@ -8,19 +10,24 @@ module geo {
         export interface MeshInfo {
             done : boolean;
             transformation ?: Transformation;
+            recommendations ?: l3d.CameraItf[];
         }
 
         export var dict : {[id:string] : MeshInfo} = {
             '/static/data/castle/princess peaches castle (outside).obj': {
+                recommendations: l3dp.RecommendationData.peachRecommendations,
                 done: false
             },
             '/static/data/mountain/coocoolmountain.obj': {
+                recommendations: l3dp.RecommendationData.mountainRecommendations,
                 done: false
             },
             '/static/data/mountain/coocoolmountain_sub.obj': {
+                recommendations: l3dp.RecommendationData.mountainRecommendations,
                 done: false
             },
             '/static/data/whomp/Whomps Fortress.obj': {
+                recommendations: l3dp.RecommendationData.whompRecommendations,
                 done: false,
                 transformation: new Transformation({
                     translation: {
@@ -37,6 +44,7 @@ module geo {
                 })
             },
             '/static/data/whomp/Whomps Fortress_sub.obj': {
+                recommendations: l3dp.RecommendationData.whompRecommendations,
                 done: false,
                 transformation : new Transformation({
                     translation: {
@@ -53,6 +61,7 @@ module geo {
                 })
             },
             '/static/data/bobomb/bobomb battlefeild.obj': {
+                recommendations: l3dp.RecommendationData.bobombRecommendations,
                 done: false,
                 transformation : new Transformation({
                     translation: {
@@ -68,6 +77,7 @@ module geo {
                 })
             },
             '/static/data/bobomb/bobomb battlefeild_sub.obj': {
+                recommendations: l3dp.RecommendationData.bobombRecommendations,
                 done: false,
                 transformation : new Transformation({
                     translation: {

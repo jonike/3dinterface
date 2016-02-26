@@ -19,7 +19,8 @@
         "l3d":"../l3d",
         "l3dp":"../l3dp",
         "config":"../config",
-        "mth":"../mth"
+        "mth":"../mth",
+        "jquery":"*"
     },
     "repository" : {
         "type" : "git",
