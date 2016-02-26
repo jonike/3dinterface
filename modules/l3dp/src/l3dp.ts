@@ -12,6 +12,8 @@ export { logfps, resizeElements, show, hide, resetCameraAspect, appendTo } from 
 export { createSceneFromConfig } from './createFromConfig';
 export { RecommendationData } from './RecommendationData';
 
+declare var window : Window;
+
 window.containerSize = {
     width : () => { return 1134; },
     height: () => { return 768;  }
