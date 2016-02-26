@@ -6,7 +6,7 @@ webpack({
     output: {
         libraryTarget: 'var',
         library: 'mth',
-        filename: path.join(__dirname, '../server/lib/static/js/mth.js'),
+        filename: path.join(__dirname, './bin/mth.js'),
     },
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']

@@ -25,9 +25,13 @@ $(MODULES)/l3dp/lib/.dirstamp: $(call FIND,$(MODULES)/l3dp/src/,*) $(MODULES)/l3
 	@$(TOUCH_DIRSTAMP)
 	@$(call LOG_BUILT,l3dp)
 
+$(MODULES)/l3dp/bin/l3dp.js: $(call FIND,$(MODULES)/l3dp/src/,*) $(MODULES)/l3dp/node_modules/.dirstamp $(MODULES)/l3dp/tsconfig-backend.json $(MODULES)/l3dp/backend.config.js $(MODULES)/l3dp/typings
+	@$(CD) $(MODULES)/l3dp/ && $(NODE) frontend.config.js
+
 clean-l3dp:
 	@$(RMRF) \
 		$(MODULES)/l3dp/lib \
+		$(MODULES)/l3dp/bin \
 		$(MODULES)/l3dp/node_modules \
 		$(MODULES)/l3dp/typings/typings \
 		$(MODULES)/l3dp/typings/custom \

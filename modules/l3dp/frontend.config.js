@@ -5,7 +5,7 @@ webpack({
     output: {
         libraryTarget: 'var',
         library: 'l3dp',
-        filename: '../server/lib/static/js/l3dp.js',
+        filename: './bin/l3dp.js',
     },
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']

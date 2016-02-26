@@ -6,7 +6,7 @@ webpack({
     output: {
         libraryTarget: 'var',
         library: 'config',
-        filename: path.join(__dirname, '../server/lib/static/js/demo.js'),
+        filename: path.join(__dirname, './bin/demo.js'),
     },
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']

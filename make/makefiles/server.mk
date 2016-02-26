@@ -44,24 +44,37 @@ OBJ_VIEWS=$(subst src/controllers/,lib/controllers/,$(SRC_VIEWS))
 
 views: $(OBJ_VIEWS)
 
-$(MODULES)/server/lib/static/js/l3d.js: ./$(MODULES)/l3d/lib/.dirstamp $(MODULES)/l3d/frontend.config.js
-	@$(CD) $(MODULES)/l3d/ && $(NODE) frontend.config.js
-
-$(MODULES)/server/lib/static/js/l3dp.js: ./$(MODULES)/l3dp/lib/.dirstamp $(MODULES)/l3dp/frontend.config.js
-	@$(CD) $(MODULES)/l3dp/ && $(NODE) frontend.config.js
-
-$(MODULES)/server/lib/static/js/config.js: ./$(MODULES)/config/lib/.dirstamp $(MODULES)/config/config.js
-	@$(CD) $(MODULES)/config/ && $(NODE) config.js
-
-$(MODULES)/server/lib/static/js/mth.js: ./$(MODULES)/mth/lib/.dirstamp $(MODULES)/mth/config.js
-	@$(CD) $(MODULES)/mth/ && $(NODE) config.js
-
 $(MODULES)/server/lib/generated/.dirstamp:
 	@$(MKDIRP) $(MODULES)/server/lib/generated/
 	@$(MERGE) generated $(MODULES)/server/lib/generated/
 	@$(TOUCH_DIRSTAMP)
 
-server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/generated/.dirstamp
+server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/generated/.dirstamp $(MODULES)/server/lib/static/js/bouncing.min.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js
+
+# APPS
+# CONFIG
+$(MODULES)/server/lib/static/js/config.js: $(MODULES)/config/bin/config.js
+	@$(MERGE) $(MODULES)/config/bin/ $(MODULES)/server/lib/static/js
+
+# BOUNCING-CUBE
+$(MODULES)/server/lib/static/js/bouncing.min.js: $(MODULES)/bouncing-cube/bin/bouncing.min.js
+	@$(MERGE) $(MODULES)/bouncing-cube/bin/ $(MODULES)/server/lib/static/js
+
+# MTH
+$(MODULES)/server/lib/static/js/mth.js: $(MODULES)/mth/bin/mth.js
+	@$(MERGE) $(MODULES)/mth/bin/ $(MODULES)/server/lib/static/js
+
+# DEMO
+$(MODULES)/server/lib/static/js/demo.js: $(MODULES)/demo/bin/demo.js
+	@$(MERGE) $(MODULES)/demo/bin/ $(MODULES)/server/lib/static/js
+
+# L3D
+$(MODULES)/server/lib/static/js/l3d.js: $(MODULES)/l3d/bin/l3d.js
+	@$(MERGE) $(MODULES)/l3d/bin/ $(MODULES)/server/lib/static/js
+
+# L3DP
+$(MODULES)/server/lib/static/js/l3dp.js: $(MODULES)/l3dp/bin/l3dp.js
+	@$(MERGE) $(MODULES)/l3dp/bin/ $(MODULES)/server/lib/static/js
 
 test-server: server
 	@$(CD) $(MODULES)/server/lib/ && $(NODE) server.js --nolisten
