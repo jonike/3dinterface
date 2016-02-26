@@ -70,6 +70,11 @@ $(MODULES)/server/lib/static/js/bouncing.min.js: $(MODULES)/bouncing-cube/bin/bo
 $(MODULES)/server/lib/static/js/mth.js: $(MODULES)/mth/bin/mth.js
 	@$(MERGE) $(MODULES)/mth/bin/ $(MODULES)/server/lib/static/js
 
+# DEMO
+$(MODULES)/server/lib/static/js/demo.js: $(MODULES)/demo/bin/demo.js
+	@$(MERGE) $(MODULES)/demo/bin/ $(MODULES)/server/lib/static/js
+
+
 test-server: server
 	@$(CD) $(MODULES)/server/lib/ && $(NODE) server.js --nolisten
 

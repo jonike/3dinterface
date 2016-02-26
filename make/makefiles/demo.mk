@@ -20,7 +20,7 @@ $(MODULES)/demo/node_modules/.dirstamp: $(MODULES)/demo/package.json $(L3D_DEPEN
 	@$(CD) $(MODULES)/demo/ && $(NPM_UNINSTALL) config l3d l3dp && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/server/lib/static/js/demo.js: $(MODULES)/demo/main.ts $(MODULES)/demo/node_modules/.dirstamp $(MODULES)/demo/tsconfig.json $(MODULES)/demo/typings/.dirstamp $(MODULES)/demo/config.js $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/mth.js
+$(MODULES)/demo/bin/demo.js: $(MODULES)/demo/main.ts $(MODULES)/demo/node_modules/.dirstamp $(MODULES)/demo/tsconfig.json $(MODULES)/demo/typings/.dirstamp $(MODULES)/demo/config.js $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/mth.js
 	@$(call LOG_BUILDING,demo)
 	@$(NODE) $(MODULES)/demo/config.js
 	@$(call LOG_BUILT,demo)
