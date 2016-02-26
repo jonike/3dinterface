@@ -57,16 +57,18 @@ $(MODULES)/server/lib/generated/.dirstamp:
 
 server: $(MODULES)/server/lib/.dirstamp $(MODULES)/server/lib/views/.dirstamp $(MODULES)/server/lib/static/.dirstamp $(OBJ_VIEWS) $(MODULES)/server/lib/static/js/l3d.js $(MODULES)/server/lib/static/js/l3dp.js $(MODULES)/server/lib/static/js/config.js $(MODULES)/server/lib/static/js/mth.js $(MODULES)/server/lib/static/js/demo.js $(MODULES)/server/lib/generated/.dirstamp $(MODULES)/server/lib/static/js/bouncing.min.js $(MODULES)/server/lib/static/js/mth.js
 
-# Apps
+# APPS
+# CONFIG
 $(MODULES)/server/lib/static/js/config.js: $(MODULES)/config/bin/config.js
 	@$(MERGE) $(MODULES)/config/bin/ $(MODULES)/server/lib/static/js
 
+# BOUNCING-CUBE
 $(MODULES)/server/lib/static/js/bouncing.min.js: $(MODULES)/bouncing-cube/bin/bouncing.min.js
 	@$(MERGE) $(MODULES)/bouncing-cube/bin/ $(MODULES)/server/lib/static/js
 
+# MTH
 $(MODULES)/server/lib/static/js/mth.js: $(MODULES)/mth/bin/mth.js
-	@$(CD) $(MODULES)/mth/ && $(NODE) config.js
-
+	@$(MERGE) $(MODULES)/mth/bin/ $(MODULES)/server/lib/static/js
 
 test-server: server
 	@$(CD) $(MODULES)/server/lib/ && $(NODE) server.js --nolisten
