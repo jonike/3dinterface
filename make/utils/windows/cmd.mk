@@ -1,6 +1,6 @@
-MERGE=copy /E /y
+MERGE=make\utils\windows\merge
 TOUCH_DIRSTAMP=copy /b $@+,,
-MKDIRP=mkdir
+MKDIRP=make\utils\windows\mkdirp
 RMRF=rd /s /q
 DEVNULL=NUL
 ECHO=echo
