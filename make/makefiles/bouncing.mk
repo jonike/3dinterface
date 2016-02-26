@@ -16,12 +16,12 @@ $(MODULES)/bouncing-cube/node_modules/.dirstamp: $(MODULES)/bouncing-cube/packag
 	@$(CD) $(MODULES)/bouncing-cube/ && $(NPM_UNINSTALL) l3d && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/bin/bouncing.min.js: $(call FIND,$(MODULES)/bouncing-cube/src/,*) $(MODULES)/bouncing-cube/node_modules/.dirstamp $(MODULES)/bouncing-cube/tsconfig.json $(MODULES)/bouncing-cube/typings $(MODULES)/bouncing-cube/config.js
+$(MODULES)/bouncing-cube/bin/bouncing.min.js: $(call FIND,$(MODULES)/bouncing-cube/src/,*) $(MODULES)/bouncing-cube/node_modules/.dirstamp $(MODULES)/bouncing-cube/tsconfig.json $(MODULES)/bouncing-cube/typings $(MODULES)/bouncing-cube/config.js
 	@$(call LOG_BUILDING,bouncing-cube)
 	@$(NODE) $(MODULES)/bouncing-cube/config.js
 	@$(call LOG_BUILT,bouncing-cube)
 
-BOUNCING_CUBE_DEPENDENCY=$(MODULES)/bin/bouncing.min.js
+BOUNCING_CUBE_DEPENDENCY=$(MODULES)/bouncing-cube/bin/bouncing.min.js
 bouncing-cube: $(BOUNCING_CUBE_DEPENDENCY)
 
 clean-bouncing-cube:
