@@ -1,8 +1,8 @@
-MERGE=sh -c 'cp -r $$0/* $$1'
+MERGE=sh -c 'cp -r $$0$/* $$1'
 TOUCH_DIRSTAMP=touch $@
 MKDIRP=mkdir -p
 RMRF=rm -rf
-DEVNULL=/dev/null
+DEVNULL=$/dev$/null
 
 COLOR_DEFAULT="\033[0m"
 COLOR_GREEN="\033[32m"

@@ -4,4 +4,4 @@ MKDIRP=make\utils\windows\mkdirp
 RMRF=make\utils\windows\rmrf
 DEVNULL=NUL
 ECHO=echo
-FIND=$(shell dir /s /b $1\$2)
+FIND=$(shell dir $/s $/b $1\$2)

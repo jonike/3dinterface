@@ -1,15 +1,23 @@
-include ./make/utils/define-cmd.mk
+# Define primordial commands
+
+ifeq ($(OS),Windows_NT)
+	/=\\
+else
+	/=/
+endif
+
+include .$/make$/utils$/define-cmd.mk
 
 all: server bouncing-cube
 
-./node_modules/.dirstamp:
+.$/node_modules$/.dirstamp:
 	@$(ECHO) $(STYLE_PREPARE)Installing global dependencies$(COLOR_DEFAULT)
 	@npm --loglevel error --progress false install typescript@next ts-loader webpack webpack-fail-plugin $(TO_NULL)
 	@$(TOUCH_DIRSTAMP)
 
-prepare: ./node_modules/.dirstamp
+prepare: .$/node_modules$/.dirstamp
 
-include ./make/include.mk
+include .$/make$/include.mk
 
 test: test-mth test-server
 
@@ -17,4 +25,4 @@ clean: clean-l3d clean-l3dp clean-server clean-demo clean-mth clean-bouncing-cub
 
 clean-global:
 	@$(RMRF) \
-		./node_modules
+		.$/node_modules
