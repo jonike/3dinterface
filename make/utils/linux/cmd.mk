@@ -10,6 +10,10 @@ STYLE_BOLD="\033[1m"
 STYLE_PREPARE=$(COLOR_GREEN)
 STYLE_BUILD=$(COLOR_GREEN)$(STYLE_BOLD)
 
-ECHO=echo
+ifeq ($(shell echo -e toto),toto)
+	ECHO=echo -e
+else
+	ECHO=echo
+endif
 
 FIND=$(shell find $1 -name "$2")
