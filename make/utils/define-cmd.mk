@@ -1,7 +1,7 @@
 ifeq ($(OS),Windows_NT)
-	include ./make/utils/define-windows-cmd.mk
+	include ./make/utils/windows/cmd.mk
 else
-	include ./make/utils/define-linux-cmd.mk
+	include ./make/utils/linux/cmd.mk
 endif
 
 NODE=node>$(DEVNULL)
