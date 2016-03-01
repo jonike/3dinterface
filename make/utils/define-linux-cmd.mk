@@ -10,7 +10,7 @@ STYLE_BOLD="\033[1m"
 STYLE_PREPARE=$(COLOR_GREEN)
 STYLE_BUILD=$(COLOR_GREEN)$(STYLE_BOLD)
 
-ifeq ($(TRAVIS),true)
+ifeq ($(shell echo -e),-e)
 	ECHO=echo
 else
 	ECHO=echo -e
