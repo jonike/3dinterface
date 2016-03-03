@@ -97,6 +97,7 @@ function main() {
 
     // On sigint, stop the server
     process.on('SIGINT', function() {
+        process.stdout.write('\r');
         log.debug('Stopping server...');
         process.exit(0);
     });

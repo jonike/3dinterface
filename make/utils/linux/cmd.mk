@@ -4,16 +4,12 @@ MKDIRP=mkdir -p
 RMRF=rm -rf
 DEVNULL=$/dev$/null
 
-COLOR_DEFAULT="\033[0m"
-COLOR_GREEN="\033[32m"
-STYLE_BOLD="\033[1m"
+COLOR_DEFAULT="\\033[0m"
+COLOR_GREEN="\\033[32m"
+STYLE_BOLD="\\033[1m"
 STYLE_PREPARE=$(COLOR_GREEN)
 STYLE_BUILD=$(COLOR_GREEN)$(STYLE_BOLD)
 
-ifeq ($(TRAVIS),true)
-	ECHO=echo
-else
-	ECHO=echo -e
-endif
+ECHO=printf "%b\n"
 
 FIND=$(shell find $1 -name "$2")
