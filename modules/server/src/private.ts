@@ -2,7 +2,7 @@
 export var url  : string = null
 
 /** @hidden */
-export var secret : string = null;
+export var secret : string = '';
 
 /** @hidden */
 export var microSecretKey : string = null;
