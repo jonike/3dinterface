@@ -1,6 +1,6 @@
 $(MODULES)/server/typings: $(MODULES)/server/typings/typings/.dirstamp $(MODULES)/server/typings/custom/.dirstamp
 
-$(MODULES)/server/typings/typings/.dirstamp: $(MODULES)/server/typings/typings.json
+$(MODULES)/server/typings/typings/.dirstamp: $(PREPARE_DEPENDENCY) $(MODULES)/server/typings/typings.json
 	@$(call LOG_TYPINGS,server)
 	@$(CD) $(MODULES)/server/typings && $(TYPINGS) install
 	@$(TOUCH_DIRSTAMP)
@@ -16,7 +16,7 @@ $(MODULES)/server/node_modules/.dirstamp: $(MODULES)/server/package.json $(L3D_D
 	@$(CD) $(MODULES)/server/ && $(NPM_UNINSTALL) l3d l3dp config mth && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/server/bin/.dirstamp: $(call FIND,$(MODULES)/server/src/,*.ts) $(call FIND,$(MODULES)/server/src,*.jade) $(MODULES)/server/node_modules/.dirstamp $(MODULES)/server/typings
+$(MODULES)/server/bin/.dirstamp: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)/server/src/,*.ts) $(call FIND,$(MODULES)/server/src,*.jade) $(MODULES)/server/node_modules/.dirstamp $(MODULES)/server/typings
 	@$(call LOG_BUILDING,server)
 	@$(CD) $(MODULES)/server/ && $(TSC)
 	@$(TOUCH_DIRSTAMP)
@@ -82,10 +82,10 @@ $(MODULES)/server/bin/static/js/l3dp.js: $(MODULES)/l3dp/bin/l3dp.js
 	@$(MKDIRP) $(MODULES)/server/bin/static/js
 	@$(MERGE) $(MODULES)/l3dp/bin/ $(MODULES)/server/bin/static/js
 
-test-server: server
+test-server: $(PREPARE_DEPENDENCY) server
 	@$(CD) $(MODULES)/server/bin/ && $(NODE) server.js --nolisten
 
-run-server: server
+run-server: $(PREPARE_DEPENDENCY) server
 	@$(CD) $(MODULES)/server/bin && $(NODE_OUTPUT) server.js
 
 clean-server:
