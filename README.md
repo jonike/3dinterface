@@ -18,7 +18,6 @@ It is hosted by [OpenShift](https://www.openshift.com/) at
 
 # Install
 ```sh
-make prepare
 make
 ```
 
