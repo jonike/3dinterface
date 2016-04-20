@@ -456,6 +456,14 @@ module l3d {
                 var currentPart = this.parts[elt.mesh];
                 var currentGeometry = (<THREE.Geometry>currentPart.mesh.geometry);
 
+                if (
+                    currentGeometry.vertices[elt.a] === undefined ||
+                    currentGeometry.vertices[elt.b] === undefined ||
+                    currentGeometry.vertices[elt.c] === undefined)
+                {
+                    console.warn("Face received before vertex");
+                }
+
                 if (elt.aNormal !== undefined) {
                     currentGeometry.faces.push(new THREE.Face3(elt.a, elt.b, elt.c, [this.normals[elt.aNormal], this.normals[elt.bNormal], this.normals[elt.cNormal]]));
                 } else {
@@ -493,25 +501,52 @@ module l3d {
 
             var currentTime = Date.now();
 
-            for (var i = 0; i < 100; i++) {
+            // console.log(arr.length);
 
-                if (typeof this.log === 'function' && this.numberOfFacesReceived % this.modulus === 0) {
-                    this.log(this.numberOfFacesReceived, this.numberOfFaces);
+            // Sync version
+            {
+                for (var i = 0; i < arr.length; i++) {
+
+                    if (typeof this.log === 'function' && this.numberOfFacesReceived % this.modulus === 0) {
+                        this.log(this.numberOfFacesReceived, this.numberOfFaces);
+                    }
+
+                    // if (arr.length === 0) {
+                    //     // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
+                    //     callback();
+                    //     return;
+                    // }
+
+                    var elt = parseList(arr[i]);
+                    this.addElement(elt);
+
                 }
 
-                if (arr.length === 0) {
-                    // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
-                    callback();
-                    return;
-                }
-
-                var elt = parseList(arr.shift());
-                this.addElement(elt);
-
+                callback();
             }
 
-            // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
-            setTimeout(() => { this.addElements(arr, callback); }, 50);
+            // Timeout version
+            // {
+            //     for (var i = 0; i < 100; i++) {
+
+            //         if (typeof this.log === 'function' && this.numberOfFacesReceived % this.modulus === 0) {
+            //             this.log(this.numberOfFacesReceived, this.numberOfFaces);
+            //         }
+
+            //         if (arr.length === 0) {
+            //             // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
+            //             callback();
+            //             return;
+            //         }
+
+            //         var elt = parseList(arr.shift());
+            //         this.addElement(elt);
+
+            //     }
+
+            //     // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
+            //     setTimeout(() => { this.addElements(arr, callback); }, 50);
+            // }
 
         }
 
