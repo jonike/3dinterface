@@ -504,49 +504,49 @@ module l3d {
             // console.log(arr.length);
 
             // Sync version
-            {
-                for (var i = 0; i < arr.length; i++) {
-
-                    if (typeof this.log === 'function' && this.numberOfFacesReceived % this.modulus === 0) {
-                        this.log(this.numberOfFacesReceived, this.numberOfFaces);
-                    }
-
-                    // if (arr.length === 0) {
-                    //     // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
-                    //     callback();
-                    //     return;
-                    // }
-
-                    var elt = parseList(arr[i]);
-                    this.addElement(elt);
-
-                }
-
-                callback();
-            }
-
-            // Timeout version
             // {
-            //     for (var i = 0; i < 100; i++) {
+            //     for (var i = 0; i < arr.length; i++) {
 
             //         if (typeof this.log === 'function' && this.numberOfFacesReceived % this.modulus === 0) {
             //             this.log(this.numberOfFacesReceived, this.numberOfFaces);
             //         }
 
-            //         if (arr.length === 0) {
-            //             // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
-            //             callback();
-            //             return;
-            //         }
+            //         // if (arr.length === 0) {
+            //         //     // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
+            //         //     callback();
+            //         //     return;
+            //         // }
 
-            //         var elt = parseList(arr.shift());
+            //         var elt = parseList(arr[i]);
             //         this.addElement(elt);
 
             //     }
 
-            //     // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
-            //     setTimeout(() => { this.addElements(arr, callback); }, 50);
+            //     callback();
             // }
+
+            // Timeout version
+            {
+                for (var i = 0; i < 100; i++) {
+
+                    if (typeof this.log === 'function' && this.numberOfFacesReceived % this.modulus === 0) {
+                        this.log(this.numberOfFacesReceived, this.numberOfFaces);
+                    }
+
+                    if (arr.length === 0) {
+                        // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
+                        callback();
+                        return;
+                    }
+
+                    var elt = parseList(arr.shift());
+                    this.addElement(elt);
+
+                }
+
+                // console.log('Time to add : ' + (Date.now() - currentTime) + 'ms');
+                setTimeout(() => { this.addElements(arr, callback); }, 50);
+            }
 
         }
 
