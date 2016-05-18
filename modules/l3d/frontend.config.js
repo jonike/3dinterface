@@ -2,6 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 
 webpack({
+    entry: './src/l3d.ts',
     output: {
         libraryTarget: 'var',
         library: 'l3d',
