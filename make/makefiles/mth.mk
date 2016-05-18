@@ -13,6 +13,8 @@ $(MODULES)/mth/node_modules/.dirstamp: $(MODULES)/mth/package.json
 
 $(MODULES)/mth/lib/.dirstamp: $(call FIND,$(MODULES)/mth/src/,*.ts) $(MODULES)/mth/package.json $(MODULES)/mth/tsconfig.json $(MODULES)/mth/typings/.dirstamp $(MODULES)/mth/node_modules/.dirstamp
 	@$(call LOG_BUILDING,mth)
+	ls $(MODULES)/mth/node_modules
+	ls $(MODULES)/mth/typings
 	@$(CD) $(MODULES)/mth/ && $(TSC)
 	@$(TOUCH_DIRSTAMP)
 	@$(call LOG_BUILT,mth)
