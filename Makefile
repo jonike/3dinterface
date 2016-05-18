@@ -4,7 +4,7 @@ all: server bouncing-cube
 
 ./node_modules/.dirstamp:
 	@$(ECHO) "$(STYLE_PREPARE)Installing global dependencies$(COLOR_DEFAULT)"
-	@npm --loglevel error --progress false install typescript@next ts-loader webpack webpack-fail-plugin $(TO_NULL)
+	@npm --loglevel error --progress false install typescript ts-loader webpack webpack-fail-plugin $(TO_NULL)
 	@$(TOUCH_DIRSTAMP)
 
 prepare: ./node_modules/.dirstamp
