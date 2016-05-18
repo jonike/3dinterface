@@ -17,7 +17,6 @@ try {
 
 webpack({
 
-    // entry: path.join(__dirname, 'src', 'l3d.ts'),
     output: {
         filename: path.join(__dirname, 'lib', 'l3d.js'),
         libraryTarget: 'commonjs'
