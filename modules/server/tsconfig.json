@@ -17,6 +17,7 @@
         "typings/typings/browser.d.ts"
     ],
     "filesGlob": [
-        "./typings/*.d.ts"
+        "./typings/*.d.ts",
+        "./typings/typings/*.d.ts"
     ]
 }

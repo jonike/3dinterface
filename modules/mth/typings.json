@@ -2,8 +2,8 @@
   "name": "mth",
   "dependencies": {},
   "devDependencies": {},
-  "ambientDependencies": {
-    "nodeunit": "github:DefinitelyTyped/DefinitelyTyped/nodeunit/nodeunit.d.ts#d202e275b263219946050e94463a5250c0ac93f6",
-    "three": "github:DefinitelyTyped/DefinitelyTyped/threejs/three.d.ts#c6c3d3e65dd2d7035428f9c7b371ec911ff28542"
+  "globalDependencies": {
+    "nodeunit": "registry:dt/nodeunit#0.0.0+20160316155526",
+    "three": "registry:dt/three#0.0.0+20160517065351"
   }
 }
