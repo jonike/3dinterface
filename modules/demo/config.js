@@ -2,7 +2,6 @@ var webpack = require('webpack');
 var path = require('path');
 
 webpack({
-    entry: path.join(__dirname, './main.ts'),
     output: {
         libraryTarget: 'var',
         library: 'config',

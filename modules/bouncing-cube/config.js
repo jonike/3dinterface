@@ -2,7 +2,6 @@ var webpack = require('webpack');
 var path = require('path');
 
 webpack({
-    entry: path.join(__dirname, 'src/main.ts'),
     output: {
         filename: path.join(__dirname, './bin/bouncing.min.js'),
     },

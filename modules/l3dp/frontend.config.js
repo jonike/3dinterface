@@ -1,7 +1,6 @@
 var webpack = require('webpack');
 
 webpack({
-    entry: './src/l3dp.ts',
     output: {
         libraryTarget: 'var',
         library: 'l3dp',
