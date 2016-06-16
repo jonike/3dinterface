@@ -576,7 +576,7 @@ module l3d {
 
             if (typeof recommendationId === 'number') {
                 //  this.loader.recommendationClicked(recommendationId);
-                this.recommendationClicked = recommendationId + 1;
+                this.recommendationClicked = recommendationId;
             }
 
             var otherCamera = recommendation.camera || recommendation;
