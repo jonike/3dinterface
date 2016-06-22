@@ -8,7 +8,7 @@ module geo {
      * Class that represents a generator that streams first the frustum of the
      * camera, and then linearly according to the .obj file
      */
-    export class NV_PN_Generator extends ConfigGenerator {
+    export class CullingGenerator extends ConfigGenerator {
         /**
          * @param streamer the parent mesh streamer
          */
@@ -26,20 +26,10 @@ module geo {
 
             var config : Config;
 
-            if (recommendationClicked === 0) {
-
-                console.log("Full for reco 0");
-                config = [{recommendationId : 0, proportion : 1, smart : true}];
-
-            } else {
-
                 // Case without prefetch
                 console.log("No prefetching");
-                config = [{ frustum: cameraFrustum, proportion: 1}];
+                return [{ frustum: cameraFrustum, proportion: 1}];
 
-            }
-
-            return config;
         }
 
         /**
@@ -48,7 +38,7 @@ module geo {
          */
         generateFillingConfig(previousConfig? : Config, previousData? : Data, cameraFrustum? : Frustum, recommendationClicked? : number) : Config {
 
-            return [{ frustum: cameraFrustum, proportion: 1}];
+            return [];
 
         }
 

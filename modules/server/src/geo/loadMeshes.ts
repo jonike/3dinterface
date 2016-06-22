@@ -19,6 +19,7 @@ module geo {
         function isLoaded() : boolean {
 
             for (let name in MeshNames.dict) {
+
                 if (MeshNames.dict[name].done === false) {
                     return false;
                 }
@@ -33,7 +34,7 @@ module geo {
 
             if (isLoaded()) {
 
-                log.ready('Meshes loaded in ' + (Date.now() - startedTime) + 'ms');
+                log.ready('All meshes loaded in ' + (Date.now() - startedTime) + 'ms');
 
             }
 
@@ -84,9 +85,11 @@ module geo {
 
                             }
 
-                            MeshNames.dict[name].done = true;
-                            trySetLoaded();
                         }
+
+                        MeshNames.dict[name].done = true;
+                        log.debug(name + ' is loaded');
+                        trySetLoaded();
                     }
                 );
                 Meshes.dict[name] = container;

@@ -215,7 +215,7 @@ module l3d {
             this.collisions = false;
             this.shouldLogCameraAngles = true;
             this.resetElements = {position: new THREE.Vector3(0,1,1), target: new THREE.Vector3()};
-            this.recommendationClicked = null;
+            this.recommendationClicked = 0;
 
         }
 
@@ -317,6 +317,7 @@ module l3d {
             super.update(time);
             if (!isNaN(this.t))
                 this.normalMotion(time);
+
         }
 
         /**
