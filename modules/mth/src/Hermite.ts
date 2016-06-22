@@ -3,60 +3,82 @@ import * as Tools from './Tools';
 
 module mth {
 
+    export interface Curve<T> {
+
+       eval(t : number) : T;
+
+    }
+
+    export class Line<T> {
+
+        p1 : T;
+        p2 : T;
+
+        constructor(p1 : T, p2 : T) {
+            this.p1 = p1;
+            this.p2 = p2;
+        }
+
+        eval(t : number) : T {
+            return sum(mul(this.p1, t), mul(this.p2, 1-t));
+        }
+
+    }
+
+    function sum<T> (a:T, b:T) : T;
+    function sum(a : number, b : number) : number;
+    function sum(a:Tools.Vector3, b:Tools.Vector3) : Tools.Vector3;
+    function sum(a : any, b : any) : any {
+        if (typeof a === 'number') {
+            return a + b;
+        } else {
+            return Tools.sum(a,b);
+        }
+    }
+
+
+    function diff<T> (a:T, b:T) : T;
+    function diff(a:Tools.Vector3, b:Tools.Vector3) : Tools.Vector3;
+    function diff(a:number, b:number) : number;
+    function diff(a : any, b : any) : any {
+        if (typeof a === 'number') {
+            return a - b;
+        } else {
+            return Tools.diff(a,b);
+        }
+    }
+
+    function mul<T> (a:T, b:number) : T;
+    function mul(a:number, b:number) : number;
+    function mul(a:Tools.Vector3, b:number) : Tools.Vector3;
+    function mul(a : any, b : any) : any {
+        if (typeof a === 'number') {
+            return a * b;
+        } else {
+            return Tools.mul(a,b);
+        }
+    }
+
+    function clone<T>(a:T) : T;
+    function clone(a:number) : number;
+    function clone(v:Tools.Vector3) : Tools.Vector3;
+    function clone(a : any) : any {
+        if (typeof a === 'number') {
+            return a;
+        } else {
+            return Tools.copy(a);
+        }
+    }
+
     /**
      * Contains eveything linked to hermite polynoms
      */
     export module Hermite {
 
-        function sum<T> (a:T, b:T) : T;
-        function sum(a : number, b : number) : number;
-        function sum(a:Tools.Vector3, b:Tools.Vector3) : Tools.Vector3;
-        function sum(a : any, b : any) : any {
-            if (typeof a === 'number') {
-                return a + b;
-            } else {
-                return Tools.sum(a,b);
-            }
-        }
-
-
-        function diff<T> (a:T, b:T) : T;
-        function diff(a:Tools.Vector3, b:Tools.Vector3) : Tools.Vector3;
-        function diff(a:number, b:number) : number;
-        function diff(a : any, b : any) : any {
-            if (typeof a === 'number') {
-                return a - b;
-            } else {
-                return Tools.diff(a,b);
-            }
-        }
-
-        function mul<T> (a:T, b:number) : T;
-        function mul(a:number, b:number) : number;
-        function mul(a:Tools.Vector3, b:number) : Tools.Vector3;
-        function mul(a : any, b : any) : any {
-            if (typeof a === 'number') {
-                return a * b;
-            } else {
-                return Tools.mul(a,b);
-            }
-        }
-
-        function clone<T>(a:T) : T;
-        function clone(a:number) : number;
-        function clone(v:Tools.Vector3) : Tools.Vector3;
-        function clone(a : any) : any {
-            if (typeof a === 'number') {
-                return a;
-            } else {
-                return Tools.copy(a);
-            }
-        }
-
         /**
          * Creates a hermite polynom
          */
-        export class Polynom<T> {
+        export class Polynom<T> implements Curve<T> {
 
             /**
              * time indices of the interpolation
@@ -246,7 +268,7 @@ module mth {
         /**
          * Represents a base function for evaluation of hermite polynoms
          */
-        export class BaseFunction {
+        export class BaseFunction implements Curve<number> {
 
             /**
              * the index of the base function
@@ -318,7 +340,7 @@ module mth {
              * @param P1 polynom at instant 1
              * @param PP1 derivative of the polynom at instant 1
              */
-            export class Polynom<T> {
+            export class Polynom<T> implements Curve<T> {
 
                 /** @description c of ax²+bx+c */
                 a : T;

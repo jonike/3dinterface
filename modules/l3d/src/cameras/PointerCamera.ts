@@ -191,8 +191,6 @@ module l3d {
 
         hermiteAngles : mth.Hermite.special.Polynom<mth.Vector3>;
 
-        hermite : mth.Hermite.Polynom<mth.Vector3>;
-
         collidableObjects : any[];
 
         changed : boolean;
@@ -553,7 +551,6 @@ module l3d {
             var t = [0,1];
             var f = [this.position.clone(), this.newPosition];
             var fp = [mth.diff(this.target, this.position), mth.diff(this.newTarget, this.newPosition)];
-            this.hermite = new mth.Hermite.Polynom(t,f,fp);
             this.t = 0;
 
             if (toSave) {
