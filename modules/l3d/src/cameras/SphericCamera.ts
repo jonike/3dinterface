@@ -138,7 +138,7 @@ module l3d {
          * @param recommendation Camera to move to
          * @param true if you want to save the current state of the camera
          */
-        move(destination : CameraItf) : void {
+        startLinearMotion(destination : CameraItf) : void {
 
             this.t = 0;
 
@@ -159,7 +159,7 @@ module l3d {
          * @param recommendation Camera to move to
          * @param toSave if you want to save the current state of the camera
          */
-        moveHermite(destination : CameraItf) : void {
+        startHermiteMotion(destination : CameraItf) : void {
 
             this.t = 0;
 

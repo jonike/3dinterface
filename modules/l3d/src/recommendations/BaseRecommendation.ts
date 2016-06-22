@@ -12,6 +12,8 @@ module l3d {
      */
     export class BaseRecommendation extends THREE.Object3D {
 
+        recommendationId : number;
+
         camera : FixedCamera;
 
         constructor(arg1:number, arg2:number, arg3:number, arg4:number, position:mth.Vector3, target:mth.Vector3) {

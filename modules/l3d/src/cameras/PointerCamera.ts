@@ -6,6 +6,7 @@ import { CameraItf } from '../utils/Logger';
 import { MousePointer, Color } from '../canvases/MousePointer';
 import { DB } from '../utils/Logger';
 import { BaseCamera } from './BaseCamera';
+import { SphericCamera } from './SphericCamera';
 
 module l3d {
     /**
@@ -46,27 +47,12 @@ module l3d {
     /**
      * Represents a camera that can be used easily
      */
-    export class PointerCamera extends BaseCamera {
+    export class PointerCamera extends SphericCamera {
 
         /**
          * A reference to the renderer
          */
         renderer : THREE.Renderer;
-
-        /**
-         * Theta angle of the camera
-         */
-        theta : number;
-
-        /**
-         * Phi angle of the camera
-         */
-        phi : number;
-
-        /**
-         * Indicates if the camera is following a linear motion
-         */
-        moving : boolean;
 
         /**
          * Indicates if the user is dragging the camera
@@ -84,11 +70,6 @@ module l3d {
         mouseMove : MouseCursor;
 
         /**
-         * Current position of the camera (optical center)
-         */
-        position : THREE.Vector3;
-
-        /**
          * Current direction of the camera
          */
         forward : THREE.Vector3;
@@ -99,14 +80,9 @@ module l3d {
         left : THREE.Vector3;
 
         /**
-         * Point that the camera is targeting
-         */
-        target : THREE.Vector3;
-
-        /**
          * Indicates the different motions that the camera should have according to the keyboard events
          */
-        motion : CameraMotion;
+        inputMotion : CameraMotion;
 
         /**
          * Sentitivity of the mouse
@@ -169,27 +145,12 @@ module l3d {
          */
         recommendationClicked : number;
 
-        /**
-         *
-         */
-        newTarget : mth.Vector3;
-
-        newPosition : mth.Vector3;
-
         mouseMoved : boolean;
-
-        t : number;
 
         mousePointer : MousePointer;
         startCanvas : any;
 
         wasLocked : boolean;
-
-        movingHermite : boolean;
-
-        hermitePosition : mth.Hermite.special.Polynom<mth.Vector3>;
-
-        hermiteAngles : mth.Hermite.special.Polynom<mth.Vector3>;
 
         collidableObjects : any[];
 
@@ -213,16 +174,12 @@ module l3d {
             else
                 listenerTarget = arguments[5];
 
-            this.theta = Math.PI;
-            this.phi = Math.PI;
-            this.moving = false;
             this.dragging = false;
             this.mouse = {x: 0, y: 0};
             this.mouseMove = {x: 0, y: 0};
             this.forward = new THREE.Vector3();
             this.left = new THREE.Vector3();
-            this.target = new THREE.Vector3(0,1,0);
-            this.motion = {};
+            this.inputMotion = {};
             this.sensitivity = 0.05;
             this.speed = 1;
             this.raycaster = new THREE.Raycaster();
@@ -356,53 +313,9 @@ module l3d {
          */
         update(time : number) {
 
-            if (this.moving) {
-                this.shouldLogCameraAngles = false;
-                this.linearMotion(time);
-            } else if (this.movingHermite) {
-                this.shouldLogCameraAngles = false;
-                this.hermiteMotion(time);
-            } else {
+            super.update(time);
+            if (!isNaN(this.t))
                 this.normalMotion(time);
-            }
-        }
-
-        /**
-         * Update the camera according to its linear motion
-         * @param time number of milliseconds between the previous and the next frame
-         */
-        linearMotion(time : number) {
-            var positionDirection = mth.diff(this.newPosition, this.position);
-            var targetDirection = mth.diff(this.newTarget, this.target);
-
-            this.position.add(mth.mul(positionDirection, 0.05 * time / 20));
-            this.target.add(mth.mul(targetDirection, 0.05 * time / 20));
-
-            if (mth.norm2(mth.diff(this.position, this.newPosition)) < 0.01 &&
-                mth.norm2(mth.diff(this.target, this.newTarget))  < 0.01) {
-                this.moving = false;
-                this.shouldLogCameraAngles = true;
-                this.anglesFromVectors();
-            }
-        }
-
-        /**
-         * Update the camera according to its hermite motion
-         * @param time number of milliseconds between the previous and the next frame
-         */
-        hermiteMotion(time : number) {
-            var e = this.hermitePosition.eval(this.t);
-            mth.copy(e, this.position);
-
-            this.target = mth.sum(this.position, this.hermiteAngles.eval(this.t));
-
-            this.t += 0.01 * time / 20;
-
-            if (this.t > 1) {
-                this.movingHermite = false;
-                this.shouldLogCameraAngles = true;
-                this.anglesFromVectors();
-            }
         }
 
         /**
@@ -412,10 +325,10 @@ module l3d {
         normalMotion(time : number) {
 
             // Update angles
-            if (this.motion.increasePhi)   {this.phi   += this.sensitivity * time / 20; this.changed = true; }
-            if (this.motion.decreasePhi)   {this.phi   -= this.sensitivity * time / 20; this.changed = true; }
-            if (this.motion.increaseTheta) {this.theta += this.sensitivity * time / 20; this.changed = true; }
-            if (this.motion.decreaseTheta) {this.theta -= this.sensitivity * time / 20; this.changed = true; }
+            if (this.inputMotion.increasePhi)   {this.phi   += this.sensitivity * time / 20; this.changed = true; }
+            if (this.inputMotion.decreasePhi)   {this.phi   -= this.sensitivity * time / 20; this.changed = true; }
+            if (this.inputMotion.increaseTheta) {this.theta += this.sensitivity * time / 20; this.changed = true; }
+            if (this.inputMotion.decreaseTheta) {this.theta -= this.sensitivity * time / 20; this.changed = true; }
 
             if ( this.isLocked() || this.dragging) {
 
@@ -465,11 +378,11 @@ module l3d {
             var speed = this.speed * time / 20;
             var direction = new THREE.Vector3();
 
-            if (this.motion.boost) speed *= 10;
-            if (this.motion.moveForward)  {direction.add(mth.mul(forward, speed)); this.changed = true;}
-            if (this.motion.moveBackward) {direction.sub(mth.mul(forward, speed)); this.changed = true;}
-            if (this.motion.moveLeft)     {direction.add(mth.mul(left,    speed)); this.changed = true;}
-            if (this.motion.moveRight)    {direction.sub(mth.mul(left,    speed)); this.changed = true;}
+            if (this.inputMotion.boost) speed *= 10;
+            if (this.inputMotion.moveForward)  {direction.add(mth.mul(forward, speed)); this.changed = true;}
+            if (this.inputMotion.moveBackward) {direction.sub(mth.mul(forward, speed)); this.changed = true;}
+            if (this.inputMotion.moveLeft)     {direction.add(mth.mul(left,    speed)); this.changed = true;}
+            if (this.inputMotion.moveRight)    {direction.sub(mth.mul(left,    speed)); this.changed = true;}
 
             if (this.changed && this.recommendationClicked !== null) {
                 this.recommendationClicked = null;
@@ -488,9 +401,8 @@ module l3d {
          * Reset the camera to its resetElements, and finishes any motion
          */
         reset() {
+            this.t = NaN;
             this.resetPosition();
-            this.moving = false;
-            this.movingHermite = false;
             this.recommendationClicked = 0;
             (new DB.Event.ResetClicked()).send();
         }
@@ -543,15 +455,7 @@ module l3d {
 
             var otherCamera = recommendation.camera || recommendation;
 
-            this.movingHermite = false;
-            this.moving = true;
-
-            this.newTarget = otherCamera.target.clone();
-            this.newPosition = otherCamera.position.clone();
-            var t = [0,1];
-            var f = [this.position.clone(), this.newPosition];
-            var fp = [mth.diff(this.target, this.position), mth.diff(this.newTarget, this.newPosition)];
-            this.t = 0;
+            super.startLinearMotion(otherCamera);
 
             if (toSave) {
                 if (this.changed) {
@@ -578,21 +482,7 @@ module l3d {
 
             var otherCamera = recommendation.camera || recommendation;
 
-            this.moving = false;
-            this.movingHermite = true;
-            this.t = 0;
-
-            this.hermitePosition = new mth.Hermite.special.Polynom(
-                this.position.clone(),
-                otherCamera.position.clone(),
-                mth.mul(mth.diff(otherCamera.target, otherCamera.position).normalize(),4)
-            );
-
-            this.hermiteAngles = new mth.Hermite.special.Polynom(
-                mth.diff(this.target, this.position),
-                mth.diff(otherCamera.target, otherCamera.position),
-                new THREE.Vector3()
-            );
+            super.startHermiteMotion(otherCamera);
 
             if (toSave) {
                 if (this.changed) {
@@ -644,31 +534,31 @@ module l3d {
          */
         onKeyEvent = function(event : any, toSet : boolean) {
             // Create copy of state
-            var motionJsonCopy = JSON.stringify(this.motion);
+            var motionJsonCopy = JSON.stringify(this.inputMotion);
 
             switch ( event.keyCode ) {
                 // Azerty keyboards
-                case 38: case 90:  this.motion.moveForward   = toSet; break; // up / z
-                case 37: case 81:  this.motion.moveLeft      = toSet; break; // left / q
-                case 40: case 83:  this.motion.moveBackward  = toSet; break; // down / s
-                case 39: case 68:  this.motion.moveRight     = toSet; break; // right / d
-                case 32:           this.motion.boost         = toSet; break;
+                case 38: case 90:  this.inputMotion.moveForward   = toSet; break; // up / z
+                case 37: case 81:  this.inputMotion.moveLeft      = toSet; break; // left / q
+                case 40: case 83:  this.inputMotion.moveBackward  = toSet; break; // down / s
+                case 39: case 68:  this.inputMotion.moveRight     = toSet; break; // right / d
+                case 32:           this.inputMotion.boost         = toSet; break;
 
                 // Qwerty keyboards
-                case 38: case 87:  this.motion.moveForward   = toSet; break; // up / w
-                case 37: case 65:  this.motion.moveLeft      = toSet; break; // left / a
-                case 40: case 83:  this.motion.moveBackward  = toSet; break; // down / s
-                case 39: case 68:  this.motion.moveRight     = toSet; break; // right / d
+                case 38: case 87:  this.inputMotion.moveForward   = toSet; break; // up / w
+                case 37: case 65:  this.inputMotion.moveLeft      = toSet; break; // left / a
+                case 40: case 83:  this.inputMotion.moveBackward  = toSet; break; // down / s
+                case 39: case 68:  this.inputMotion.moveRight     = toSet; break; // right / d
 
-                case 73: case 104: this.motion.increasePhi   = toSet; break; // 8 Up for angle
-                case 75: case 98:  this.motion.decreasePhi   = toSet; break; // 2 Down for angle
-                case 74: case 100: this.motion.increaseTheta = toSet; break; // 4 Left for angle
-                case 76: case 102: this.motion.decreaseTheta = toSet; break; // 6 Right for angle
+                case 73: case 104: this.inputMotion.increasePhi   = toSet; break; // 8 Up for angle
+                case 75: case 98:  this.inputMotion.decreasePhi   = toSet; break; // 2 Down for angle
+                case 74: case 100: this.inputMotion.increaseTheta = toSet; break; // 4 Left for angle
+                case 76: case 102: this.inputMotion.decreaseTheta = toSet; break; // 6 Right for angle
 
                 case 13: if (toSet) this.log(); break;
             }
 
-            if (motionJsonCopy != JSON.stringify(this.motion)) {
+            if (motionJsonCopy != JSON.stringify(this.inputMotion)) {
                 // Log any change
                 var e = new DB.Event.KeyboardEvent();
                 e.camera = this;
@@ -757,7 +647,7 @@ module l3d {
             this.onMouseMove(event);
 
             // Send log to DB
-            if (this.dragging && this.mouseMoved && !this.moving && !this.movingHermite) {
+            if (this.dragging && this.mouseMoved && !isNaN(this.t)) {
                 var e = new DB.Event.KeyboardEvent();
                 e.camera = this;
                 e.keypressed = false;

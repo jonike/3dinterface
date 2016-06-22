@@ -3,8 +3,14 @@ import * as l3d from 'l3d';
 
 module l3dp {
 
-    function create(a:number,b:number,c:number,d:number,e:number,f:number) : l3d.CameraItf {
-        return {position:{x:a,y:b,z:c}, target:{x:d,y:e,z:f}};
+    var recommendationId = 0;
+
+    interface CreateReturnType extends l3d.CameraItf {
+        recommendationId : number;
+    }
+
+    function create(a:number,b:number,c:number,d:number,e:number,f:number) : CreateReturnType {
+        return {position:{x:a,y:b,z:c}, target:{x:d,y:e,z:f}, recommendationId:++recommendationId};
     }
 
     export module RecommendationData {
@@ -40,6 +46,8 @@ module l3dp {
                 16.752484674681824,-11.466024392567634,-30.926268727065203)
 
         ];
+
+        recommendationId = 0;
 
         export var bobombRecommendations : l3d.CameraItf[] = [
 
@@ -88,6 +96,8 @@ module l3dp {
                 35.82557966946029,-3.7247748037464845,-4.21695195820471)
         ];
 
+        recommendationId = 0;
+
         export var mountainRecommendations : l3d.CameraItf[] = [
             create(
                 -32.55470573684094,29.55322138048939,-17.59574199842915,
@@ -133,6 +143,8 @@ module l3dp {
                 27.528666741865862,-9.63536430265764,46.43021804402408,
                 1.1519844626168592,-18.896564555304533,17.820765028981576)
         ];
+
+        recommendationId = 0;
 
         export var whompRecommendations : l3d.CameraItf[] = [
             create(
