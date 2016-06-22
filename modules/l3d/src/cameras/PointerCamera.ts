@@ -315,7 +315,8 @@ module l3d {
         update(time : number) {
 
             super.update(time);
-            if (!isNaN(this.t))
+
+            if (isNaN(this.t))
                 this.normalMotion(time);
 
         }
