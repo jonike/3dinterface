@@ -4,6 +4,7 @@ import * as io from 'socket.io';
 import * as mth from 'mth';
 
 import { PointerCamera } from '../cameras/PointerCamera';
+import { BaseRecommendation } from '../recommendations/BaseRecommendation';
 
 module l3d {
 
@@ -312,9 +313,9 @@ module l3d {
                 // Only good for sponza model
                 var _moveHermite = this.camera.moveHermite;
 
-                this.camera.moveHermite = (a:any, b:any, c:any) => {
-                    this.socket.emit('reco', c);
-                    _moveHermite.apply(this.camera, [a,b,c]);
+                this.camera.moveHermite = (a:BaseRecommendation, b:boolean) => {
+                    this.socket.emit('reco', a.recommendationId);
+                    _moveHermite.apply(this.camera, [a,b]);
                 };
 
             }

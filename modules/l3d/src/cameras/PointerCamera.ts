@@ -7,6 +7,7 @@ import { MousePointer, Color } from '../canvases/MousePointer';
 import { DB } from '../utils/Logger';
 import { BaseCamera } from './BaseCamera';
 import { SphericCamera } from './SphericCamera';
+import { BaseRecommendation } from '../recommendations/BaseRecommendation';
 
 module l3d {
     /**
@@ -449,20 +450,16 @@ module l3d {
          * @param recommendation Camera to move to
          * @param true if you want to save the current state of the camera
          */
-        move(recommendation : CameraItf, toSave : boolean, recommendationId? : number) : void;
-        move(recommendation : TargetMove, toSave : boolean, recommendationId ?: number) : void;
-        move(recommendation : any, toSave = true, recommendationId? : number) : void {
+        move(recommendation : CameraItf, toSave : boolean, recommendationId? : number) : void {
 
-            var otherCamera = recommendation.camera || recommendation;
-
-            super.startLinearMotion(otherCamera);
+            super.startLinearMotion(recommendation);
 
             if (toSave) {
                 if (this.changed) {
                     this.save();
                     this.changed = false;
                 }
-                this.history.addState({position: otherCamera.position.clone(), target: otherCamera.target.clone()});
+                this.history.addState({position: mth.copy(recommendation.position), target: mth.copy(recommendation.target)});
             }
         }
 
@@ -471,16 +468,11 @@ module l3d {
          * @param recommendation Camera to move to
          * @param toSave if you want to save the current state of the camera
          */
-        moveHermite(recommendation : CameraItf, toSave ?: boolean, recommendationId ?: number) : void;
-        moveHermite(recommendation : TargetMove, toSave ?: boolean, recommendationId ?: number) : void;
-        moveHermite(recommendation : any, toSave = true, recommendationId ?: number) : void {
+        moveHermite(recommendation : BaseRecommendation, toSave ?: boolean) : void {
 
-            if (typeof recommendationId === 'number') {
-                //  this.loader.recommendationClicked(recommendationId);
-                this.recommendationClicked = recommendationId + 1;
-            }
+            this.recommendationClicked = recommendation.recommendationId + 1;
 
-            var otherCamera = recommendation.camera || recommendation;
+            var otherCamera = recommendation.camera;
 
             super.startHermiteMotion(otherCamera);
 
