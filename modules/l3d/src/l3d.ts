@@ -6,7 +6,7 @@ export { LoadingCanvas } from './canvases/LoadingCanvas';
 export { ProgressiveLoader } from './loaders/ProgressiveLoader';
 export { ViewportRecommendation } from './recommendations/ViewportRecommendation';
 export { ArrowRecommendation } from './recommendations/ArrowRecommendation';
-export { BaseRecommendation } from './recommendations/BaseRecommendation';
+export { BaseRecommendation, RecommendationInfo } from './recommendations/BaseRecommendation';
 export { History } from './utils/History';
 export { CameraItf, DB } from './utils/Logger';
 export { ObjectClicker } from './utils/ObjectClicker';

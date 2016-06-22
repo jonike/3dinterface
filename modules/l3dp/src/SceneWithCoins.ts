@@ -86,7 +86,7 @@ module l3dp {
 
         }
 
-        abstract getRawRecommendations() : l3d.CameraItf[];
+        abstract getRawRecommendations() : l3d.RecommendationInfo[];
 
         abstract getRawCoins() : mth.Vector3[];
 

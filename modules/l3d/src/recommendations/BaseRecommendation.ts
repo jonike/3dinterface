@@ -2,8 +2,15 @@ import * as THREE from 'three';
 import * as mth from 'mth';
 
 import { FixedCamera } from '../cameras/FixedCamera';
+import { CameraItf } from '../utils/Logger';
 
 module l3d {
+
+    export interface RecommendationInfo extends CameraItf {
+
+        recommendationId : number;
+
+    }
 
     /**
      * @description Represents a reccomendation that does nothing

@@ -5,17 +5,13 @@ module l3dp {
 
     var recommendationId = 0;
 
-    interface CreateReturnType extends l3d.CameraItf {
-        recommendationId : number;
-    }
-
-    function create(a:number,b:number,c:number,d:number,e:number,f:number) : CreateReturnType {
+    function create(a:number,b:number,c:number,d:number,e:number,f:number) : l3d.RecommendationInfo {
         return {position:{x:a,y:b,z:c}, target:{x:d,y:e,z:f}, recommendationId:++recommendationId};
     }
 
     export module RecommendationData {
 
-        export var peachRecommendations : l3d.CameraItf[] = [
+        export var peachRecommendations : l3d.RecommendationInfo[] = [
 
             create(
                 -4.318087280217455,2.8007613084859253,1.5193437897009336,
@@ -49,7 +45,7 @@ module l3dp {
 
         recommendationId = 0;
 
-        export var bobombRecommendations : l3d.CameraItf[] = [
+        export var bobombRecommendations : l3d.RecommendationInfo[] = [
 
             create(
                 22.81974561274774,23.728166674516967,-23.50757340835654,
@@ -98,7 +94,7 @@ module l3dp {
 
         recommendationId = 0;
 
-        export var mountainRecommendations : l3d.CameraItf[] = [
+        export var mountainRecommendations : l3d.RecommendationInfo[] = [
             create(
                 -32.55470573684094,29.55322138048939,-17.59574199842915,
                 -2.6530082773148784,13.825746134447998,3.8176886333992925)
@@ -146,7 +142,7 @@ module l3dp {
 
         recommendationId = 0;
 
-        export var whompRecommendations : l3d.CameraItf[] = [
+        export var whompRecommendations : l3d.RecommendationInfo[] = [
             create(
                 -9.183036772081453,3.0766349039394916,-10.631680881366988,
                 23.306020365359252,-17.647069934844886,0.09162197153512075)

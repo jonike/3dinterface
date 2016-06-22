@@ -84,7 +84,6 @@ $(function() {
         // Initialize scene
 
         scene = l3dp.createSceneFromConfig(CONFIG);
-        scene.load(LOADING_CONFIG.prefetchingPolicy, LOADING_CONFIG.lowRes);
 
         // scene = new GLOB.SceneClass();
         scene.addEventListener('onload', function() { loadingCanvas.clear(); });
@@ -113,6 +112,8 @@ $(function() {
         $('#lock').prop('checked', true);
         camera.shouldLock = true;
         camera.onPointerLockChange();
+
+        scene.load(LOADING_CONFIG.prefetchingPolicy, LOADING_CONFIG.lowRes);
     }
 
     function initCanvases() {

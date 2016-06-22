@@ -4,7 +4,7 @@ import * as mth from 'mth';
 
 import { PointerCamera } from '../cameras/PointerCamera';
 import { ProgressiveLoader } from '../loaders/ProgressiveLoader';
-import { BaseRecommendation } from '../recommendations/BaseRecommendation';
+import { BaseRecommendation, RecommendationInfo } from '../recommendations/BaseRecommendation';
 import { CameraItf } from '../utils/Logger';
 
 module l3d {
@@ -111,8 +111,8 @@ module l3d {
 
         addRecommendations(ClassToInstanciate : any, width : number, height : number, recoSize ?: number) {
 
-            var createRecommendation = function(position : CameraItf) {
-                return new ClassToInstanciate(
+            var createRecommendation = function(position : RecommendationInfo) {
+                var newReco = new ClassToInstanciate(
                     50,
                     width/height,
                     1,
@@ -120,6 +120,8 @@ module l3d {
                     mth.copy(position.position),
                     mth.copy(position.target)
                 );
+                newReco.recommendationId = position.recommendationId;
+                return newReco;
             }
 
             // Access local recommendations
@@ -180,7 +182,7 @@ module l3d {
 
         }
 
-        abstract getRawRecommendations() : CameraItf[];
+        abstract getRawRecommendations() : RecommendationInfo[];
 
     }
 }
