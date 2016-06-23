@@ -13,7 +13,7 @@ It is hosted by [OpenShift](https://www.openshift.com/) at
 # Prerequisites
   - [Node](https://nodejs.org/en/)
   - [NPM](https://www.npmjs.com/)
-  - [TypeScript](http://www.typescriptlang.org/) : `sudo npm install -g typescript@next`
+  - [TypeScript](http://www.typescriptlang.org/) : `sudo npm install -g typescript`
   - [Typings](https://github.com/typings/typings) : `sudo npm install -g typings`
 
 # Install

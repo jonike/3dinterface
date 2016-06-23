@@ -28,11 +28,22 @@ module geo {
         */
         constructor(arg : string) {
 
-            let split = arg.replace(/s+/g, ' ').split(' ');
+            let split = arg.replace(/[ \t]+/g, ' ').split(' ');
 
-            this.x = parseFloat(split[1]);
-            this.y = parseFloat(split[2]);
-            this.z = parseFloat(split[3]);
+            // Apparently, *1 is better than parseFloat
+            this.x = (<any>split[1]) * 1;
+            this.y = (<any>split[2]) * 1;
+            this.z = (<any>split[3]) * 1;
+
+            if (isNaN(this.x)) {
+                console.log(split[1]);
+            }
+            if (isNaN(this.y)) {
+                console.log(split[2]);
+            }
+            if (isNaN(this.z)) {
+                console.log(split[3]);
+            }
 
             this.index = null;
 

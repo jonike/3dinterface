@@ -24,11 +24,20 @@ module geo {
          */
         generateMainConfig(cameraFrustum : Frustum, recommendationClicked? : number) : Config {
 
-            var config : Config = [];
+            var config : Config;
 
-            // Case without prefetch
-            console.log("No prefetching");
-            config = [{ frustum: cameraFrustum, proportion: 1}];
+            if (recommendationClicked === 0) {
+
+                console.log("Full for reco 0");
+                config = [{recommendationId : 0, proportion : 1, smart : true}];
+
+            } else {
+
+                // Case without prefetch
+                console.log("No prefetching");
+                config = [{ frustum: cameraFrustum, proportion: 1}];
+
+            }
 
             return config;
         }
@@ -39,7 +48,7 @@ module geo {
          */
         generateFillingConfig(previousConfig? : Config, previousData? : Data, cameraFrustum? : Frustum, recommendationClicked? : number) : Config {
 
-            return [];
+            return [{ frustum: cameraFrustum, proportion: 1}];
 
         }
 

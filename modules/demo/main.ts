@@ -167,7 +167,7 @@ $(function() {
             };
 
             a.onClick = function() {
-                camera.moveHermite(a.camera, true, scene.recommendations.indexOf(a));
+                camera.moveHermite(a.camera, true, scene.recommendations.indexOf(a) + 1);
             }
 
             objectClicker.objects.push(a);

@@ -4,7 +4,8 @@ module config {
         PeachCastle,
         BobombBattlefield,
         CoolCoolMountain,
-        WhompFortress
+        WhompFortress,
+        Sponza
     }
 
     export enum RecommendationStyle {

@@ -9,6 +9,7 @@ import { PeachScene } from './PeachScene';
 import { WhompScene } from './WhompScene';
 import { BobombScene } from './BobombScene';
 import { MountainScene } from './MountainScene';
+import { SponzaScene } from './SponzaScene';
 
 module l3dp {
 
@@ -22,6 +23,7 @@ module l3dp {
             case Scene.CoolCoolMountain:  scene = new MountainScene(); break;
             case Scene.BobombBattlefield: scene = new BobombScene();   break;
             case Scene.WhompFortress:     scene = new WhompScene();    break;
+            case Scene.Sponza:            scene = new SponzaScene();   break;
 
         }
 
@@ -34,13 +36,13 @@ module l3dp {
 
             case RecommendationStyle.BaseRecommendation:
                 params[0] = l3d.BaseRecommendation;
-            break;
+                break;
             case RecommendationStyle.ViewportRecommendation:
                 params[0] = l3d.ViewportRecommendation;
-            break;
+                break;
             case RecommendationStyle.ArrowRecommendation:
                 params[0] = l3d.ArrowRecommendation;
-            break;
+                break;
 
         }
 

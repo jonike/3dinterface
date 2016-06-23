@@ -22,6 +22,7 @@ export function demo(req : express.Request, res : express.Response, render : Fun
         case '2': scene = config.Scene.BobombBattlefield; break;
         case '3': scene = config.Scene.CoolCoolMountain;  break;
         case '4': scene = config.Scene.WhompFortress;     break;
+        case '5': scene = config.Scene.Sponza;            break;
     }
 
     switch (req.query.bookmark) {
@@ -47,7 +48,7 @@ export function demo(req : express.Request, res : express.Response, render : Fun
 
     let loadingConf : config.LoadingConfig = {
         prefetchingPolicy : prefetchingPolicy,
-        lowRes : req.query.lowres === 'on'
+        lowRes : req.query.lowres === 'on' && scene !== config.Scene.Sponza
     }
 
     res.locals.config = JSON.stringify(conf);

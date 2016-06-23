@@ -2,10 +2,10 @@
   "name": "bouncing-cube",
   "dependencies": {},
   "devDependencies": {},
-  "ambientDependencies": {
-    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#263705d313346e093d95cb62cef6fed848e46978",
-    "socket.io": "github:DefinitelyTyped/DefinitelyTyped/socket.io/socket.io.d.ts#4128f7af06c355e3526b7cf7cbb85e2e43bff167",
-    "socket.io-client": "github:DefinitelyTyped/DefinitelyTyped/socket.io-client/socket.io-client.d.ts#495f2734927a644e913f9ed8f4d7d903f276f41d",
-    "three": "github:DefinitelyTyped/DefinitelyTyped/threejs/three.d.ts#c6c3d3e65dd2d7035428f9c7b371ec911ff28542"
+  "globalDependencies": {
+    "node": "registry:dt/node#6.0.0+20160514165920",
+    "socket.io": "registry:dt/socket.io#1.4.4+20160317120654",
+    "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654",
+    "three": "registry:dt/three#0.0.0+20160517065351"
   }
 }

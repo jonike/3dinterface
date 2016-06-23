@@ -347,10 +347,10 @@ module geo {
                         this.predictionTable = predictionTables[2];
                         this.facesToSend = facesToSend[2];
                     break;
-                    case '/static/data/sponza/sponza.obj':
-                        this.predictionTable = predictionTables[3];
-                        this.facesToSend = facesToSend[3];
-                    break;
+                    // case '/static/data/sponza/sponza.obj':
+                    //     this.predictionTable = predictionTables[3];
+                    //     this.facesToSend = facesToSend[3];
+                    // break;
                     default:
                         this.predictionTable = predictionTables[3];
                 };
@@ -384,6 +384,8 @@ module geo {
             socket.on('materials', () => {
 
                 var data = this.nextMaterials();
+
+                console.log(data.length);
 
                 socket.emit('elements', data);
 
@@ -676,7 +678,7 @@ module geo {
                 // Sort buffer
                 if (config[configIndex].frustum !== undefined) {
 
-                    buffers[configIndex].sort(this.faceComparator(config[configIndex].frustum));
+                    // buffers[configIndex].sort(this.faceComparator(config[configIndex].frustum));
 
                 } else {
 
