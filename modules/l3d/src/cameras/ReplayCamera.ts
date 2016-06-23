@@ -45,6 +45,8 @@ module l3d {
 
         logReco : (b : boolean, n : number) => any;
 
+        motionDuration : number;
+
         resetElements : {
             position : THREE.Vector3,
             target : THREE.Vector3
@@ -82,6 +84,8 @@ module l3d {
 
             this.quittingTime = Infinity;
 
+            this.motionDuration = 1;
+
         }
 
         look() {
@@ -96,9 +100,10 @@ module l3d {
 
         update(time : number) : boolean {
 
-            super.update(time);
+            super.update(time / this.motionDuration);
 
             this.totalTime += time;
+            this.transitionDuration = 1;
 
             if (this.totalTime > this.quittingTime) {
                 process.exit(0);
@@ -141,63 +146,47 @@ module l3d {
             // console.log(this.event.type);
 
             if (this.event.type == 'camera') {
+
                 this.startLinearMotion(this.event);
+                this.motionDuration = this.event.date - this.path[this.counter - 1].date;
+
             } else if (this.event.type == 'coin') {
+
                 // Get the coin with the same id of event
                 for (var i = 0; i < this.coins.length; i++) {
                     if (this.coins[i].id === this.event.id)
                         this.coins[i].get();
                 }
+
                 this.nextEvent();
-                // Wait a little before launching nextEvent
-                // (function(self) {
-                //     setTimeout(function() {
-                //         self.nextEvent();
-                //     },500);
-                // })(this);
+
             } else if (this.event.type == 'arrow') {
-                self.isArrow = true;
-                if (typeof self.logReco === 'function') {
-                    var info = self.logReco(true, self.totalTime);
-                    // require('fs').appendFileSync(info.path, info.value);
-                }
-                // process.stderr.write('\033[33mArrowclicked ! ' + JSON.stringify(self.cameras[self.event.id].camera.position) + '\033[0m\n');
-                if (self.quittingTime === Infinity)
-                    self.quittingTime = self.totalTime + 6000;
-                if (this.shouldRecover) {
-                    (function(self : ReplayCamera, tmp : number) {
-                        self.event.type = 'camera';
-                        self.recovering = true;
-                        self.startLinearMotion({
-                            position: self.position.clone(),
-                            target: self.cameras[self.event.id].camera.position.clone()
-                        }/*, function() {
-                            self.recovering = false;
-                            self.event.type = 'arrow';
-                            self.moveReco(tmp);
-                        }*/);
-                    })(this, this.event.id);
-                } else {
-                    this.moveReco(this.event.id);
-                }
+
+                this.startLinearMotion(this.cameras[this.event.id].camera);
+                this.motionDuration = 2;
+
             } else if (this.event.type == 'reset') {
+
                 this.reset();
                 this.nextEvent();
-                //(function (self) {
-                //    setTimeout(function() {
-                //        self.nextEvent();
-                //    },500);
-                //})(this);
+
             } else if (this.event.type == 'previousnext') {
+
                 this.startLinearMotion(this.event);
+                this.motionDuration = 2;
+
             } else {
+
                 // Ignore other events
                 this.nextEvent();
+
             }
         }
 
         reset() {
+
             this.resetPosition();
+
         }
 
         resetPosition() {

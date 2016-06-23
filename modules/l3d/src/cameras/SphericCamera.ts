@@ -16,6 +16,11 @@ module l3d {
     export class SphericCamera extends BaseCamera {
 
         /**
+         * Time that it takes to move to a bookmark (in s)
+         */
+        transitionDuration : number;
+
+        /**
          * Theta angle of the camera
          */
         theta : number;
@@ -66,6 +71,8 @@ module l3d {
 
             this.speed = 1;
 
+            this.transitionDuration = 2;
+
         }
 
         /**
@@ -89,7 +96,7 @@ module l3d {
             this.position.copy(this.curvePosition.eval(this.t));
             this.target.copy(mth.sum(this.position, this.curveDirection.eval(this.t)));
 
-            this.t += 0.01 * time / 20;
+            this.t += time / (20 * this.transitionDuration * 60);
 
             if (this.t > 1) {
                 this.t = NaN;
