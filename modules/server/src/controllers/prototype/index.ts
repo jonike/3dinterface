@@ -170,14 +170,12 @@ export function replay(req : express.Request, res : express.Response, next : Fun
     });
 };
 
-export function replayIndex(req : express.Request, res : express.Response, next : Function) {
+export function replayIndex(req : express.Request, res : express.Response, render : Function) {
     db.getAllExps(function(result) {
         res.locals.users = result;
 
         res.setHeader('Content-Type', 'text/html');
-        res.render("replay_index.jade", res.locals, function(err, result) {
-            res.send(result);
-        });
+        render('replay_index.jade');
     });
 };
 
