@@ -7,6 +7,7 @@ declare var Stats : any;
 
 declare var CONFIG : Config.ExpConfig;
 declare var LOADING_CONFIG : Config.LoadingConfig;
+declare var REPLAY_ID : number;
 
 $(function() {
 
@@ -77,7 +78,24 @@ $(function() {
         scene = l3dp.createSceneFromConfig(CONFIG);
 
         // scene = new GLOB.SceneClass();
-        scene.addEventListener('onload', function() { loadingCanvas.clear(); });
+        scene.addEventListener('onload', function() {
+            loadingCanvas.clear();
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", '/prototype/replay-info/' + REPLAY_ID, true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    camera.data = JSON.parse(xhr.responseText);
+                    camera.path = camera.data.events;
+                    camera.start();
+                }
+            };
+
+            xhr.send();
+
+        });
+
         renderer = new THREE.WebGLRenderer({alpha:true, antialias:true});
         renderer.setClearColor(0x87ceeb);
 

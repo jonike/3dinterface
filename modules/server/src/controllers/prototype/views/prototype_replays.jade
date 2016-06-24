@@ -7,7 +7,8 @@ block prepend js
     script.
         CONFIG = !{config};
         LOADING_CONFIG = !{loadingConf};
-        GLOB = typeof GLOB === 'undefined' ? GLOB : {};
+        REPLAY_ID = #{id};
+        GLOB = typeof GLOB !== 'undefined' ? GLOB : {};
         GLOB.DB_DISABLED = true;
 
 block extrajs
