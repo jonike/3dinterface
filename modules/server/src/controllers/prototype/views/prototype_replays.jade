@@ -4,14 +4,15 @@ block title
     title #{title} - Prototype
 
 block prepend js
-    script DB_DISABLED = true;
+    script.
+        CONFIG = !{config};
+        LOADING_CONFIG = !{loadingConf};
+        GLOB = typeof GLOB === 'undefined' ? GLOB : {};
+        GLOB.DB_DISABLED = true;
 
 block extrajs
-    script Recommendation = l3d.ArrowRecommendation;
-    script var params = params || {}; params.get = params.get || {}; params.get.id = #{id};
-    script initMainScene = #{initjs}
-    script(src="/static/js/l3dp.min.js")
-    script(src="/static/js/replay.min.js")
+    script(src="/static/js/l3dp.js")
+    script(src="/static/js/replay.js")
 
 block extrahead
     link(rel="stylesheet" href="/static/css/prototype.css")
