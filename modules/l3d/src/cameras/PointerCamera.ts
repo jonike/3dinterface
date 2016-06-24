@@ -136,10 +136,6 @@ module l3d {
          */
         shouldLogCameraAngles : boolean;
 
-        /**
-         * The camera we will move to when we'll reset the camera
-         */
-        resetElements : CameraItf;
 
         /**
          * Id of the recommendation that is currently clicked (null if no recommendation are clicked)
@@ -214,7 +210,6 @@ module l3d {
 
             this.collisions = false;
             this.shouldLogCameraAngles = true;
-            this.resetElements = {position: new THREE.Vector3(0,1,1), target: new THREE.Vector3()};
             this.recommendationClicked = 0;
 
         }
@@ -398,25 +393,6 @@ module l3d {
             // Update angle
             this.target = this.position.clone();
             this.target.add(forward);
-        }
-
-        /**
-         * Reset the camera to its resetElements, and finishes any motion
-         */
-        reset() {
-            this.t = NaN;
-            this.resetPosition();
-            this.recommendationClicked = 0;
-            (new DB.Event.ResetClicked()).send();
-        }
-
-        /**
-         * Reset the position of th camera
-         */
-        resetPosition() {
-            mth.copy(this.resetElements.position, this.position);
-            mth.copy(this.resetElements.target, this.target);
-            this.anglesFromVectors();
         }
 
         /**
@@ -713,47 +689,6 @@ module l3d {
          */
         redoable() : boolean {
             return this.history.redoable();
-        }
-
-        /**
-         * Creates a list containing all the elements to send to the server to stream visible part
-         * @return {Array} A list containing <ol start="0">
-         * <li>the position of the camera</li>
-         * <li>the target of the camera</li>
-         * <li>and planes defining the frustum of the camera (a,b,c, and d from ax+by+cz+d=0)</li>
-         * </ol>
-         */
-        toList() : any[] {
-
-            var camera = this; // (this.recommendationClicked === null ? this : this.cameras[this.recommendationClicked].camera);
-
-            camera.updateMatrix();
-            camera.updateMatrixWorld(true);
-
-            camera.matrixWorldInverse.getInverse(camera.matrixWorld);
-
-            var frustum = new THREE.Frustum();
-
-            frustum.setFromMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
-
-            var ret =
-                [[camera.position.x, camera.position.y, camera.position.z],
-                    [camera.target.x,   camera.target.y,   camera.target.z],
-                    this.recommendationClicked
-            ];
-
-            for (var i = 0; i < frustum.planes.length; i++) {
-
-                var p = frustum.planes[i];
-
-                ret.push([
-                    p.normal.x, p.normal.y, p.normal.z, p.constant
-                ]);
-
-            }
-
-            return ret;
-
         }
 
     }

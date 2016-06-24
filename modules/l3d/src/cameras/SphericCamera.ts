@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import * as mth from 'mth';
 
+import { BaseRecommendation } from '../recommendations/BaseRecommendation';
 import { History } from '../utils/History';
 import { CameraItf } from '../utils/Logger';
 import { MousePointer, Color } from '../canvases/MousePointer';
@@ -13,7 +14,7 @@ module l3d {
     /**
      * Represents a camera that can be used easily
      */
-    export class SphericCamera extends BaseCamera {
+    export abstract class SphericCamera extends BaseCamera {
 
         /**
          * Time that it takes to move to a bookmark (in s)
@@ -39,6 +40,11 @@ module l3d {
          * Point that the camera is targeting
          */
         target : THREE.Vector3;
+
+        /**
+         * The camera we will move to when we'll reset the camera
+         */
+        resetElements : CameraItf;
 
         /**
          * Speed of the camera
@@ -73,6 +79,7 @@ module l3d {
 
             this.transitionDuration = 2;
 
+            this.resetElements = {position: new THREE.Vector3(0,1,1), target: new THREE.Vector3()};
         }
 
         /**
@@ -184,6 +191,8 @@ module l3d {
 
         }
 
+        abstract moveHermite(recommendation : BaseRecommendation, toSave ?: boolean) : void;
+
         /**
          * Look method. Equivalent to gluLookAt for the current camera
          */
@@ -197,6 +206,67 @@ module l3d {
         addToScene(scene : THREE.Scene) {
             scene.add(this);
         }
+
+        /**
+         * Reset the camera to its resetElements, and finishes any motion
+         */
+        reset() {
+            this.t = NaN;
+            this.resetPosition();
+            this.recommendationClicked = 0;
+        }
+
+        /**
+         * Reset the position of th camera
+         */
+        resetPosition() {
+            mth.copy(this.resetElements.position, this.position);
+            mth.copy(this.resetElements.target, this.target);
+            this.anglesFromVectors();
+        }
+
+        /**
+         * Creates a list containing all the elements to send to the server to stream visible part
+         * @return {Array} A list containing <ol start="0">
+         * <li>the position of the camera</li>
+         * <li>the target of the camera</li>
+         * <li>and planes defining the frustum of the camera (a,b,c, and d from ax+by+cz+d=0)</li>
+         * </ol>
+         */
+        toList() : any[] {
+
+            var camera = this; // (this.recommendationClicked === null ? this : this.cameras[this.recommendationClicked].camera);
+
+            camera.updateMatrix();
+            camera.updateMatrixWorld(true);
+
+            camera.matrixWorldInverse.getInverse(camera.matrixWorld);
+
+            var frustum = new THREE.Frustum();
+
+            frustum.setFromMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+
+            var ret =
+                [[camera.position.x, camera.position.y, camera.position.z],
+                    [camera.target.x,   camera.target.y,   camera.target.z],
+                    this.recommendationClicked
+            ];
+
+            for (var i = 0; i < frustum.planes.length; i++) {
+
+                var p = frustum.planes[i];
+
+                ret.push([
+                    p.normal.x, p.normal.y, p.normal.z, p.constant
+                ]);
+
+            }
+
+            return ret;
+
+        }
+
+
 
     }
 

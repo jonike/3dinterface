@@ -47,11 +47,6 @@ module l3d {
 
         motionDuration : number;
 
-        resetElements : {
-            position : THREE.Vector3,
-            target : THREE.Vector3
-        };
-
         constructor(
             arg0: any,
             arg1: any,
@@ -183,16 +178,14 @@ module l3d {
             }
         }
 
-        reset() {
+        moveHermite(recommendation : BaseRecommendation, toSave ?: boolean) : void {
 
-            this.resetPosition();
+            this.recommendationClicked = recommendation.recommendationId + 1;
 
-        }
+            var otherCamera = recommendation.camera;
 
-        resetPosition() {
-            this.position.copy(this.resetElements.position);
-            this.target.copy(this.resetElements.target);
-            this.anglesFromVectors();
+            super.startHermiteMotion(otherCamera);
+
         }
 
         moveReco(recommendationId : number) {
@@ -206,46 +199,6 @@ module l3d {
 
         save() {
 
-        }
-
-/**
- * Creates a list containing all the elements to send to the server to stream visible part
- * @return {Array} A list containing <ol start="0">
- * <li>the position of the camera</li>
- * <li>the target of the camera</li>
- * <li>and planes defining the frustum of the camera (a,b,c, and d from ax+by+cz+d=0)</li>
- * </ol>
- */
-        toList() : any[] {
-
-            var camera = this; // (this.recommendationClicked === null ? this : this.cameras[this.recommendationClicked].camera);
-
-            camera.updateMatrix();
-            camera.updateMatrixWorld(true);
-
-            camera.matrixWorldInverse.getInverse(camera.matrixWorld);
-
-            var frustum = new THREE.Frustum();
-
-            frustum.setFromMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
-
-            var ret =
-                [[camera.position.x, camera.position.y, camera.position.z],
-                    [camera.target.x,   camera.target.y,   camera.target.z],
-                    this.recommendationClicked
-            ];
-
-            for (var i = 0; i < frustum.planes.length; i++) {
-
-                var p = frustum.planes[i];
-
-                ret.push([
-                    p.normal.x, p.normal.y, p.normal.z, p.constant
-                ]);
-
-            }
-
-            return ret;
         }
 
     }
