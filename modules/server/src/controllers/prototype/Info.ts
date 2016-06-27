@@ -90,6 +90,7 @@ module DBReq {
 
             this.redCoins = [];
             this.results = {};
+            this.finalResult = {};
             this.finishAction = finishAction;
             this.client = null;
 
@@ -151,15 +152,24 @@ module DBReq {
 
             for (;;) {
                 // Find next element
-                let nextIndex : number = null;
+                let nextIndex : string = null;
+                let index : string;
 
-                for (let index = 0; index < this.results.length; index++) {
-                    let i = this.results[index];
+                for (let tmp in this.results) {
+                    // Sometimes, TypeScript is smart, but sometimes, it's not.
+                    // In this case, we want to iterate over the keys of
+                    // this.results, meaning that tmp will be a string, but
+                    // TypeScript is convinced that tmp is a number, so it
+                    // throws an error in the next lines.
+                    //
+                    // To correct this, we cast tmp to a string
+                    index = <string>tmp;
+
                     // The next element is placed at the index 0 (since the elements
                     // gotten from the database are sorted)
-                    if (this.results[i].length !== 0 &&
-                        (nextIndex === null || this.results[i][0].time < this.results[nextIndex][0].time)) {
-                        nextIndex = i;
+                    if (this.results[index].length !== 0 &&
+                        (nextIndex === null || this.results[index][0].time < this.results[nextIndex][0].time)) {
+                        nextIndex = index;
                     }
                 }
 

@@ -90,6 +90,7 @@ module l3d {
         start() {
             this.counter = 0;
             this.started = true;
+            console.log(this.data);
             this.nextEvent();
         }
 
