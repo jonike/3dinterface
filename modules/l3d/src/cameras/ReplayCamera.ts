@@ -90,12 +90,12 @@ module l3d {
         start() {
             this.counter = 0;
             this.started = true;
-            console.log(this.data);
             this.nextEvent();
         }
 
         update(time : number) : boolean {
 
+            var wasNaN = isNaN(this.t);
             super.update(time / this.motionDuration);
 
             this.totalTime += time;
@@ -106,6 +106,10 @@ module l3d {
             }
 
             if (this.started) {
+
+                if (!wasNaN && isNaN(this.t)) {
+                    this.nextEvent();
+                }
 
             }
 
@@ -144,7 +148,7 @@ module l3d {
             if (this.event.type == 'camera') {
 
                 this.startLinearMotion(this.event);
-                this.motionDuration = this.event.date - this.path[this.counter - 1].date;
+                this.motionDuration = ((new Date(this.event.time)).getTime() - (new Date(this.path[this.counter - 1].time)).getTime()) / 1000;
 
             } else if (this.event.type == 'coin') {
 
