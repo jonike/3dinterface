@@ -162,7 +162,7 @@ module l3d {
 
             } else if (this.event.type == 'arrow') {
 
-                this.startLinearMotion(this.cameras[this.event.id].camera);
+                this.startHermiteMotion(this.cameras[this.event.id].camera);
                 this.motionDuration = 2;
 
             } else if (this.event.type == 'reset') {
