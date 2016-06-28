@@ -9,3 +9,4 @@ include ./make/makefiles/l3dp.mk
 include ./make/makefiles/bouncing.mk
 include ./make/makefiles/server.mk
 include ./make/makefiles/demo.mk
+include ./make/makefiles/replay.mk

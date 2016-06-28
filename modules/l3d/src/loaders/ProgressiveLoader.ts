@@ -3,7 +3,8 @@ import * as THREE from 'three';
 import * as io from 'socket.io';
 import * as mth from 'mth';
 
-import { PointerCamera } from '../cameras/PointerCamera';
+import { SphericCamera } from '../cameras/SphericCamera';
+import { BaseRecommendation } from '../recommendations/BaseRecommendation';
 
 module l3d {
 
@@ -222,7 +223,7 @@ module l3d {
         /**
          * Reference to the camera
          */
-        camera : PointerCamera;
+        camera : SphericCamera;
 
         /**
          * Number of total elements for loading
@@ -264,14 +265,14 @@ module l3d {
         finished : boolean;
 
         /**
-         * @param {string} path path to the .obj file
-         * @param {THREE.Scene} scene to add the object
-         * @param {PointerCamera} camera the camera that will be sent to server for smart
+         * @param path path to the .obj file
+         * @param scene to add the object
+         * @param camera the camera that will be sent to server for smart
          * streaming (can be null, then the server will stream the mesh in the .obj
          * order)
-         * @param {function} callback callback to call on the objects when they're created
+         * @param callback callback to call on the objects when they're created
          */
-        constructor(path : string, scene : THREE.Scene, camera : PointerCamera, callback : Function, log : Function, laggy : boolean, prefetch : config.PrefetchingPolicy) {
+        constructor(path : string, scene : THREE.Scene, camera : SphericCamera, callback : Function, log : Function, laggy : boolean, prefetch : config.PrefetchingPolicy) {
 
             this.objPath = path;
             this.texturesPath = path.substring(0, path.lastIndexOf('/')) + '/';
@@ -307,14 +308,14 @@ module l3d {
             //         _moveReco.apply(this.camera, [param]);
             //     };
 
-            if (this.camera instanceof PointerCamera) {
+            if (this.camera instanceof SphericCamera) {
 
                 // Only good for sponza model
                 var _moveHermite = this.camera.moveHermite;
 
-                this.camera.moveHermite = (a:any, b:any, c:any) => {
-                    this.socket.emit('reco', c);
-                    _moveHermite.apply(this.camera, [a,b,c]);
+                this.camera.moveHermite = (a:BaseRecommendation, b:boolean) => {
+                    this.socket.emit('reco', a.recommendationId);
+                    _moveHermite.apply(this.camera, [a,b]);
                 };
 
             }

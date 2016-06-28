@@ -1,5 +1,6 @@
 import { Frustum, Data } from '../Interfaces';
 import { MeshStreamer } from '../MeshStreamer';
+import { CullingGenerator } from './Culling';
 import { NV_PN_Generator } from './NV_PN';
 import { V_PP_Generator } from './V_PP';
 import { V_PD_Generator } from './V_PD';

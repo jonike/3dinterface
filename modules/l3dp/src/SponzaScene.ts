@@ -106,7 +106,7 @@ module l3dp {
 
         }
 
-        getRawRecommendations() : l3d.CameraItf[] { return []; }
+        getRawRecommendations() : l3d.RecommendationInfo[] { return []; }
         getRawCoins() : mth.Vector3[] { return []; }
 
     }

@@ -3,8 +3,9 @@ import * as THREE from 'three';
 import * as mth from 'mth';
 
 import { PointerCamera } from '../cameras/PointerCamera';
+import { SphericCamera } from '../cameras/SphericCamera';
 import { ProgressiveLoader } from '../loaders/ProgressiveLoader';
-import { BaseRecommendation } from '../recommendations/BaseRecommendation';
+import { BaseRecommendation, RecommendationInfo } from '../recommendations/BaseRecommendation';
 import { CameraItf } from '../utils/Logger';
 
 module l3d {
@@ -26,7 +27,7 @@ module l3d {
         /**
          * The pointer camera associated with the scene (and the loading)
          */
-        protected camera : PointerCamera;
+        protected camera : SphericCamera;
 
         /**
          * The progressive loader that will load the elements from the scene
@@ -75,7 +76,7 @@ module l3d {
          * Sets the camera of the scene
          * @param camera the camera associated with the loading of the scene
          */
-        setCamera(camera : PointerCamera) {
+        setCamera(camera : SphericCamera) {
 
             this.camera = camera;
             this.camera.resetElements = this.getResetElements();
@@ -111,8 +112,8 @@ module l3d {
 
         addRecommendations(ClassToInstanciate : any, width : number, height : number, recoSize ?: number) {
 
-            var createRecommendation = function(position : CameraItf) {
-                return new ClassToInstanciate(
+            var createRecommendation = function(position : RecommendationInfo) {
+                var newReco = new ClassToInstanciate(
                     50,
                     width/height,
                     1,
@@ -120,6 +121,8 @@ module l3d {
                     mth.copy(position.position),
                     mth.copy(position.target)
                 );
+                newReco.recommendationId = position.recommendationId;
+                return newReco;
             }
 
             // Access local recommendations
@@ -180,7 +183,7 @@ module l3d {
 
         }
 
-        abstract getRawRecommendations() : CameraItf[];
+        abstract getRawRecommendations() : RecommendationInfo[];
 
     }
 }

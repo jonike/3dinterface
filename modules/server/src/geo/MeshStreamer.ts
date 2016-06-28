@@ -10,6 +10,7 @@ import { Vector, Sendable, CameraItf, Frustum, Data, Plane } from './Interfaces'
 import { MeshContainer } from './MeshContainer';
 import { Transformation } from './Transformation';
 import { ConfigGenerator, Config } from './ConfigGenerators/ConfigGenerator';
+import { CullingGenerator } from './ConfigGenerators/Culling';
 import { createConfigFromPolicy } from './ConfigGenerators/createConfigFromPolicy';
 
 import { Meshes } from './loadMeshes';
@@ -332,17 +333,17 @@ module geo {
                 this.mesh = Meshes.dict[path];
 
                 switch (path) {
-                    case '/static/data/bobomb/bobomb battlefeild.obj':
+                    // case '/static/data/bobomb/bobomb battlefeild.obj':
                     case '/static/data/bobomb/bobomb battlefeild_sub.obj':
                         this.predictionTable = predictionTables[0];
                         this.facesToSend = facesToSend[0];
                     break;
-                    case '/static/data/mountain/coocoolmountain.obj':
+                    // case '/static/data/mountain/coocoolmountain.obj':
                     case '/static/data/mountain/coocoolmountain_sub.obj':
                         this.predictionTable = predictionTables[1];
                         this.facesToSend = facesToSend[1];
                     break;
-                    case '/static/data/whomp/Whomps Fortress.obj':
+                    // case '/static/data/whomp/Whomps Fortress.obj':
                     case '/static/data/whomp/Whomps Fortress_sub.obj':
                         this.predictionTable = predictionTables[2];
                         this.facesToSend = facesToSend[2];
@@ -355,9 +356,15 @@ module geo {
                         this.predictionTable = predictionTables[3];
                 };
 
-                log.debug('Prefetch is : ' + config.PrefetchingPolicy[prefetch]);
-                this.generator = createConfigFromPolicy(prefetch, this);
-                this.backupGenerator = new ConfigGenerator(this);
+                if (this.predictionTable !== undefined && this.facesToSend !== undefined) {
+                    log.debug('Prefetch is : ' + config.PrefetchingPolicy[prefetch]);
+                    this.generator = createConfigFromPolicy(prefetch, this);
+                    this.backupGenerator = new ConfigGenerator(this);
+                } else {
+                    log.debug('No info : doing only culling');
+                    this.generator = new CullingGenerator(this);
+                    this.backupGenerator = new CullingGenerator(this);
+                }
 
                 if (this.mesh === undefined) {
                     process.stderr.write('Wrong path for model : ' + path + "\n");

@@ -4,6 +4,8 @@ import pg = require('pg');
 import pgc = require('../../private');
 import db = require('./DBReq');
 
+import * as config from 'config';
+
 export function index(req : express.Request, res : express.Response) {
     res.setHeader('Content-Type', 'text/html');
 
@@ -144,7 +146,7 @@ export function replayInfo(req : express.Request, res : express.Response) {
     });
 };
 
-export function replay(req : express.Request, res : express.Response, next : Function) {
+export function replay(req : express.Request, res : express.Response, render : Function, next:Function) {
     // Get id parameter
     res.locals.id = tools.filterInt(req.params.id);
 
@@ -156,28 +158,54 @@ export function replay(req : express.Request, res : express.Response, next : Fun
     }
 
     db.checkExpId(res.locals.id, function(sceneId) {
+
         if (sceneId === null) {
+
             var err = new Error("This replay does not exist");
             err.status = 404;
             next(err);
+
         } else {
-            res.locals.initjs = sceneToFunction(sceneId);
-            res.setHeader('Content-Type', 'text/html');
-            res.render('prototype_replays.jade', res.locals, function(err, result) {
-                res.send(result);
-            });
+
+            let scene : config.Scene;
+            let recommendationStyle : config.RecommendationStyle;
+            let coinConfig : config.CoinConfig = { type : config.ConfigType.None };
+
+            switch (sceneId) {
+                case 1: scene = config.Scene.PeachCastle;       break;
+                case 2: scene = config.Scene.BobombBattlefield; break;
+                case 3: scene = config.Scene.CoolCoolMountain;  break;
+                case 4: scene = config.Scene.WhompFortress;     break;
+                case 5: scene = config.Scene.Sponza;            break;
+            }
+
+            recommendationStyle = config.RecommendationStyle.BaseRecommendation;
+
+            let conf : config.ExpConfig = {
+                scene : scene,
+                coinConfig : coinConfig,
+                recommendationStyle : recommendationStyle
+            };
+
+            let loadingConf : config.LoadingConfig = {
+                lowRes : true,
+                prefetchingPolicy : config.PrefetchingPolicy.NV_PN
+            };
+
+            res.locals.config = JSON.stringify(conf);
+            res.locals.loadingConf = JSON.stringify(loadingConf);
+
+            render('prototype_replays.jade');
         }
     });
 };
 
-export function replayIndex(req : express.Request, res : express.Response, next : Function) {
+export function replayIndex(req : express.Request, res : express.Response, render : Function) {
     db.getAllExps(function(result) {
         res.locals.users = result;
 
         res.setHeader('Content-Type', 'text/html');
-        res.render("replay_index.jade", res.locals, function(err, result) {
-            res.send(result);
-        });
+        render('replay_index.jade');
     });
 };
 

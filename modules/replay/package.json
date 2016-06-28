@@ -1,0 +1,9 @@
+{
+  "name": "replay",
+  "version": "1.0.0",
+  "dependencies":{
+    "config":"file:../config",
+    "l3d":"file:../l3d",
+    "l3dp":"file:../l3dp"
+  }
+}

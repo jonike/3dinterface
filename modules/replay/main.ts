@@ -7,6 +7,7 @@ declare var Stats : any;
 
 declare var CONFIG : Config.ExpConfig;
 declare var LOADING_CONFIG : Config.LoadingConfig;
+declare var REPLAY_ID : number;
 
 $(function() {
 
@@ -21,14 +22,11 @@ $(function() {
         recommendations : l3d.BaseRecommendation[],
         objectClicker : l3d.ObjectClicker,
         previewer : l3d.Previewer,
-        camera : l3d.PointerCamera,
+        camera : l3d.ReplayCamera,
         coins : l3dp.Coin[] = [],
         previousTime : number,
-        pointer : l3d.MousePointer,
-        startCanvas : l3d.StartCanvas,
         loadingCanvas : l3d.LoadingCanvas,
-        coinCanvas : l3dp.CoinCanvas,
-        buttonManager : l3dp.ButtonManager;
+        coinCanvas : l3dp.CoinCanvas;
 
     main();
 
@@ -47,18 +45,12 @@ $(function() {
         //     l3dp.appendTo(container)(stats, coinCanvas, startCanvas, pointer, previewer, loadingCanvas, renderer);
         //     loadingCanvas.render();
         // } else
-        l3dp.appendTo(container)(startCanvas, pointer, previewer, renderer);
+        l3dp.appendTo(container)(renderer);
 
         // Set the good size of cameras
         onWindowResize();
 
-        coinCanvas.update();
-
-
-        // if (GLOB.locked !== undefined && GLOB.locked)
-        startCanvas.render();
-
-        // startCanvas.render(l3d.StartCanvas.Black);
+        // coinCanvas.update();
 
         // Bind previewer to renderer (for fixed option)
         function bind() {
@@ -86,15 +78,32 @@ $(function() {
         scene = l3dp.createSceneFromConfig(CONFIG);
 
         // scene = new GLOB.SceneClass();
-        scene.addEventListener('onload', function() { loadingCanvas.clear(); });
+        scene.addEventListener('onload', function() {
+            loadingCanvas.clear();
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", '/prototype/replay-info/' + REPLAY_ID, true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    camera.data = JSON.parse(xhr.responseText);
+                    camera.path = camera.data.events;
+                    camera.start();
+                }
+            };
+
+            xhr.send();
+
+        });
+
         renderer = new THREE.WebGLRenderer({alpha:true, antialias:true});
         renderer.setClearColor(0x87ceeb);
 
         // Initialize pointer camera
-        camera = new l3d.PointerCamera(
+        camera = new l3d.ReplayCamera(
             50,
             window.containerSize.width() / window.containerSize.height(),
-            0.01, 100000, renderer, container
+            0.01, 100000, coins, "{}", function() {}
         );
 
         scene.setCamera(camera);
@@ -105,13 +114,13 @@ $(function() {
 
         // scene.addCoins(GLOB.coinConfig);
 
-        camera.collidableObjects = scene.collidableObjects;
-        camera.collisions = true;
+        // camera.collidableObjects = scene.collidableObjects;
+        // camera.collisions = true;
 
         // Get default param for camera lock
-        $('#lock').prop('checked', true);
-        camera.shouldLock = true;
-        camera.onPointerLockChange();
+        // $('#lock').prop('checked', true);
+        // camera.shouldLock = true;
+        // camera.onPointerLockChange();
 
         scene.load(LOADING_CONFIG.prefetchingPolicy, LOADING_CONFIG.lowRes);
     }
@@ -134,12 +143,6 @@ $(function() {
         coinCanvas.domElement.style.position = 'absolute';
         coinCanvas.domElement.style.cssFloat = 'top-left';
 
-        // Initialize pointer for pointer lock
-        pointer = new l3d.MousePointer(camera);
-
-        // Init start canvas
-        startCanvas = new l3d.StartCanvas(camera);
-
         loadingCanvas = new l3d.LoadingCanvas();
     }
 
@@ -150,7 +153,7 @@ $(function() {
         window.addEventListener('resize', onWindowResize, false);
 
         // HTML Bootstrap buttons
-        buttonManager = new l3dp.ButtonManager(camera, recommendations, previewer);
+        // buttonManager = new l3dp.ButtonManager(camera, recommendations, previewer);
 
         // Object clicker for hover and clicking recommendations
         objectClicker = new l3d.ObjectClicker(container);
@@ -185,16 +188,16 @@ $(function() {
         // Stats for render
         stats.begin();
 
-        objectClicker.update();
+        // objectClicker.update();
 
         // Update recommendations (set raycastable if shown)
-        scene.recommendations.map(function(reco : l3d.BaseRecommendation) {
-            if (reco instanceof l3d.BaseRecommendation) {
-                reco.traverse(function(elt : THREE.Object3D) {
-                    elt.visible = elt.raycastable = buttonManager.showArrows;
-                });
-            }
-        });
+        // scene.recommendations.map(function(reco : l3d.BaseRecommendation) {
+        //     if (reco instanceof l3d.BaseRecommendation) {
+        //         reco.traverse(function(elt : THREE.Object3D) {
+        //             elt.visible = elt.raycastable = buttonManager.showArrows;
+        //         });
+        //     }
+        // });
 
         // Update coins
         scene.coins.forEach(function(coin : l3dp.Coin) { coin.update(); });
@@ -242,7 +245,7 @@ $(function() {
 
     function onWindowResize() {
 
-        l3dp.resizeElements(renderer, container, previewer, coinCanvas, pointer, startCanvas, loadingCanvas);
+        l3dp.resizeElements(renderer, container, previewer, coinCanvas, loadingCanvas);
 
         scene.recommendations.forEach(function(reco : l3d.BaseRecommendation) {
             l3dp.resetCameraAspect(reco.camera, window.containerSize.width(), window.containerSize.height());

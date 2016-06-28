@@ -69,7 +69,7 @@ module l3dp {
 
         }
 
-        getRawRecommendations() : l3d.CameraItf[] {
+        getRawRecommendations() : l3d.RecommendationInfo[] {
             return RecommendationData.bobombRecommendations;
         }
 
