@@ -20,7 +20,7 @@ module mth {
         }
 
         eval(t : number) : T {
-            return sum(mul(this.p1, t), mul(this.p2, 1-t));
+            return sum(mul(this.p1, 1-t), mul(this.p2, t));
         }
 
     }
