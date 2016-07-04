@@ -3,10 +3,10 @@
   "dependencies": {},
   "devDependencies": {},
   "globalDependencies": {
-    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
-    "node": "registry:dt/node#6.0.0+20160514165920",
+    "jquery": "registry:dt/jquery#1.10.0+20160701124751",
+    "node": "registry:dt/node#6.0.0+20160621231320",
     "socket.io": "registry:dt/socket.io#1.4.4+20160317120654",
     "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654",
-    "three": "registry:dt/three#0.0.0+20160517065351"
+    "three": "registry:dt/three#0.0.0+20160627210315"
   }
 }

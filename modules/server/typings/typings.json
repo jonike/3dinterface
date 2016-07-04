@@ -2,22 +2,22 @@
   "dependencies": {},
   "devDependencies": {},
   "globalDependencies": {
-    "async": "registry:dt/async#1.4.2+20160501155344",
-    "body-parser": "registry:dt/body-parser#0.0.0+20160317120654",
+    "async": "registry:dt/async#1.4.2+20160602152629",
+    "body-parser": "registry:dt/body-parser#0.0.0+20160619023215",
     "errorhandler": "registry:dt/errorhandler#0.0.0+20160316155526",
     "express": "registry:dt/express#4.0.0+20160317120654",
-    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160322035842",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160701212727",
     "jade": "registry:dt/jade#0.0.0+20160316155526",
-    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
+    "jquery": "registry:dt/jquery#1.10.0+20160701124751",
     "method-override": "registry:dt/method-override#0.0.0+20160317120654",
     "mime": "registry:dt/mime#0.0.0+20160316155526",
-    "node": "registry:dt/node#6.0.0+20160514165920",
+    "node": "registry:dt/node#6.0.0+20160621231320",
     "pg": "registry:dt/pg#0.0.0+20160514172051",
-    "serve-static": "registry:dt/serve-static#0.0.0+20160501131543",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
     "socket.io": "registry:dt/socket.io#1.4.4+20160317120654",
     "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654",
     "source-map-support": "registry:dt/source-map-support#0.2.10+20160316155526",
-    "three": "registry:dt/three#0.0.0+20160517065351",
-    "yargs": "registry:dt/yargs#0.0.0+20160326124407"
+    "three": "registry:dt/three#0.0.0+20160627210315",
+    "yargs": "registry:dt/yargs#0.0.0+20160619033636"
   }
 }
