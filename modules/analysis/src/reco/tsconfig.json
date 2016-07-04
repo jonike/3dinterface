@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outDir": "../../bin/reco/",
+        "noEmitOnError":true
+    },
+    "files": [
+        "../../typings/index.d.ts"
+    ]
+}

@@ -10,3 +10,4 @@ include ./make/makefiles/bouncing.mk
 include ./make/makefiles/server.mk
 include ./make/makefiles/demo.mk
 include ./make/makefiles/replay.mk
+include ./make/makefiles/analysis.mk
