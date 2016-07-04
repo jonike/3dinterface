@@ -12,11 +12,6 @@
     "exclude":[
         "node_modules",
         "lib",
-        "bin",
-        "typings/typings/browser",
-        "typings/typings/browser.d.ts"
-    ],
-    "globFiles": [
-        "./typings/*.d.ts"
+        "bin"
     ]
 }

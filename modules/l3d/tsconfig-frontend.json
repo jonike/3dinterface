@@ -13,8 +13,5 @@
         "bin",
         "typings/typings/browser",
         "typings/typings/browser.d.ts"
-    ],
-    "filesGlob":[
-        "./typings/*.d.ts"
     ]
 }
