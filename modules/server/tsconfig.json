@@ -12,12 +12,6 @@
         "node_modules",
         "bin",
         "views",
-        "static",
-        "typings/typings/browser",
-        "typings/typings/browser.d.ts"
-    ],
-    "filesGlob": [
-        "./typings/*.d.ts",
-        "./typings/typings/*.d.ts"
+        "static"
     ]
 }
