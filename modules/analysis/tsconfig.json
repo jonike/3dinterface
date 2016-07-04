@@ -4,10 +4,13 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "outDir": "../../bin/reco/",
-        "noEmitOnError":true
+        "outDir": "./bin/",
+        "noEmitOnError":true,
+        "rootDir":"./"
     },
-    "files": [
-        "../../typings/index.d.ts"
+    "exclude": [
+        "node_modules",
+        "bin"
     ]
 }
+

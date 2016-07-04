@@ -15,7 +15,7 @@ include ./make/include.mk
 
 test: test-mth test-server
 
-clean: clean-l3d clean-l3dp clean-server clean-demo clean-mth clean-bouncing-cube clean-config clean-global clean-analysis
+clean: clean-l3d clean-l3dp clean-server clean-demo clean-mth clean-bouncing-cube clean-config clean-analysis
 
 clean-global:
 	@$(RMRF) \
