@@ -2,12 +2,12 @@
   "name": "l3d",
   "version": "1.0.0",
   "dependencies": {
-    "socket.io": "1.3.5",
-    "socket.io-client": "1.3.5",
-    "source-map-support": "^0.4.0",
-    "three": "^0.71.0",
-    "mth":"file:../mth",
-    "config":"file:../config"
+    "config": "file:../config",
+    "mth": "file:../mth",
+    "socket.io": "*",
+    "socket.io-client": "*",
+    "source-map-support": "*",
+    "three": "*"
   },
   "main": "./lib/l3d.js",
   "typings": "./lib/src/l3d.d.ts"
