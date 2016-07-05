@@ -14,7 +14,7 @@ module l3d {
     /**
      * Represents a camera that can be used easily
      */
-    export abstract class SphericCamera extends BaseCamera {
+    export class SphericCamera extends BaseCamera {
 
         /**
          * Time that it takes to move to a bookmark (in s)
@@ -191,7 +191,7 @@ module l3d {
 
         }
 
-        abstract moveHermite(recommendation : BaseRecommendation, toSave ?: boolean) : void;
+        moveHermite(recommendation : BaseRecommendation, toSave ?: boolean) : void {};
 
         /**
          * Look method. Equivalent to gluLookAt for the current camera

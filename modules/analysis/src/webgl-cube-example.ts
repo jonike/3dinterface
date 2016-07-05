@@ -18,7 +18,6 @@ function pixelsToFile(pixels : Uint8Array, path : string) {
 
     let str = 'P3\n' + width + ' ' + height + '\n' + 255 + '\n';
 
-    // for(let i = (pixels.length / 4) - 1; i >= 0; i--) {
     for (let i = (pixels.length / 4) - 3; i > 0 ; i--) {
         str += pixels[4*i] + ' ' + pixels[4*i+1] + ' ' + pixels[4*i+2] + '\n';
     }
