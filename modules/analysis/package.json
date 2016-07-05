@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
+    "canvas": "*",
     "config": "file:../config",
+    "gl": "*",
     "l3d": "file:../l3d",
     "l3dp": "file:../l3dp",
-    "three": "^0.78.0"
+    "three": "*"
   }
 }
