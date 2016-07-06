@@ -23,10 +23,10 @@ module l3dp {
 
         }
 
-        load(prefetch : config.PrefetchingPolicy, lowRes = false) {
+        load(loadingConfig : config.LoadingConfig, lowRes = false) {
 
-            if (prefetch !== undefined) {
-                this.prefetchType = prefetch;
+            if (loadingConfig !== undefined) {
+                this.loadingConfig = loadingConfig;
             }
 
             var path = lowRes === true ?
@@ -66,8 +66,7 @@ module l3dp {
 
                 },
                 ()=>{},// l3d.LogFunction,
-                false,
-                this.prefetchType
+                this.loadingConfig
             );
 
             this.loader.onFinished = () => { this.finish(); }

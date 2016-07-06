@@ -20,10 +20,10 @@ module l3dp {
 
         }
 
-        load(prefetch : config.PrefetchingPolicy) {
+        load(loadingConfig : config.LoadingConfig) {
 
-            if (prefetch !== undefined) {
-                this.prefetchType = prefetch;
+            if (loadingConfig !== undefined) {
+                this.loadingConfig = loadingConfig;
             }
 
             this.loader = new l3d.ProgressiveLoader(
@@ -46,8 +46,7 @@ module l3dp {
 
                 },
                 ()=>{},// l3d.LogFunction,
-                false,
-                this.prefetchType
+                this.loadingConfig
             );
 
             this.loader.onFinished = () => { this.finish(); }

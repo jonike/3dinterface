@@ -324,10 +324,10 @@ module geo {
 
             this.socket = socket;
 
-            socket.on('request', (path : string, laggy : boolean, prefetch : config.PrefetchingPolicy) => {
+            socket.on('request', (path : string, loadingConfig : config.LoadingConfig) => {
 
-                if (laggy === true) {
-                    this.chunk = 1;
+                if (loadingConfig.chunkSize !== undefined) {
+                    this.chunk = loadingConfig.chunkSize;
                 }
 
                 this.mesh = Meshes.dict[path];
@@ -357,8 +357,8 @@ module geo {
                 };
 
                 if (this.predictionTable !== undefined && this.facesToSend !== undefined) {
-                    log.debug('Prefetch is : ' + config.PrefetchingPolicy[prefetch]);
-                    this.generator = createConfigFromPolicy(prefetch, this);
+                    log.debug('Prefetch is : ' + config.PrefetchingPolicy[loadingConfig.prefetchingPolicy]);
+                    this.generator = createConfigFromPolicy(loadingConfig.prefetchingPolicy, this);
                     this.backupGenerator = new ConfigGenerator(this);
                 } else {
                     log.debug('No info : doing only culling');
