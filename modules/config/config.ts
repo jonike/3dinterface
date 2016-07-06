@@ -55,6 +55,7 @@ module config {
     export interface LoadingConfig {
 
         prefetchingPolicy : PrefetchingPolicy;
+        chunkSize ?: number;
         lowRes ?: boolean;
 
     }

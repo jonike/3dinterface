@@ -37,7 +37,7 @@ module l3d {
         /**
          * Default prefetching policy
          */
-        prefetchType : config.PrefetchingPolicy;
+        loadingConfig : config.LoadingConfig;
 
         /**
          * Array for recommendations
@@ -57,7 +57,9 @@ module l3d {
             this.clickableObjects = [];
             this.camera = null;
             this.loader = null;
-            this.prefetchType = config.PrefetchingPolicy.NV_PN;
+            this.loadingConfig = {
+                prefetchingPolicy : config.PrefetchingPolicy.NV_PN
+            };
             this.recommendations = [];
             this.onLoad = [];
 
@@ -91,7 +93,7 @@ module l3d {
          * Loads the models from the scene
          * @param prefetch prefetching policy
          */
-        load(prefetch : config.PrefetchingPolicy, lowRes : boolean) {
+        load(loadingConfig : config.LoadingConfig) {
 
             // Nothing to load for an empty scene
 

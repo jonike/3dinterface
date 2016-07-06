@@ -122,7 +122,7 @@ $(function() {
         // camera.shouldLock = true;
         // camera.onPointerLockChange();
 
-        scene.load(LOADING_CONFIG.prefetchingPolicy, LOADING_CONFIG.lowRes);
+        scene.load(LOADING_CONFIG);
     }
 
     function initCanvases() {

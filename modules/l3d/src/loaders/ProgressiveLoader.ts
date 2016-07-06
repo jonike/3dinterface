@@ -168,11 +168,6 @@ module l3d {
         callback : Function
 
         /**
-         * Boolean indicate that we want extra lag for testing purposes
-         */
-        laggy : boolean;
-
-        /**
          * Group where the sub-objects will be added
          */
         obj : THREE.Object3D;
@@ -254,7 +249,7 @@ module l3d {
         /**
          * Indicates which type of prefetch is used
          */
-        prefetch : config.PrefetchingPolicy;
+        loadingConfig : config.LoadingConfig;
 
         /**
          * Stores the materials
@@ -272,7 +267,7 @@ module l3d {
          * order)
          * @param callback callback to call on the objects when they're created
          */
-        constructor(path : string, scene : THREE.Scene, camera : SphericCamera, callback : Function, log : Function, laggy : boolean, prefetch : config.PrefetchingPolicy) {
+        constructor(path : string, scene : THREE.Scene, camera : SphericCamera, callback : Function, log : Function, loadingConfig : config.LoadingConfig) {
 
             this.objPath = path;
             this.texturesPath = path.substring(0, path.lastIndexOf('/')) + '/';
@@ -280,7 +275,6 @@ module l3d {
 
             this.scene = scene;
             this.callback = callback;
-            this.laggy = laggy;
 
             this.obj = new THREE.Object3D();
             scene.add(this.obj);
@@ -289,6 +283,7 @@ module l3d {
             this.texCoords = [];
             this.normals = [];
             this.uvs = [];
+            this.loadingConfig = loadingConfig;
 
             this.parts = [];
 
@@ -326,8 +321,6 @@ module l3d {
             this.log = log;
 
             this.mapFace = {};
-
-            this.prefetch = prefetch;
 
         }
 
@@ -575,12 +568,8 @@ module l3d {
                     } else {
 
                         // Ask for next elements
-                        if (!this.laggy) {
-                            this.socket.emit('next', this.getCamera(), param);
-                        } else {
-                            this.socket.emit('next', this.getCamera());
-                            // setTimeout(function() { this.socket.emit('next', this.getCamera());}, 100);
-                        }
+                        this.socket.emit('next', this.getCamera());
+
                     }
 
                 });
@@ -617,7 +606,8 @@ module l3d {
          * Starts the communication with the server
          */
         start() {
-            this.socket.emit('request', this.objPath, this.laggy, this.prefetch);
+            console.log(this.loadingConfig);
+            this.socket.emit('request', this.objPath, this.loadingConfig);
         }
 
         onFinished() {}

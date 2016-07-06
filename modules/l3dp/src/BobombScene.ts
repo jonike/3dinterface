@@ -23,13 +23,13 @@ module l3dp {
 
         }
 
-        load(prefetch : config.PrefetchingPolicy, lowRes = false) {
+        load(loadingConfig : config.LoadingConfig) {
 
-            if (prefetch !== undefined) {
-                this.prefetchType = prefetch;
+            if (loadingConfig !== undefined) {
+                this.loadingConfig = loadingConfig;
             }
 
-            var path = lowRes === true ?
+            var path = loadingConfig.lowRes === true ?
                 '/static/data/bobomb/bobomb battlefeild.obj' :
                 '/static/data/bobomb/bobomb battlefeild_sub.obj';
 
@@ -47,8 +47,7 @@ module l3dp {
                     }
                 },
                 ()=>{},// l3d.LogFunction,
-                    false,
-                this.prefetchType
+                this.loadingConfig
             );
 
             this.loader.onFinished = () => { this.finish(); }
