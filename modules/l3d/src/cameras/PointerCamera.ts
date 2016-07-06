@@ -448,7 +448,7 @@ module l3d {
          */
         moveHermite(recommendation : BaseRecommendation, toSave ?: boolean) : void {
 
-            this.recommendationClicked = recommendation.recommendationId + 1;
+            this.recommendationClicked = recommendation.recommendationId;
 
             var otherCamera = recommendation.camera;
 

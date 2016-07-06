@@ -685,7 +685,7 @@ module geo {
                 // Sort buffer
                 if (config[configIndex].frustum !== undefined) {
 
-                    // buffers[configIndex].sort(this.faceComparator(config[configIndex].frustum));
+                    buffers[configIndex].sort(this.faceComparator(config[configIndex].frustum));
 
                 } else {
 
