@@ -34,7 +34,7 @@ module geo {
 
                 // Case full reco
                 console.log("Going to " + recommendationClicked);
-                console.log("Recommendation is clicking : full for " + JSON.stringify(this.streamer.mesh.recommendations[recommendationClicked].position));
+                // console.log("Recommendation is clicking : full for " + JSON.stringify(this.streamer.mesh.recommendations[recommendationClicked].position));
                 config = [{recommendationId : recommendationClicked, proportion: 1, smart:true}];
 
             } else if (this.streamer.beginning === true) {
