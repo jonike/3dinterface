@@ -11,6 +11,8 @@ import { join } from 'path';
 import { pixelsToFile } from './pixelsToFile';
 import { selectScene, UndefinedSceneError } from './selectScene';
 
+import { initializeScene } from './initializeScene';
+
 let Canvas = require('canvas');
 let gl = require('gl');
 
@@ -25,56 +27,18 @@ let loader : l3d.ProgressiveLoader;
 
 function main(configScene : config.Scene) {
 
-    let sceneElements = selectScene(configScene);
-
-    let canvas = new Canvas(width, height);
-    canvas.addEventListener = function(t : any, listener : any) {
-        canvas['on' + t] = listener;
-    };
-
-    let gl = require('gl')(width, height, { preserveDrawingBuffer: true })
-
-    let renderer = new THREE.WebGLRenderer({canvas:canvas, context:gl});
-    renderer.setClearColor(0x000000);
-
-    let scene = l3dp.createSceneFromConfig({
-        scene: configScene,
-        recommendationStyle: config.RecommendationStyle.BaseRecommendation
-    }, width, height);
-
-    let camera = new l3d.SphericCamera(50, width/height, 0.001, 1000000);
-    scene.setCamera(camera);
-
-    let modelMap = JSON.parse(fs.readFileSync(sceneElements.modelMapPath, 'utf-8'));
-    let bigModel = Serial.loadFromFile(sceneElements.bigModelPath);
-    let recommendationData = sceneElements.recommendationData;
-
-    // For each small triangle
-    let counter = 0;
-    let material = new THREE.MeshFaceMaterial();
-    for (let key in modelMap) {
-
-        let geometry = new THREE.Geometry();
-        geometry.vertices = (<THREE.Geometry>(<THREE.Mesh>bigModel.children[0]).geometry).vertices;
-
-        for (let i = 0; i < modelMap[key].length; i++) {
-            let face = modelMap[key][i];
-            let split = face.split('-').map(function(o : string) { return parseInt(o,10) - 1; });
-            let face3 = new THREE.Face3(split[0], split[1], split[2]);
-
-            face3.materialIndex = counter;
-            material.materials.push(new THREE.MeshBasicMaterial({color: counter+1}));
-            colorToFace[counter] = face3;
-
-            geometry.faces.push(face3);
-
-            counter++;
-        }
-
-        triangleMeshes[key] = new THREE.Mesh(geometry, material);
-        scene.add(triangleMeshes[key]);
-
-    }
+    let {
+        sceneElements,
+        canvas,
+        gl,
+        renderer,
+        triangleMeshes,
+        camera,
+        modelMap,
+        recommendationData,
+        counter,
+        scene
+    } = initializeScene(configScene, width, height);
 
     process.stderr.write('Initialization finished : ' + config.Scene[configScene] + ' has ' + counter + ' faces\n');
 
