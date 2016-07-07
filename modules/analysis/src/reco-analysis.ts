@@ -35,6 +35,7 @@ function main(configScene : config.Scene) {
     let gl = require('gl')(width, height, { preserveDrawingBuffer: true })
 
     let renderer = new THREE.WebGLRenderer({canvas:canvas, context:gl});
+    renderer.setClearColor(0x000000);
 
     let scene = l3dp.createSceneFromConfig({
         scene: configScene,
@@ -105,7 +106,7 @@ function main(configScene : config.Scene) {
             fs.mkdirSync('img/' + config.Scene[configScene]);
         }
 
-        pixelsToFile(pixels, width, height, 'img/' + config.Scene[configScene] + '/' + recommendationId + '.ppm');
+        pixelsToFile(pixels, width, height, 'img/' + config.Scene[configScene] + '/' + recommendationId + '.png');
 
     }
 
