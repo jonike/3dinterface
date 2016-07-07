@@ -191,6 +191,16 @@ module l3d {
 
         }
 
+        startInstantMotion(destination : CameraItf) : void {
+
+            this.t = NaN;
+
+            mth.copy(destination.position,this.position);
+            mth.copy(destination.target,this.target);
+            this.anglesFromVectors();
+
+        }
+
         moveHermite(recommendation : BaseRecommendation, toSave ?: boolean) : void {};
 
         /**

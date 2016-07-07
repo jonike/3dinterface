@@ -9,6 +9,8 @@ import * as Serial from './Serial';
 
 import { join } from 'path';
 
+import { pixelsToFile } from './pixelsToFile';
+
 let Canvas = require('canvas');
 let gl = require('gl');
 
@@ -21,19 +23,9 @@ let triangleMeshes : { [id:string] : THREE.Mesh } = {};
 
 let pathToGenerated = join(__dirname,'../../../../generated/models-generation/');
 
-function pixelsToFile(pixels : Uint8Array, path : string) {
+let loader : l3d.ProgressiveLoader;
 
-    let str = 'P3\n' + width + ' ' + height + '\n' + 255 + '\n';
-
-    for (let i = (pixels.length / 4) - 3; i > 0 ; i--) {
-        str += pixels[4*i] + ' ' + pixels[4*i+1] + ' ' + pixels[4*i+2] + '\n';
-    }
-
-    fs.writeFileSync(path, str);
-
-}
-
-function main(path : string) {
+function main(recommendationIds ?: number[]) {
 
     let canvas = new Canvas(width, height);
     canvas.addEventListener = function(t : any, listener : any) {
@@ -54,8 +46,6 @@ function main(path : string) {
 
     let modelMap = JSON.parse(fs.readFileSync(join(pathToGenerated, 'maps', 'bobomb battlefeild.json'), 'utf-8'));
     let bigModel = Serial.loadFromFile(join(pathToGenerated, 'models', 'bobomb battlefeild_sub.json'));
-
-    camera.look();
 
     // For each small triangle
     let counter = 0;
@@ -79,20 +69,56 @@ function main(path : string) {
             counter++;
         }
 
-        // let name = key.split('-').map(function(o) { return parseInt(o,10)-1; }).join('-');
         triangleMeshes[key] = new THREE.Mesh(geometry, material);
         scene.add(triangleMeshes[key]);
 
     }
 
-    renderer.render(scene, camera);
+    if (recommendationIds === undefined) {
+        recommendationIds = [0];
+        for (let i = 0; i < l3dp.RecommendationData.bobombRecommendations.length; i++) {
+            recommendationIds.push(i+1);
+        }
+    }
 
-    let pixels = new Uint8Array(width*height*4);
-    gl.readPixels(0,0,width,height,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
-    pixelsToFile(pixels, path);
+    process.stderr.write('Initialization finished : ' + counter + ' faces\n');
+
+    for (let recommendationId of recommendationIds) {
+
+        process.stderr.write('Computing recommendation ' + recommendationId + '\n');
+
+        if (recommendationId !== 0) {
+            let reco = l3dp.RecommendationData.bobombRecommendations[recommendationId - 1];
+            camera.startInstantMotion(reco);
+        }
+
+        camera.recommendationClicked = recommendationId;
+
+        camera.look();
+
+        let previousTime = Date.now();
+        renderer.render(scene, camera);
+        process.stderr.write('Rendering complete : ' + (Date.now() - previousTime) + 'ms\n');
+
+        let pixels = new Uint8Array(width*height*4);
+        gl.readPixels(0,0,width,height,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
+
+        if (!fs.existsSync('./img')) {
+            fs.mkdirSync('img');
+        }
+
+        pixelsToFile(pixels, width, height, 'img/' + recommendationId + '.ppm');
+
+    }
 
 }
 
 if (require.main === module) {
-    main(process.argv[2]);
+    let recommendationId = parseInt(process.argv[2], 10);
+    if (!isNaN(recommendationId)) {
+        main([recommendationId]);
+    } else {
+        main();
+    }
+
 }
