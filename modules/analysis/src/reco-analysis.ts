@@ -8,8 +8,8 @@ import * as fs from 'fs';
 import * as Serial from './Serial';
 
 import { join } from 'path';
-
 import { pixelsToFile } from './pixelsToFile';
+import { selectScene, UndefinedSceneError } from './selectScene';
 
 let Canvas = require('canvas');
 let gl = require('gl');
@@ -21,11 +21,11 @@ let imageNumber = 0;
 let colorToFace : THREE.Face3[] = [];
 let triangleMeshes : { [id:string] : THREE.Mesh } = {};
 
-let pathToGenerated = join(__dirname,'../../../../generated/models-generation/');
-
 let loader : l3d.ProgressiveLoader;
 
-function main(recommendationIds ?: number[]) {
+function main(configScene : config.Scene) {
+
+    let sceneElements = selectScene(configScene);
 
     let canvas = new Canvas(width, height);
     canvas.addEventListener = function(t : any, listener : any) {
@@ -37,15 +37,16 @@ function main(recommendationIds ?: number[]) {
     let renderer = new THREE.WebGLRenderer({canvas:canvas, context:gl});
 
     let scene = l3dp.createSceneFromConfig({
-        scene: config.Scene.BobombBattlefield,
+        scene: configScene,
         recommendationStyle: config.RecommendationStyle.BaseRecommendation
     }, width, height);
 
     let camera = new l3d.SphericCamera(50, width/height, 0.001, 1000000);
     scene.setCamera(camera);
 
-    let modelMap = JSON.parse(fs.readFileSync(join(pathToGenerated, 'maps', 'bobomb battlefeild.json'), 'utf-8'));
-    let bigModel = Serial.loadFromFile(join(pathToGenerated, 'models', 'bobomb battlefeild_sub.json'));
+    let modelMap = JSON.parse(fs.readFileSync(sceneElements.modelMapPath, 'utf-8'));
+    let bigModel = Serial.loadFromFile(sceneElements.bigModelPath);
+    let recommendationData = sceneElements.recommendationData;
 
     // For each small triangle
     let counter = 0;
@@ -74,21 +75,14 @@ function main(recommendationIds ?: number[]) {
 
     }
 
-    if (recommendationIds === undefined) {
-        recommendationIds = [0];
-        for (let i = 0; i < l3dp.RecommendationData.bobombRecommendations.length; i++) {
-            recommendationIds.push(i+1);
-        }
-    }
+    process.stderr.write('Initialization finished : ' + config.Scene[configScene] + ' has ' + counter + ' faces\n');
 
-    process.stderr.write('Initialization finished : ' + counter + ' faces\n');
-
-    for (let recommendationId of recommendationIds) {
+    for (let recommendationId = 0; recommendationId < recommendationData.length; recommendationId++) {
 
         process.stderr.write('Computing recommendation ' + recommendationId + '\n');
 
         if (recommendationId !== 0) {
-            let reco = l3dp.RecommendationData.bobombRecommendations[recommendationId - 1];
+            let reco = recommendationData[recommendationId - 1];
             camera.startInstantMotion(reco);
         }
 
@@ -107,18 +101,27 @@ function main(recommendationIds ?: number[]) {
             fs.mkdirSync('img');
         }
 
-        pixelsToFile(pixels, width, height, 'img/' + recommendationId + '.ppm');
+        if (!fs.existsSync('./img/' + config.Scene[configScene])) {
+            fs.mkdirSync('img/' + config.Scene[configScene]);
+        }
+
+        pixelsToFile(pixels, width, height, 'img/' + config.Scene[configScene] + '/' + recommendationId + '.ppm');
 
     }
 
 }
 
 if (require.main === module) {
-    let recommendationId = parseInt(process.argv[2], 10);
-    if (!isNaN(recommendationId)) {
-        main([recommendationId]);
-    } else {
-        main();
-    }
+    let scene = parseInt(process.argv[2], 10) ;
 
+    try {
+        main(scene);
+    } catch (e) {
+        if (e instanceof UndefinedSceneError) {
+            process.stderr.write('The scene you asked for is not defined\n');
+            process.exit(-1);
+        } else {
+            throw e;
+        }
+    }
 }
