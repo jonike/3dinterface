@@ -1,9 +1,9 @@
 import express = require('express');
-import tools = require('../../lib/filterInt');
 import pg = require('pg');
 import pgc = require('../../private');
 import db = require('./DBReq');
 
+import { filterInt } from 'mth';
 import * as config from 'config';
 
 export function index(req : express.Request, res : express.Response) {
@@ -139,7 +139,7 @@ export function replayInfo(req : express.Request, res : express.Response) {
     res.setHeader('Content-Type', 'text/plain');
 
     // Parse id
-    var id = tools.filterInt(req.params.id);
+    var id = filterInt(req.params.id);
 
     db.getInfo(id, function(results) {
         res.send(JSON.stringify(results));
@@ -148,7 +148,7 @@ export function replayInfo(req : express.Request, res : express.Response) {
 
 export function replay(req : express.Request, res : express.Response, render : Function, next:Function) {
     // Get id parameter
-    res.locals.id = tools.filterInt(req.params.id);
+    res.locals.id = filterInt(req.params.id);
 
     if (res.locals.id <= 0) {
         var err = new Error("This replay does not exist");

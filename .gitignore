@@ -5,3 +5,4 @@ doc/
 .changed.json
 lib
 bin
+generated/models-generation

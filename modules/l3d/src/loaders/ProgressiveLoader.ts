@@ -606,7 +606,6 @@ module l3d {
          * Starts the communication with the server
          */
         start() {
-            console.log(this.loadingConfig);
             this.socket.emit('request', this.objPath, this.loadingConfig);
         }
 

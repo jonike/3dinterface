@@ -18,4 +18,5 @@ export { FixedCamera } from './cameras/FixedCamera';
 export { BaseCamera } from './cameras/BaseCamera';
 export { Camera } from './cameras/Camera';
 export { ReplayCamera } from './cameras/ReplayCamera';
+export { SphericCamera } from './cameras/SphericCamera';
 export { CursorChangeEvent } from './utils/ObjectClicker';

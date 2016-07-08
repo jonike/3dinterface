@@ -1,5 +1,5 @@
 import express = require('express');
-import tools = require('../../lib/filterInt');
+import { filterInt } from 'mth';
 
 export function index(req : express.Request, res : express.Response, render : Function, next : Function) {
 
@@ -9,7 +9,7 @@ export function index(req : express.Request, res : express.Response, render : Fu
     if (res.locals.resolution === undefined) {
         res.locals.resolution = 5;
     } else {
-        res.locals.resolution = tools.filterInt(res.locals.resolution);
+        res.locals.resolution = filterInt(res.locals.resolution);
     }
 
     if (isNaN(res.locals.resolution) || res.locals.resolution < 1 || res.locals.resolution > 25) {

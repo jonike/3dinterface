@@ -1,6 +1,6 @@
 include ./make/utils/define-cmd.mk
 
-all: server bouncing-cube
+all: server bouncing-cube analysis
 
 PREPARE_DEPENDENCY=./node_modules/.dirstamp
 
@@ -15,7 +15,7 @@ include ./make/include.mk
 
 test: test-mth test-server
 
-clean: clean-l3d clean-l3dp clean-server clean-demo clean-mth clean-bouncing-cube clean-config clean-global
+clean: clean-l3d clean-l3dp clean-server clean-demo clean-mth clean-bouncing-cube clean-config clean-analysis
 
 clean-global:
 	@$(RMRF) \

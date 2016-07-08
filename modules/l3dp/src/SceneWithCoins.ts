@@ -40,6 +40,10 @@ module l3dp {
                 this.coinScale = coinScale;
             }
 
+            if (coinConfig === undefined) {
+                return;
+            }
+
             if (typeof coinConfig.visible !== 'boolean') {
                 coinConfig.visible = true;
             }

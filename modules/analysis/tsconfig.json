@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outDir": "./bin/",
+        "noEmitOnError":true,
+        "sourceMap":true
+    },
+    "exclude": [
+        "node_modules",
+        "bin"
+    ]
+}
+
