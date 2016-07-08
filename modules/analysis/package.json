@@ -8,6 +8,7 @@
     "gl": "*",
     "l3d": "file:../l3d",
     "l3dp": "file:../l3dp",
+    "mth": "file:../mth",
     "pngjs": "*",
     "three": "*",
     "yargs": "*"

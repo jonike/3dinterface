@@ -1,4 +1,4 @@
-$(MODULES)/analysis/node_modules/.dirstamp: $(PREPARE_DEPENDENCY) $(MODULES)/analysis/package.json $(L3D_DEPENDENCY) $(L3DP_DEPENDENCY) $(CONFIG_DEPENDENCY)
+$(MODULES)/analysis/node_modules/.dirstamp: $(PREPARE_DEPENDENCY) $(MODULES)/analysis/package.json $(L3D_DEPENDENCY) $(L3DP_DEPENDENCY) $(CONFIG_DEPENDENCY) $(MTH_DEPENDENCY)
 	@$(call LOG_DEPENDENCIES,analysis)
 	@$(CD) $(MODULES)/analysis/ && $(NPM_UNINSTALL) l3d l3dp config && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
@@ -18,6 +18,7 @@ $(MODULES)/analysis/bin/.dirstamp: $(PREPARE_DEPENDENCY) $(MODULES)/analysis/typ
 	@$(call LOG_BUILDING,analysis)
 	@$(CD) $(MODULES)/analysis/ && $(TSC)
 	@$(TOUCH_DIRSTAMP)
+	@$(call LOG_BUILT,analysis)
 
 clean-analysis:
 	@$(RMRF) \

@@ -45,7 +45,7 @@ let loader : l3d.ProgressiveLoader;
 export function analyse(
     renderer : THREE.WebGLRenderer,
     scene : THREE.Scene,
-    camera : l3d.SphericCamera,) {
+    camera : l3d.SphericCamera) {
 
     camera.look();
     renderer.render(scene, camera);
