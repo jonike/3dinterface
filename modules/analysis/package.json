@@ -9,6 +9,7 @@
     "l3d": "file:../l3d",
     "l3dp": "file:../l3dp",
     "pngjs": "*",
-    "three": "*"
+    "three": "*",
+    "yargs": "*"
   }
 }

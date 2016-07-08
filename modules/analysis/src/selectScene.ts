@@ -3,7 +3,7 @@ import * as l3dp from 'l3dp';
 
 import { join } from 'path';
 
-let pathToGenerated = join(__dirname,'../../../../generated/models-generation/');
+let pathToGenerated = join(__dirname,'../../../generated/models-generation/');
 
 export class UndefinedSceneError extends Error {
 

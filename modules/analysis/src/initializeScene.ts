@@ -23,8 +23,19 @@ export function initializeScene(configScene : config.Scene, width : number, heig
 
     let gl = require('gl')(width, height, { preserveDrawingBuffer: true })
 
+    // Disabling logging during WebGLRenderer initialization
+    let tmpLog = console.log;
+    let tmpWarn = console.warn;
+
+    console.log = function() {};
+    console.warn = function() {};
+
     let renderer = new THREE.WebGLRenderer({canvas:canvas, context:gl});
     renderer.setClearColor(0x000000);
+
+    // Reenabling logging
+    console.log = tmpLog;
+    console.warn = tmpWarn;
 
     let scene = l3dp.createSceneFromConfig({
         scene: configScene,
