@@ -18,12 +18,7 @@ import { Meshes } from './loadMeshes';
 module geo {
 
     function readIt(sceneNumber : number, recoId : number) : {index : number, area : number}[] {
-        var toZip = {
-            triangles :
-                JSON.parse(fs.readFileSync('./generated/scene-info/scene' + sceneNumber + '/triangles' + recoId + '.json', 'utf-8')),
-            areas :
-                JSON.parse(fs.readFileSync('./generated/scene-info/scene' + sceneNumber + '/areas' + recoId + '.json', 'utf-8'))
-        };
+        var toZip = JSON.parse(fs.readFileSync('./generated/scene-info/scene' + sceneNumber + '/bookmark' + recoId + '.json', 'utf-8'));
 
         var ret : {index: number, area: number}[] = [];
 
@@ -39,7 +34,7 @@ module geo {
 
     function readAll(sceneNumber : number) : {index : number, area : number}[][] {
 
-        let numberOfReco = [0, 0, 12, 12, 11, 2];
+        let numberOfReco = [0, 0, 12, 12, 11]; //, 2];
         let ret : {index : number, area : number}[][] = [];
 
         for (var i = 0; i < numberOfReco[sceneNumber]; i++) {
@@ -68,6 +63,7 @@ module geo {
         ];
 
     } catch (e) {
+        console.log(e);
         log.warning('Error occured while reading prefetching files');
         log.warning('No prefetching will be done !');
         predictionTables = [];
