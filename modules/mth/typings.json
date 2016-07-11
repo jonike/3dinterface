@@ -3,7 +3,7 @@
   "dependencies": {},
   "devDependencies": {},
   "globalDependencies": {
-    "nodeunit": "registry:dt/nodeunit#0.0.0+20160316155526",
-    "three": "registry:dt/three#0.0.0+20160627210315"
+    "nodeunit": "registry:dt/nodeunit",
+    "three": "registry:dt/three"
   }
 }
