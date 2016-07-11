@@ -69,7 +69,7 @@ module l3dp {
         }
 
         getRawRecommendations() : l3d.RecommendationInfo[] {
-            return RecommendationData.bobombRecommendations;
+            return RecommendationData.dict[config.Scene.BobombBattlefield];
         }
 
         getRawCoins() : mth.Vector3[] {

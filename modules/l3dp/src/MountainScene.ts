@@ -88,7 +88,7 @@ module l3dp {
         }
 
         getRawRecommendations() : l3d.RecommendationInfo[] {
-            return RecommendationData.mountainRecommendations;
+            return RecommendationData.dict[config.Scene.CoolCoolMountain];
         }
 
         getRawCoins() : mth.Vector3[] {

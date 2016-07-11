@@ -1,3 +1,4 @@
+import * as config from 'config';
 import * as l3d from 'l3d';
 import * as l3dp from 'l3dp';
 import * as mth from 'mth';
@@ -15,19 +16,19 @@ module geo {
 
         export var dict : {[id:string] : MeshInfo} = {
             '/static/data/castle/princess peaches castle (outside).obj': {
-                recommendations: l3dp.RecommendationData.peachRecommendations,
+                recommendations: l3dp.RecommendationData.dict[config.Scene.PeachCastle],
                 done: false
             },
             '/static/data/mountain/coocoolmountain.obj': {
-                recommendations: l3dp.RecommendationData.mountainRecommendations,
+                recommendations: l3dp.RecommendationData.dict[config.Scene.CoolCoolMountain],
                 done: false
             },
             '/static/data/mountain/coocoolmountain_sub.obj': {
-                recommendations: l3dp.RecommendationData.mountainRecommendations,
+                recommendations: l3dp.RecommendationData.dict[config.Scene.CoolCoolMountain],
                 done: false
             },
             '/static/data/whomp/Whomps Fortress.obj': {
-                recommendations: l3dp.RecommendationData.whompRecommendations,
+                recommendations: l3dp.RecommendationData.dict[config.Scene.WhompFortress],
                 done: false,
                 transformation: new Transformation({
                     translation: {
@@ -44,7 +45,7 @@ module geo {
                 })
             },
             '/static/data/whomp/Whomps Fortress_sub.obj': {
-                recommendations: l3dp.RecommendationData.whompRecommendations,
+                recommendations: l3dp.RecommendationData.dict[config.Scene.WhompFortress],
                 done: false,
                 transformation : new Transformation({
                     translation: {
@@ -61,7 +62,7 @@ module geo {
                 })
             },
             '/static/data/bobomb/bobomb battlefeild.obj': {
-                recommendations: l3dp.RecommendationData.bobombRecommendations,
+                recommendations: l3dp.RecommendationData.dict[config.Scene.BobombBattlefield],
                 done: false,
                 transformation : new Transformation({
                     translation: {
@@ -77,7 +78,7 @@ module geo {
                 })
             },
             '/static/data/bobomb/bobomb battlefeild_sub.obj': {
-                recommendations: l3dp.RecommendationData.bobombRecommendations,
+                recommendations: l3dp.RecommendationData.dict[config.Scene.BobombBattlefield],
                 done: false,
                 transformation : new Transformation({
                     translation: {

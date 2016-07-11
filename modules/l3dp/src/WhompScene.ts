@@ -95,7 +95,7 @@ module l3dp {
         }
 
         getRawRecommendations() : l3d.RecommendationInfo[] {
-            return RecommendationData.whompRecommendations;
+            return RecommendationData.dict[config.Scene.WhompFortress];
         }
 
         getRawCoins() : mth.Vector3[] {

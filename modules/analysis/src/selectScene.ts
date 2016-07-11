@@ -11,27 +11,30 @@ export class UndefinedSceneError extends Error {
 
 export function selectScene(scene : config.Scene) {
 
+    let ret = {
+        modelMapPath: '',
+        bigModelPath: '',
+        recommendationData: l3dp.RecommendationData.dict[scene]
+    };
+
     switch (scene) {
-        case config.Scene.BobombBattlefield:
-            return {
-                modelMapPath : join(pathToGenerated, 'maps', 'bobomb battlefeild.json'),
-                bigModelPath : join(pathToGenerated, 'models', 'bobomb battlefeild_sub.json'),
-                recommendationData : l3dp.RecommendationData.bobombRecommendations
-            };
+        case config.Scene.BobombBattlefield: {
+            ret.modelMapPath = join(pathToGenerated, 'maps', 'bobomb battlefeild.json');
+            ret.bigModelPath = join(pathToGenerated, 'models', 'bobomb battlefeild_sub.json');
+            return ret;
+        }
 
-        case config.Scene.WhompFortress:
-            return {
-                modelMapPath : join(pathToGenerated, 'maps', 'Whomps Fortress.json'),
-                bigModelPath : join(pathToGenerated, 'models', 'Whomps Fortress_sub.json'),
-                recommendationData : l3dp.RecommendationData.whompRecommendations
-            };
+        case config.Scene.WhompFortress: {
+            ret.modelMapPath = join(pathToGenerated, 'maps', 'Whomps Fortress.json');
+            ret.bigModelPath = join(pathToGenerated, 'models', 'Whomps Fortress_sub.json');
+            return ret;
+        }
 
-        case config.Scene.CoolCoolMountain:
-            return {
-                modelMapPath : join(pathToGenerated, 'maps', 'coocoolmountain.json'),
-                bigModelPath : join(pathToGenerated, 'models', 'coocoolmountain_sub.json'),
-                recommendationData : l3dp.RecommendationData.mountainRecommendations
-            };
+        case config.Scene.CoolCoolMountain: {
+            ret.modelMapPath = join(pathToGenerated, 'maps', 'coocoolmountain.json');
+            ret.bigModelPath = join(pathToGenerated, 'models', 'coocoolmountain_sub.json');
+            return ret;
+        }
 
         default:
             throw new UndefinedSceneError("Scene not available for recommendation elements");

@@ -2,6 +2,7 @@ import * as config from 'config';
 import * as fs from 'fs';
 import * as THREE from 'three';
 import * as l3d from 'l3d';
+import * as l3dp from 'l3dp';
 import * as log from '../lib/log';
 import * as mth from 'mth';
 
@@ -18,7 +19,8 @@ import { Meshes } from './loadMeshes';
 module geo {
 
     function readIt(sceneNumber : number, recoId : number) : {index : number, area : number}[] {
-        var toZip = JSON.parse(fs.readFileSync('./generated/scene-info/scene' + sceneNumber + '/bookmark' + recoId + '.json', 'utf-8'));
+
+        var toZip = JSON.parse(fs.readFileSync('./generated/scene-info/' + config.Scene[sceneNumber] + '/bookmark' + recoId + '.json', 'utf-8'));
 
         var ret : {index: number, area: number}[] = [];
 
@@ -34,10 +36,9 @@ module geo {
 
     function readAll(sceneNumber : number) : {index : number, area : number}[][] {
 
-        let numberOfReco = [0, 0, 12, 12, 11]; //, 2];
         let ret : {index : number, area : number}[][] = [];
 
-        for (var i = 0; i < numberOfReco[sceneNumber]; i++) {
+        for (var i = 0; i < l3dp.RecommendationData.dict[sceneNumber].length; i++) {
             ret.push(readIt(sceneNumber, i));
         }
 
@@ -55,19 +56,17 @@ module geo {
                 [1,2]]
         ];
 
-        var facesToSend = [
-            readAll(2),
-            readAll(3),
-            readAll(4),
-            readAll(5)
-        ];
+        var facesToSend : {[id : string] : {index : number, area : number}[][]} = {};
+        facesToSend[config.Scene[1]] = readAll(1);
+        facesToSend[config.Scene[2]] = readAll(2);
+        facesToSend[config.Scene[3]] = readAll(3);
 
     } catch (e) {
         console.log(e);
         log.warning('Error occured while reading prefetching files');
         log.warning('No prefetching will be done !');
         predictionTables = [];
-        facesToSend = [];
+        facesToSend = {};
     }
 
     /**
@@ -332,17 +331,17 @@ module geo {
                     // case '/static/data/bobomb/bobomb battlefeild.obj':
                     case '/static/data/bobomb/bobomb battlefeild_sub.obj':
                         this.predictionTable = predictionTables[0];
-                        this.facesToSend = facesToSend[0];
+                        this.facesToSend = facesToSend[config.Scene[config.Scene.BobombBattlefield]];
                     break;
                     // case '/static/data/mountain/coocoolmountain.obj':
                     case '/static/data/mountain/coocoolmountain_sub.obj':
                         this.predictionTable = predictionTables[1];
-                        this.facesToSend = facesToSend[1];
+                        this.facesToSend = facesToSend[config.Scene[config.Scene.CoolCoolMountain]];
                     break;
                     // case '/static/data/whomp/Whomps Fortress.obj':
                     case '/static/data/whomp/Whomps Fortress_sub.obj':
                         this.predictionTable = predictionTables[2];
-                        this.facesToSend = facesToSend[2];
+                        this.facesToSend = facesToSend[config.Scene[config.Scene.WhompFortress]];
                     break;
                     // case '/static/data/sponza/sponza.obj':
                     //     this.predictionTable = predictionTables[3];

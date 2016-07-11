@@ -100,7 +100,7 @@ module l3dp {
         }
 
         getRawRecommendations() : l3d.RecommendationInfo[] {
-            return RecommendationData.peachRecommendations;
+            return RecommendationData.dict[config.Scene.PeachCastle];
         }
 
         getRawCoins() : mth.Vector3[] {

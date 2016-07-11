@@ -64,7 +64,7 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
     if (verbose)
         process.stderr.write(`Initialization finished : ${config.Scene[configScene]} has ${counter} faces\n`);
 
-    for (let recommendationId = 0; recommendationId < recommendationData.length; recommendationId++) {
+    for (let recommendationId = 0; recommendationId < recommendationData.length + 1; recommendationId++) {
 
         if (verbose)
             process.stderr.write('Computing recommendation ' + recommendationId + '\n');
