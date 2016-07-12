@@ -311,6 +311,198 @@ module geo {
             };
         }
 
+        onRequest(path : string, loadingConfig : config.LoadingConfig) {
+
+            if (loadingConfig.chunkSize !== undefined) {
+                this.chunk = loadingConfig.chunkSize;
+            }
+
+            this.mesh = Meshes.dict[path];
+
+            switch (path) {
+                case '/static/data/bobomb/bobomb battlefeild_sub.obj': {
+                    this.predictionTable = predictionTables[0];
+                    this.facesToSend = facesToSend[config.Scene[config.Scene.BobombBattlefield]];
+                    break;
+                }
+                case '/static/data/mountain/coocoolmountain_sub.obj': {
+                    this.predictionTable = predictionTables[1];
+                    this.facesToSend = facesToSend[config.Scene[config.Scene.CoolCoolMountain]];
+                    break;
+                }
+                case '/static/data/whomp/Whomps Fortress_sub.obj': {
+                    this.predictionTable = predictionTables[2];
+                    this.facesToSend = facesToSend[config.Scene[config.Scene.WhompFortress]];
+                    break;
+                }
+                // case '/static/data/sponza/sponza.obj': {
+                //     this.predictionTable = predictionTables[3];
+                //     this.facesToSend = facesToSend[3];
+                //     break;
+                // }
+                default:
+                    this.predictionTable = predictionTables[3];
+            };
+
+            if (this.predictionTable !== undefined && this.facesToSend !== undefined) {
+                log.debug('Prefetch is : ' + config.PrefetchingPolicy[loadingConfig.prefetchingPolicy]);
+                this.generator = createConfigFromPolicy(loadingConfig.prefetchingPolicy, this);
+                this.backupGenerator = new ConfigGenerator(this);
+            } else {
+                log.debug('No info : doing only culling');
+                this.generator = new CullingGenerator(this);
+                this.backupGenerator = new CullingGenerator(this);
+            }
+
+            if (this.mesh === undefined) {
+                process.stderr.write('Wrong path for model : ' + path + "\n");
+                this.socket.emit('refused');
+                this.socket.disconnect();
+                return;
+            }
+
+            this.meshFaces = new Array(this.mesh.meshes.length);
+
+            for (var i = 0; i < this.meshFaces.length; i++) {
+
+                this.meshFaces[i] = {
+                    counter: 0,
+                    array: new Array(this.mesh.meshes[i].faces.length)
+                };
+
+            }
+
+            this.socket.emit('ok');
+
+        }
+
+        onMaterials() {
+            var data = this.nextMaterials();
+            this.socket.emit('elements', data);
+        }
+
+        onNext(_camera ?: any[]) {
+
+            var oldTime = Date.now();
+
+            var cameraFrustum : Frustum;
+            var beginning = this.beginning;
+            var cameraExists = false;
+
+            // Clean camera attribute
+            if (_camera !== null) {
+
+                cameraFrustum = {
+                    position: {
+                        x: _camera[0][0],
+                        y: _camera[0][1],
+                        z: _camera[0][2]
+                    },
+                    target: {
+                        x: _camera[1][0],
+                        y: _camera[1][1],
+                        z: _camera[1][2]
+                    },
+                    planes: []
+                };
+
+                var recommendationClicked = _camera[2];
+
+                if (recommendationClicked !== null) {
+
+                    this.previousReco = recommendationClicked;
+
+                }
+
+                for (let i = 3; i < _camera.length; i++) {
+
+                    cameraFrustum.planes.push({
+                        normal: {
+                            x: _camera[i][0],
+                            y: _camera[i][1],
+                            z: _camera[i][2]
+                        },
+                        constant: _camera[i][3]
+                    });
+
+                }
+
+                cameraExists = true;
+
+            }
+
+            if (cameraExists) {
+
+                // Create config for proportions of chunks
+                var didPrefetch = false;
+                var config = this.generator.generateMainConfig(cameraFrustum, recommendationClicked);
+
+                // Send next elements
+                var next = this.nextElements(config);
+
+                // console.log(
+                //     'Adding ' +
+                //     next.size +
+                //     ' for newConfig : '
+                //     + JSON.stringify(config.map(function(o) { return o.proportion}))
+                // );
+
+
+                if (this.beginning === true && next.size < this.chunk) {
+
+                    this.beginning = false;
+                    config = this.generator.generateMainConfig(cameraFrustum, recommendationClicked);
+
+                }
+
+                var fillElements = this.nextElements(config, this.chunk - next.size);
+
+                next.configSizes = fillElements.configSizes;
+                next.data.push.apply(next.data, fillElements.data);
+                next.size += fillElements.size;
+
+                // Chunk is not empty, compute fill config
+                if (next.size < this.chunk) {
+
+                    config = this.generator.generateFillingConfig(config, next, cameraFrustum, recommendationClicked);
+                    fillElements = this.nextElements(config, this.chunk - next.size);
+
+                    next.data.push.apply(next.data, fillElements.data);
+                    next.size += fillElements.size;
+
+                }
+
+                // If still not empty, fill linear
+                if (next.size < this.chunk) {
+
+                    fillElements = this.nextElements([], this.chunk - next.size);
+
+                    next.data.push.apply(next.data, fillElements.data);
+                    next.size += fillElements.size;
+
+                }
+
+            } else {
+
+                config = this.backupGenerator.generateMainConfig();
+                next = this.nextElements(config, this.chunk);
+
+            }
+
+            log.debug('Chunk of size ' + next.size + ' (generated in ' + (Date.now() - oldTime) + 'ms)');
+
+            if (next.data.length === 0) {
+
+                socket.disconnect();
+
+            } else {
+
+                socket.emit('elements', next.data);
+
+            }
+
+        }
+
         /**
          * Initialize the socket.io callbacks
          * @param socket the socket to initialize
@@ -319,201 +511,10 @@ module geo {
 
             this.socket = socket;
 
-            socket.on('request', (path : string, loadingConfig : config.LoadingConfig) => {
+            socket.on('request', this.onRequest.bind(this));
+            socket.on('materials', this.onMaterials.bind(this));
+            socket.on('next', this.onNext.bind(this));
 
-                if (loadingConfig.chunkSize !== undefined) {
-                    this.chunk = loadingConfig.chunkSize;
-                }
-
-                this.mesh = Meshes.dict[path];
-
-                switch (path) {
-                    // case '/static/data/bobomb/bobomb battlefeild.obj':
-                    case '/static/data/bobomb/bobomb battlefeild_sub.obj':
-                        this.predictionTable = predictionTables[0];
-                        this.facesToSend = facesToSend[config.Scene[config.Scene.BobombBattlefield]];
-                    break;
-                    // case '/static/data/mountain/coocoolmountain.obj':
-                    case '/static/data/mountain/coocoolmountain_sub.obj':
-                        this.predictionTable = predictionTables[1];
-                        this.facesToSend = facesToSend[config.Scene[config.Scene.CoolCoolMountain]];
-                    break;
-                    // case '/static/data/whomp/Whomps Fortress.obj':
-                    case '/static/data/whomp/Whomps Fortress_sub.obj':
-                        this.predictionTable = predictionTables[2];
-                        this.facesToSend = facesToSend[config.Scene[config.Scene.WhompFortress]];
-                    break;
-                    // case '/static/data/sponza/sponza.obj':
-                    //     this.predictionTable = predictionTables[3];
-                    //     this.facesToSend = facesToSend[3];
-                    // break;
-                    default:
-                        this.predictionTable = predictionTables[3];
-                };
-
-                if (this.predictionTable !== undefined && this.facesToSend !== undefined) {
-                    log.debug('Prefetch is : ' + config.PrefetchingPolicy[loadingConfig.prefetchingPolicy]);
-                    this.generator = createConfigFromPolicy(loadingConfig.prefetchingPolicy, this);
-                    this.backupGenerator = new ConfigGenerator(this);
-                } else {
-                    log.debug('No info : doing only culling');
-                    this.generator = new CullingGenerator(this);
-                    this.backupGenerator = new CullingGenerator(this);
-                }
-
-                if (this.mesh === undefined) {
-                    process.stderr.write('Wrong path for model : ' + path + "\n");
-                    socket.emit('refused');
-                    socket.disconnect();
-                    return;
-                }
-
-                this.meshFaces = new Array(this.mesh.meshes.length);
-
-                for (var i = 0; i < this.meshFaces.length; i++) {
-
-                    this.meshFaces[i] = {
-                        counter: 0,
-                        array: new Array(this.mesh.meshes[i].faces.length)
-                    };
-
-                }
-
-                socket.emit('ok');
-
-            });
-
-            socket.on('materials', () => {
-
-                var data = this.nextMaterials();
-
-                console.log(data.length);
-
-                socket.emit('elements', data);
-
-            });
-
-            socket.on('next', (_camera? : any[]) => {
-
-                var oldTime = Date.now();
-
-                var cameraFrustum : Frustum;
-                var beginning = this.beginning;
-                var cameraExists = false;
-
-                // Clean camera attribute
-                if (_camera !== null) {
-
-                    cameraFrustum = {
-                        position: {
-                            x: _camera[0][0],
-                            y: _camera[0][1],
-                            z: _camera[0][2]
-                        },
-                        target: {
-                            x: _camera[1][0],
-                            y: _camera[1][1],
-                            z: _camera[1][2]
-                        },
-                        planes: []
-                    };
-
-                    var recommendationClicked = _camera[2];
-
-                    if (recommendationClicked !== null) {
-
-                        this.previousReco = recommendationClicked;
-
-                    }
-
-                    for (let i = 3; i < _camera.length; i++) {
-
-                        cameraFrustum.planes.push({
-                            normal: {
-                                x: _camera[i][0],
-                                y: _camera[i][1],
-                                z: _camera[i][2]
-                            },
-                            constant: _camera[i][3]
-                        });
-
-                    }
-
-                    cameraExists = true;
-
-                }
-
-                if (cameraExists) {
-
-                    // Create config for proportions of chunks
-                    var didPrefetch = false;
-                    var config = this.generator.generateMainConfig(cameraFrustum, recommendationClicked);
-
-                    // Send next elements
-                    var next = this.nextElements(config);
-
-                    // console.log(
-                    //     'Adding ' +
-                    //     next.size +
-                    //     ' for newConfig : '
-                    //     + JSON.stringify(config.map(function(o) { return o.proportion}))
-                    // );
-
-
-                    if (this.beginning === true && next.size < this.chunk) {
-
-                        this.beginning = false;
-                        config = this.generator.generateMainConfig(cameraFrustum, recommendationClicked);
-
-                    }
-
-                    var fillElements = this.nextElements(config, this.chunk - next.size);
-
-                    next.configSizes = fillElements.configSizes;
-                    next.data.push.apply(next.data, fillElements.data);
-                    next.size += fillElements.size;
-
-                    // Chunk is not empty, compute fill config
-                    if (next.size < this.chunk) {
-
-                        config = this.generator.generateFillingConfig(config, next, cameraFrustum, recommendationClicked);
-                        fillElements = this.nextElements(config, this.chunk - next.size);
-
-                        next.data.push.apply(next.data, fillElements.data);
-                        next.size += fillElements.size;
-
-                    }
-
-                    // If still not empty, fill linear
-                    if (next.size < this.chunk) {
-
-                        fillElements = this.nextElements([], this.chunk - next.size);
-
-                        next.data.push.apply(next.data, fillElements.data);
-                        next.size += fillElements.size;
-
-                    }
-
-                } else {
-
-                    config = this.backupGenerator.generateMainConfig();
-                    next = this.nextElements(config, this.chunk);
-
-                }
-
-                log.debug('Chunk of size ' + next.size + ' (generated in ' + (Date.now() - oldTime) + 'ms)');
-
-                if (next.data.length === 0) {
-
-                    socket.disconnect();
-
-                } else {
-
-                    socket.emit('elements', next.data);
-
-                }
-
-            });
         }
 
         /**
