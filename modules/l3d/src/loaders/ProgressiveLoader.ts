@@ -289,7 +289,8 @@ module l3d {
 
             this.loader = typeof THREE.MTLLoader === 'function' ? new THREE.MTLLoader(this.texturesPath) : null;
 
-            this.socket = typeof io === 'function' ? io() : require('socket.io-client').connect('http://localhost:4000', {multiplex: false});
+            // If node, use require, otherwise, use global io
+            this.socket = typeof module !== 'undefined' && module.exports ? require('socket.io-client').connect('http://localhost:4000', {multiplex: false}) : io();
 
             this.initIOCallbacks();
 
