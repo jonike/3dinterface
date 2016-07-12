@@ -2,6 +2,8 @@ import { Frustum, Data } from '../Interfaces';
 import { ConfigGenerator, Config } from './ConfigGenerator';
 import { MeshStreamer } from '../MeshStreamer';
 
+import * as log from '../../lib/log';
+
 module geo {
 
     /**
@@ -28,13 +30,13 @@ module geo {
 
             if (recommendationClicked === 0) {
 
-                console.log("Full for reco 0");
+                log.debug("Full for reco 0");
                 config = [{recommendationId : 0, proportion : 1, smart : true}];
 
             } else {
 
                 // Case without prefetch
-                console.log("No prefetching");
+                log.debug("No prefetching");
                 config = [{ frustum: cameraFrustum, proportion: 1}];
 
             }

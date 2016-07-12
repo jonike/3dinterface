@@ -65,7 +65,6 @@ module geo {
         facesToSend[config.Scene[3]] = readAll(3);
 
     } catch (e) {
-        console.log(e);
         log.warning('Error occured while reading prefetching files');
         log.warning('No prefetching will be done !');
         predictionTables = [];
