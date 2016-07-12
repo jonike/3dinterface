@@ -113,7 +113,7 @@ module geo {
             for (var i = 0; i < previousConfig.length; i++) {
 
                 // Check if previousConfig was full
-                if (previousData.configSizes[i] >= this.streamer.chunk * previousConfig[i].proportion) {
+                if (previousData.buffers[i].size >= this.streamer.chunk * previousConfig[i].proportion) {
 
                     newConfig.push(previousConfig[i]);
                     sum += previousConfig[i].proportion;

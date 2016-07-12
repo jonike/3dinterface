@@ -6,6 +6,9 @@ import * as l3dp from 'l3dp';
 import * as log from '../lib/log';
 import * as mth from 'mth';
 
+import { Vertex } from './Vertex';
+import { TexCoord } from './TexCoord';
+import { Normal } from './Normal';
 import { Face } from './Face';
 import { Vector, Sendable, CameraItf, Frustum, Data, Plane } from './Interfaces';
 import { MeshContainer } from './MeshContainer';
@@ -457,7 +460,7 @@ module geo {
 
                 var fillElements = this.nextElements(config, this.chunk - next.size);
 
-                next.configSizes = fillElements.configSizes;
+                next.buffers = fillElements.buffers;
                 next.data.push.apply(next.data, fillElements.data);
                 next.size += fillElements.size;
 
@@ -548,54 +551,14 @@ module geo {
 
         }
 
-        /**
-         * Prepare the next elements
-         * @param config a configuration list
-         * @returns an array of elements ready to send
-         * @see {@link https://github.com/DragonRock/3dinterface/wiki/Streaming-configuration|Configuration list documentation}
-         */
-        nextElements(config : Config, chunk? : number) : Data {
-
-            if (chunk === undefined)
-                chunk = this.chunk;
-
-            var data : any[] = [];
-
-            var configSizes :number[] = [];
-            var buffers : any[][] = [];
-
-            var mightBeCompletetlyFinished = true;
-
-            // BOOM
-            // if (camera != null)
-            //     this.mesh.faces.sort(this.faceComparator(camera));
-
-            if (config.length === 0) {
-                config.push({
-                    proportion: 1
-                });
-            }
-
-            totalSize = 0;
-            for (var configIndex = 0; configIndex < config.length; configIndex++) {
-
-                configSizes[configIndex] = 0;
-                buffers[configIndex] = [];
-
-            }
+        fillCullingBuffers(config : Config, buffers : {data:any[], size:number}[]) {
 
             faceloop:
-                for (var faceIndex = 0; faceIndex < this.mesh.faces.length; faceIndex++) {
-
+            for (var faceIndex = 0; faceIndex < this.mesh.faces.length; faceIndex++) {
                 var currentFace = this.mesh.faces[faceIndex];
 
-                if (this.faces[currentFace.index] === true) {
-
+                if (this.faces[currentFace.index] === true)
                     continue;
-
-                }
-
-                mightBeCompletetlyFinished = false;
 
                 var vertex1 = this.mesh.vertices[currentFace.a];
                 var vertex2 = this.mesh.vertices[currentFace.b];
@@ -604,15 +567,17 @@ module geo {
                 for (var configIndex = 0; configIndex < config.length; configIndex++) {
 
                     var currentConfig = config[configIndex];
-
                     var display = false;
                     var exitToContinue = false;
                     var threeVertices = [vertex1, vertex2, vertex3];
 
-                    // Frustum culling
-                    if (!currentConfig.smart && (currentConfig.frustum === undefined || (isInFrustum(threeVertices, currentConfig.frustum.planes) && !this.isBackFace(currentConfig.frustum, currentFace)))) {
+                    // Ignore smart config elements
+                    if (currentConfig.smart || currentConfig.frustum === undefined)
+                        continue;
 
-                        buffers[configIndex].push(currentFace);
+                    if (isInFrustum(threeVertices, currentConfig.frustum.planes) && !this.isBackFace(currentConfig.frustum, currentFace)) {
+
+                        buffers[configIndex].data.push(currentFace);
                         continue faceloop;
 
                     }
@@ -621,16 +586,16 @@ module geo {
 
             }
 
-            // Fill smart recos
+        }
+
+        fillSmartBuffers(config : Config, buffers : {data:any[],size:number}[]) {
+
             for (var configIndex = 0; configIndex < config.length; configIndex++) {
 
                 var currentConfig = config[configIndex];
 
-                if (!currentConfig.smart) {
-
+                if (!currentConfig.smart)
                     continue;
-
-                }
 
                 var area = 0;
                 var currentArea = 0;
@@ -651,10 +616,9 @@ module geo {
                         var face = this.mesh.faces[faceInfo.index];
 
                         if (face === undefined) {
-                            console.log(faceInfo.index, this.mesh.faces.length);
-                            console.log('ERROR !!!');
+                            log.faceerror('Trying to get ${faceInfo.index}th face out of ${this.mesh.faces.length}');
                         } else {
-                            buffers[configIndex].push(face);
+                            buffers[configIndex].data.push(face);
                         }
 
                     } else if (this.beginning === true) {
@@ -673,6 +637,11 @@ module geo {
 
             }
 
+        }
+
+        truncateBuffers(config : Config, buffers : {data:any[],size:number}[], chunk : number) {
+
+            var data : any[] = [];
             var totalSize = 0;
             var configSize = 0;
 
@@ -681,7 +650,7 @@ module geo {
                 // Sort buffer
                 if (config[configIndex].frustum !== undefined) {
 
-                    buffers[configIndex].sort(this.faceComparator(config[configIndex].frustum));
+                    buffers[configIndex].data.sort(this.faceComparator(config[configIndex].frustum));
 
                 } else {
 
@@ -690,15 +659,15 @@ module geo {
                 }
 
                 // Fill chunk
-                for(var i = 0; i < buffers[configIndex].length; i++) {
+                for(var i = 0; i < buffers[configIndex].data.length; i++) {
 
                     // console.log(buffers[configIndex][i]);
-                    var size = this.pushFace(buffers[configIndex][i], data);
+                    var size = this.pushFace(buffers[configIndex].data[i], data);
 
                     totalSize += size;
-                    configSizes[configIndex] += size;
+                    buffers[configIndex].size += size;
 
-                    if (configSizes[configIndex] > chunk * config[configIndex].proportion) {
+                    if (buffers[configIndex].size > chunk * config[configIndex].proportion) {
 
                         break;
 
@@ -709,104 +678,84 @@ module geo {
                 if (totalSize > chunk) {
 
                     // console.log(configIndex, sent/(chunk * currentConfig.proportion));
-                    return {data: data, finished:false, configSizes: configSizes, size: totalSize};
+                    return {data: data, finished:false, buffers: buffers, size: totalSize};
 
                 }
 
             }
 
-            return {data: data, finished: mightBeCompletetlyFinished, configSizes: configSizes, size:totalSize};
+            return {data: data, finished: data.length === 0, buffers: buffers, size:totalSize};
 
+        }
+
+        /**
+         * Prepare the next elements
+         * @param config a configuration list
+         * @returns an array of elements ready to send
+         * @see {@link https://github.com/DragonRock/3dinterface/wiki/Streaming-configuration|Configuration list documentation}
+         */
+        nextElements(config : Config, chunk? : number) : Data {
+
+            if (chunk === undefined) {
+                chunk = this.chunk;
+            }
+
+            var buffers : {data : any[], size : number}[] = [];
+
+            if (config.length === 0) {
+                config.push({
+                    proportion: 1
+                });
+            }
+
+            for (var configIndex = 0; configIndex < config.length; configIndex++) {
+                buffers[configIndex] = {data : [], size : 0};
+            }
+
+            this.fillCullingBuffers(config, buffers);
+            this.fillSmartBuffers(config, buffers);
+
+            return this.truncateBuffers(config, buffers, chunk);
+
+        }
+
+        pushElement(vertex : any, buffer : any[], toVerify : any[]) {
+            if (vertex === undefined || toVerify[vertex.index]) {
+                return 0;
+            } else {
+                buffer.push(vertex.toList());
+                toVerify[vertex.index] = true;
+                return 1;
+            }
+        }
+
+        pushVertex(vertex : Vertex, buffer : any[]) {
+            return this.pushElement(vertex, buffer, this.vertices);
+        }
+
+        pushNormal(normal : Normal, buffer : any[]) {
+            return this.pushElement(normal, buffer, this.normals)
+        }
+
+        pushTexCoord(texCoord : TexCoord, buffer : any[]) {
+            return this.pushElement(texCoord, buffer, this.texCoords);
         }
 
         pushFace(face : Face, buffer : any[]) {
 
             var totalSize = 0;
 
-            var vertex1 = this.mesh.vertices[face.a];
-            var vertex2 = this.mesh.vertices[face.b];
-            var vertex3 = this.mesh.vertices[face.c];
+            totalSize += this.pushVertex(this.mesh.vertices[face.a], buffer);
+            totalSize += this.pushVertex(this.mesh.vertices[face.b], buffer);
+            totalSize += this.pushVertex(this.mesh.vertices[face.c], buffer);
 
-            // Send face
-            if (!this.vertices[face.a]) {
+            totalSize += this.pushNormal(this.mesh.normals[face.aNormal], buffer);
+            totalSize += this.pushNormal(this.mesh.normals[face.bNormal], buffer);
+            totalSize += this.pushNormal(this.mesh.normals[face.cNormal], buffer);
 
-                buffer.push(vertex1.toList());
-                this.vertices[face.a] = true;
-                totalSize++;
-
-            }
-
-            if (!this.vertices[face.b]) {
-
-                buffer.push(vertex2.toList());
-                this.vertices[face.b] = true;
-                totalSize++;
-
-            }
-
-            if (!this.vertices[face.c]) {
-
-                buffer.push(vertex3.toList());
-                this.vertices[face.c] = true;
-                totalSize++;
-
-            }
-
-            var normal1 = this.mesh.normals[face.aNormal];
-            var normal2 = this.mesh.normals[face.bNormal];
-            var normal3 = this.mesh.normals[face.cNormal];
-
-            if (normal1 !== undefined && !this.normals[face.aNormal]) {
-
-                buffer.push(normal1.toList());
-                this.normals[face.aNormal] = true;
-                totalSize++;
-
-            }
-
-            if (normal2 !== undefined && !this.normals[face.bNormal]) {
-
-                buffer.push(normal2.toList());
-                this.normals[face.bNormal] = true;
-                totalSize++;
-
-            }
-
-            if (normal3 !== undefined && !this.normals[face.cNormal]) {
-
-                buffer.push(normal3.toList());
-                this.normals[face.cNormal] = true;
-                totalSize++;
-
-            }
-
-            var tex1 = this.mesh.texCoords[face.aTexture];
-            var tex2 = this.mesh.texCoords[face.bTexture];
-            var tex3 = this.mesh.texCoords[face.cTexture];
-
-            if (tex1 !== undefined && !this.texCoords[face.aTexture]) {
-
-                buffer.push(tex1.toList());
-                this.texCoords[face.aTexture] = true;
-                totalSize++;
-
-            }
-
-            if (tex2 !== undefined && !this.texCoords[face.bTexture]) {
-
-                buffer.push(tex2.toList());
-                this.texCoords[face.bTexture] = true;
-                totalSize++;
-
-            }
-
-            if (tex3 !== undefined && !this.texCoords[face.cTexture]) {
-
-                buffer.push(tex3.toList());
-                this.texCoords[face.cTexture] = true;
-                totalSize++;
-
-            }
+            totalSize += this.pushTexCoord(this.mesh.texCoords[face.aTexture], buffer);
+            totalSize += this.pushTexCoord(this.mesh.texCoords[face.bTexture], buffer);
+            totalSize += this.pushTexCoord(this.mesh.texCoords[face.cTexture], buffer);
 
             buffer.push(face.toList());
             this.faces[face.index] = true;

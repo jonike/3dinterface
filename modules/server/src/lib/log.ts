@@ -135,6 +135,15 @@ export function warning(message : any) {
 
 }
 
+export function faceerror(message : any) {
+
+    write(
+        '[FER] ' + new Date() + ' ' + message,
+        Color.RED
+    );
+
+}
+
 }
 
 export = log;

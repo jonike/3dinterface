@@ -59,7 +59,7 @@ module geo {
         finished: boolean;
 
         /** Sizes of the config */
-        configSizes? : number[];
+        buffers ? : {data:any[], size:number}[];
 
         /** Size of the data */
         size : number;
