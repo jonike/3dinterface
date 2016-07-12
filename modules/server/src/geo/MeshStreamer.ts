@@ -493,11 +493,11 @@ module geo {
 
             if (next.data.length === 0) {
 
-                socket.disconnect();
+                this.socket.disconnect();
 
             } else {
 
-                socket.emit('elements', next.data);
+                this.socket.emit('elements', next.data);
 
             }
 
