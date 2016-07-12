@@ -41,7 +41,7 @@ let imageNumber = 0;
 let colorToFace : THREE.Face3[] = [];
 let triangleMeshes : { [id:string] : THREE.Mesh } = {};
 
-let loader : l3d.ProgressiveLoader;
+let loader : l3d.TestLoader;
 
 function main(configScene : config.Scene, generateImages : string, verbose : boolean) {
 
@@ -78,7 +78,7 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
         camera.startInstantMotion(reco);
         camera.recommendationClicked = recommendationId;
 
-        loader = new l3d.ProgressiveLoader(
+        loader = new l3d.TestLoader(
             sceneElements.loaderPath,
             new THREE.Scene(),
             camera,
@@ -86,7 +86,7 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
             () => {},
             {
                 prefetchingPolicy: config.PrefetchingPolicy.V_PD,
-                chunkSize: Infinity
+                chunkSize: 12500
             }
         );
 
@@ -94,7 +94,7 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
 
         loader.load(() => {
 
-            console.log("Hello");
+            console.log("Loading finished, analysing");
 
             // Analyse the bookmark
             let {array, pixels} = analyse(renderer, scene, camera);
@@ -103,13 +103,11 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
 
             let percentage = 0;
 
+            console.log("Traversing faces received by the loader");
+
             for (let i in loader.mapFace) {
 
-                // Convert i to color
-                let iColor = i
-                    .split('-')
-                    .map((a)=>parseInt(a,10))
-                    .reduce((a,b,c,d) => a+b*Math.pow(256,d.length-c-1),0);
+                let iColor = loader.mapFace[i];
 
                 if (iColor === 0) {
                     continue;

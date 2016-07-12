@@ -571,10 +571,10 @@ module geo {
                     var threeVertices = [vertex1, vertex2, vertex3];
 
                     // Ignore smart config elements
-                    if (currentConfig.smart || currentConfig.frustum === undefined)
+                    if (currentConfig.smart)
                         continue;
 
-                    if (isInFrustum(threeVertices, currentConfig.frustum.planes) && !this.isBackFace(currentConfig.frustum, currentFace)) {
+                    if (currentConfig.frustum === undefined || isInFrustum(threeVertices, currentConfig.frustum.planes) && !this.isBackFace(currentConfig.frustum, currentFace)) {
 
                         buffers[configIndex].data.push(currentFace);
                         continue faceloop;
@@ -683,7 +683,7 @@ module geo {
 
             }
 
-            return {data: data, finished: data.length === 0, buffers: buffers, size:totalSize};
+            return {data: data, finished: false, buffers: buffers, size:totalSize};
 
         }
 
