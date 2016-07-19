@@ -107,7 +107,7 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
 
             for (let i in loader.mapFace) {
 
-                let iColor = loader.mapFace[i] + 1;
+                let iColor = loader.mapFace[i];
 
                 if (iColor === 0) {
                     continue;

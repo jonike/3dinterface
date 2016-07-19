@@ -207,6 +207,8 @@ module geo {
         /** In case {@link generator} gave an empty data */
         backupGenerator : ConfigGenerator;
 
+        breakAt : number;
+
         /**
          * @param {string} path to the mesh
          */
@@ -226,6 +228,8 @@ module geo {
             this.chunk = 1250;
 
             this.previousReco = 0;
+
+            this.breakAt = 0.9;
 
             if (path !== undefined) {
                 this.mesh = Meshes.dict[path];
@@ -606,7 +610,7 @@ module geo {
 
                     area += faceInfo.area;
 
-                    if (area > 0.9) {
+                    if (this.breakAt !== undefined && area > this.breakAt) {
                         break;
                     }
 

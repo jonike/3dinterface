@@ -35,6 +35,7 @@ module geo {
 
             super(path);
             this.beginning = false;
+            this.breakAt = undefined;
 
         }
 
