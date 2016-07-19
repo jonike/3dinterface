@@ -71,18 +71,18 @@ export function request(req : express.Request, res : Express.Response, time : nu
 
 export module socket {
 
-    export function connection(socket : SocketIO.Socket) {
+    export function connection(socket : SocketIO.Socket, isTest ?: boolean) {
         write(
             '[SOK] ' + new Date() + ' ' +
-                (socket.handshake.headers['x-forwarded-for'] || socket.handshake.address) + ' connection',
+                (socket.handshake.headers['x-forwarded-for'] || socket.handshake.address) + (isTest ? ' test' : '') + ' connection',
             Color.MAGENTA
         );
     }
 
-    export function disconnect(socket : SocketIO.Socket) {
+    export function disconnect(socket : SocketIO.Socket, isTest ?: boolean) {
         write(
             '[SOK] ' + new Date() + ' ' +
-                (socket.handshake.headers['x-forwarded-for'] || socket.handshake.address) + ' disconnect',
+                (socket.handshake.headers['x-forwarded-for'] || socket.handshake.address) + (isTest ? ' test' : '') + ' disconnect',
             Color.MAGENTA
         );
     }

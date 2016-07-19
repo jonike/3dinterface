@@ -94,7 +94,7 @@ module l3d {
             this.loadingConfig = loadingConfig;
 
             // If node, use require, otherwise, use global io
-            this.socket = typeof module !== 'undefined' && module.exports ? require('socket.io-client').connect('http://localhost:4000', {multiplex: false}) : io();
+            this.socket = typeof module !== 'undefined' && module.exports ? require('socket.io-client').connect('http://localhost:4000?isTest=1', {multiplex: false}) : io();
 
             this.initIOCallbacks();
 
@@ -168,7 +168,7 @@ module l3d {
         initIOCallbacks() {
 
             this.socket.on('ok', () => {
-                this.socket.emit('materials');
+                this.socket.emit('next', this.getCamera());
             });
 
             this.socket.on('elements', (arr : any[]) => {
@@ -179,9 +179,10 @@ module l3d {
 
                     var elt = parseList(arr.shift());
                     this.addElement(elt);
-                    this.socket.emit('next', this.getCamera());
 
                 }
+
+                this.socket.emit('next', this.getCamera());
 
             });
 

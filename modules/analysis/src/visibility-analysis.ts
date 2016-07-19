@@ -107,7 +107,7 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
 
             for (let i in loader.mapFace) {
 
-                let iColor = loader.mapFace[i];
+                let iColor = loader.mapFace[i] + 1;
 
                 if (iColor === 0) {
                     continue;
@@ -115,11 +115,19 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
 
                 let correspondingFace = array.map((a) => a.triangle).indexOf(iColor);
 
-                percentage += array[correspondingFace].area;
+                if (correspondingFace !== -1) {
+                    percentage += array[correspondingFace].area;
+                } else {
+                    // console.log(iColor, correspondingFace);
+                }
 
-                console.log(percentage);
+                output.push(percentage);
 
+                if (percentage > 1)
+                    break;
             }
+
+            fs.writeFileSync('curves/' + recommendationId + '.json', JSON.stringify(output));
 
             f(recommendationId + 1);
 
