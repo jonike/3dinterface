@@ -3,9 +3,25 @@ import * as l3dp from 'l3dp';
 
 import { join } from 'path';
 
-let pathToGenerated = join(__dirname,'../../../generated/models-generation/');
+let pathToGenerated = join(__dirname,'../../../../generated/models-generation/');
 
 export class UndefinedSceneError extends Error {
+
+    name : string = "UndefinedSceneError";
+
+    constructor(message ?: string) {
+        super(message);
+    }
+
+}
+
+export class UndefinedPrefetchingPolicyError extends Error {
+
+    name : string = "UndefinedPrefetchingPolicyError";
+
+    constructor(message ?: string) {
+        super(message);
+    }
 
 }
 
@@ -41,6 +57,7 @@ export function selectScene(scene : config.Scene) {
         }
 
         default:
+            console.log("Scene not available for recommendation elements " + scene)
             throw new UndefinedSceneError("Scene not available for recommendation elements");
 
     }

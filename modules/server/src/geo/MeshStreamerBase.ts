@@ -94,10 +94,12 @@ module geo {
                     let plane = planes[j];
 
                     let distance =
-                        plane.normal.x * vertex.x +
-                        plane.normal.y * vertex.y +
-                        plane.normal.z * vertex.z +
-                        plane.constant;
+                        plane.constant !== null ?
+                            plane.normal.x * vertex.x +
+                            plane.normal.y * vertex.y +
+                            plane.normal.z * vertex.z +
+                            plane.constant :
+                        1;
 
                     // if (distance < 0) {
                     //     exitToContinue = true;

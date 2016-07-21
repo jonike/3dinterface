@@ -188,6 +188,8 @@ module l3d {
 
             this.socket.on('disconnect', () => {
 
+                this.socket.disconnect();
+
                 this.finished = true;
                 this.callback();
 

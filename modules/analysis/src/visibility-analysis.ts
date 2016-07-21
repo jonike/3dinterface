@@ -9,7 +9,7 @@ import * as THREE from 'three';
 
 import * as Serial from './lib/serial';
 import { pixelsToFile } from './lib/pixelsToFile';
-import { selectScene, UndefinedSceneError } from './lib/selectScene';
+import { selectScene, UndefinedSceneError, UndefinedPrefetchingPolicyError } from './lib/selectScene';
 import { initializeScene } from './lib/initializeScene';
 import { analyse } from './lib/analyse';
 
@@ -18,9 +18,6 @@ let gl = require('gl');
 
 let argv = require('yargs')
     .usage('Usage : reco-analysis.js [options]')
-    .alias('i', 'images')
-    .describe('i', 'Path to the place where the images should be generated, leave empty for no generation')
-    .string('i')
     .alias('s','scene')
     .describe('s', 'Scene id, between 1 and 3')
     .number('s')
@@ -32,16 +29,10 @@ let argv = require('yargs')
     .locale('en')
     .argv;
 
-let width = 1134;
-let height = 768;
+const width = 1134;
+const height = 768;
 
-let imageNumber = 0;
-let colorToFace : THREE.Face3[] = [];
-let triangleMeshes : { [id:string] : THREE.Mesh } = {};
-
-let loader : l3d.TestLoader;
-
-function main(configScene : config.Scene, generateImages : string, verbose : boolean) {
+export function main(configScene : config.Scene, prefetchingPolicy = config.PrefetchingPolicy.NV_PN, verbose : boolean, next ?: Function) {
 
     if (verbose)
         process.stderr.write('Initializing elements, please wait...\n');
@@ -62,46 +53,84 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
     if (verbose)
         process.stderr.write(`Initialization finished : ${config.Scene[configScene]} has ${counter} faces\n`);
 
-    let recommendationId = 1;
-
     let f = (recommendationId : number) => {
 
-        if (recommendationId > recommendationData.length)
+        if (recommendationId > recommendationData.length) {
+
+            // console.log(`-> We are done ${recommendationId}/${recommendationData.length}`);
+
+            // We are done
+            if (typeof next === 'function') {
+                next();
+            }
+
             return;
+
+        }
 
         if (verbose)
             process.stderr.write('Computing recommendation ' + recommendationId + '\n');
 
-        let reco = recommendationData[recommendationId - 1];
-        camera.startInstantMotion(reco);
-        camera.recommendationClicked = recommendationId;
+        if (recommendationId !== 0) {
+            let reco = recommendationData[recommendationId - 1];
+            camera.startInstantMotion(reco);
+            camera.recommendationClicked = recommendationId;
+        } else {
+            camera.reset();
+        }
 
-        loader = new l3d.TestLoader(
+        camera.look();
+
+        let loader = new l3d.TestLoader(
             sceneElements.loaderPath,
             new THREE.Scene(),
             camera,
             () => {},
             () => {},
             {
-                prefetchingPolicy: config.PrefetchingPolicy.V_PD,
+                prefetchingPolicy: prefetchingPolicy,
                 chunkSize: 12500
             }
         );
 
-        // loader.socket.emit('reco', recommendationId);
-
         loader.load(() => {
 
-            console.log("Loading finished, analysing");
+            if (verbose)
+                console.log("Loading finished, analysing");
 
             // Analyse the bookmark
-            let {array, pixels} = analyse(renderer, scene, camera);
+            let array : {triangle : number, area : number}[];
+
+            try {
+
+                array = [];
+
+                let tmp = JSON.parse(
+                    fs.readFileSync(
+                        './generated/' + config.Scene[configScene] + '/bookmark' + recommendationId  +'.json', 'utf-8'
+                    )
+                );
+
+                for (let i = 0; i < tmp.triangles.length; i++) {
+                    array.push({
+                        triangle : tmp.triangles[i],
+                        area : tmp.areas[i]
+                    });
+                }
+
+            } catch(e) {
+
+                process.stderr.write('Could not read serialized file, computing rendering...\n');
+                array = analyse(renderer, scene, camera).array;
+
+            }
 
             let output : number[] = [];
 
             let percentage = 0;
 
-            console.log("Traversing faces received by the loader");
+            if (verbose)
+                console.log("Traversing faces received by the loader : " + Object.keys(loader.mapFace).length);
 
             for (let i in loader.mapFace) {
 
@@ -125,7 +154,15 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
                     break;
             }
 
-            fs.writeFileSync('curves/' + recommendationId + '.json', JSON.stringify(output));
+            if (!fs.existsSync('curves')) {
+                fs.mkdirSync('curves');
+            }
+
+            if (!fs.existsSync('curves/' + config.PrefetchingPolicy[prefetchingPolicy])) {
+                fs.mkdirSync('curves/' + config.PrefetchingPolicy[prefetchingPolicy]);
+            }
+
+            fs.writeFileSync('curves/' + config.PrefetchingPolicy[prefetchingPolicy] + '/' + config.Scene[configScene] + recommendationId + '.json', JSON.stringify(output));
 
             f(recommendationId + 1);
 
@@ -133,30 +170,25 @@ function main(configScene : config.Scene, generateImages : string, verbose : boo
 
     };
 
-    f(1);
+    f(0);
 
 }
 
 if (require.main === module) {
-    let scene = filterInt(argv.s || argv.scene);
     let generateImages = argv.i || argv.images;
     let verbose = argv.v || argv.verbose;
 
-    if (isNaN(scene)) {
-        main(1, generateImages, verbose);
-        // main(2, generateImages, verbose);
-        // main(3, generateImages, verbose);
-    } else {
+    let scene : config.Scene = argv.scene || argv.s;
+    let prefetchName = argv.p || argv.prefetch;
 
-        try {
-            main(scene, generateImages, verbose);
-        } catch(e) {
-            if (e instanceof UndefinedSceneError) {
-                process.stderr.write('The scene you asked for is not defined\n');
-                process.exit(-1);
-            } else {
-                throw e;
-            }
-        }
-    }
+    let prefetchingPolicy : config.PrefetchingPolicy;
+
+    switch(argv.p || argv.prefetch) {
+        case 'NV-PN': prefetchingPolicy = config.PrefetchingPolicy.NV_PN; break;
+        case 'V-PD':  prefetchingPolicy = config.PrefetchingPolicy.V_PD;  break;
+        default:      throw new UndefinedPrefetchingPolicyError('Only NV-PN or V-PD is allowed here');
+    };
+
+    main(scene, prefetchingPolicy, verbose);
+
 }
