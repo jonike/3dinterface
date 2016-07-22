@@ -1,10 +1,11 @@
+import * as fs from 'fs';
+
 import * as config from 'config';
 import * as l3d from 'l3d';
 import * as l3dp from 'l3dp';
 import * as THREE from 'three';
-import * as fs from 'fs';
-import * as Serial from './Serial';
 
+import * as Serial from './serial';
 import { selectScene } from './selectScene';
 
 let Canvas = require('canvas');

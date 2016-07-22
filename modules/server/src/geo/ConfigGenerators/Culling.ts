@@ -2,6 +2,8 @@ import { Frustum, Data } from '../Interfaces';
 import { ConfigGenerator, Config } from './ConfigGenerator';
 import { MeshStreamer } from '../MeshStreamer';
 
+import * as log from '../../lib/log';
+
 module geo {
 
     /**
@@ -27,7 +29,7 @@ module geo {
             var config : Config;
 
                 // Case without prefetch
-                console.log("No prefetching");
+                log.debug("No prefetching");
                 return [{ frustum: cameraFrustum, proportion: 1}];
 
         }

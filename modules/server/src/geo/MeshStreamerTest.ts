@@ -26,7 +26,7 @@ module geo {
     /**
      * A class that streams easily a mesh via socket.io
      */
-    export class MeshStreamer extends MeshStreamerBase {
+    export class MeshStreamerTest extends MeshStreamerBase {
 
         /**
          * @param {string} path to the mesh
@@ -34,12 +34,13 @@ module geo {
         constructor(path? : string) {
 
             super(path);
+            this.beginning = false;
+            this.breakAt = undefined;
 
         }
 
         onMaterials() {
-            var data = this.nextMaterials();
-            this.socket.emit('elements', data);
+            this.socket.emit('elements', []);
         }
 
         onNext(_camera ?: any[]) {
@@ -101,50 +102,9 @@ module geo {
                 // Send next elements
                 var next = this.nextElements(config);
 
-                // console.log(
-                //     'Adding ' +
-                //     next.size +
-                //     ' for newConfig : '
-                //     + JSON.stringify(config.map(function(o) { return o.proportion}))
-                // );
-
-
-                if (this.beginning === true && next.size < this.chunk) {
-
-                    this.beginning = false;
-                    config = this.generator.generateMainConfig(cameraFrustum, recommendationClicked);
-
-                }
-
-                var fillElements = this.nextElements(config, this.chunk - next.size);
-
-                next.buffers = fillElements.buffers;
-                next.data.push.apply(next.data, fillElements.data);
-                next.size += fillElements.size;
-
-                // Chunk is not empty, compute fill config
-                if (next.size < this.chunk) {
-
-                    config = this.generator.generateFillingConfig(config, next, cameraFrustum, recommendationClicked);
-                    fillElements = this.nextElements(config, this.chunk - next.size);
-
-                    next.data.push.apply(next.data, fillElements.data);
-                    next.size += fillElements.size;
-
-                }
-
-                // If still not empty, fill linear
-                if (next.size < this.chunk) {
-
-                    fillElements = this.nextElements([], this.chunk - next.size);
-
-                    next.data.push.apply(next.data, fillElements.data);
-                    next.size += fillElements.size;
-
-                }
-
             } else {
 
+                log.warning("MeshStreamerTest has no camera... seems weird");
                 config = this.backupGenerator.generateMainConfig();
                 next = this.nextElements(config, this.chunk);
 

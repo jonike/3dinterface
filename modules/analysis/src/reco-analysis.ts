@@ -1,19 +1,17 @@
+import * as fs from 'fs';
+import { join } from 'path';
+
 import * as config from 'config';
 import * as l3d from 'l3d';
 import * as l3dp from 'l3dp';
+import { filterInt } from 'mth';
 import * as THREE from 'three';
 
-import * as fs from 'fs';
-
-import * as Serial from './Serial';
-
-import { filterInt } from 'mth';
-import { join } from 'path';
-import { pixelsToFile } from './pixelsToFile';
-import { selectScene, UndefinedSceneError } from './selectScene';
-
-import { initializeScene } from './initializeScene';
-import { analyse } from './analyse';
+import * as Serial from './lib/serial';
+import { pixelsToFile } from './lib/pixelsToFile';
+import { selectScene, UndefinedSceneError } from './lib/selectScene';
+import { initializeScene } from './lib/initializeScene';
+import { analyse } from './lib/analyse';
 
 let Canvas = require('canvas');
 let gl = require('gl');

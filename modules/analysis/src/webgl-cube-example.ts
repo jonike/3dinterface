@@ -4,8 +4,6 @@ import * as THREE from 'three';
 
 import * as fs from 'fs';
 
-import * as Serial from './Serial';
-
 let Canvas = require('canvas');
 let gl = require('gl');
 

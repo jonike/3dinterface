@@ -83,7 +83,3 @@ export function loadFromFile(path : string) {
     return deserialize(fs.readFileSync(path, 'utf-8'));
 
 }
-
-function main() {
-
-}
