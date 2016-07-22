@@ -24,6 +24,7 @@ webpack({
     },
     externals: {
         three : 'THREE',
+        quickhull3d : 'QuickHull'
     },
     plugins: [
         require('webpack-fail-plugin')
