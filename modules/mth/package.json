@@ -1,12 +1,13 @@
 {
   "name": "mth",
   "version": "1.0.0",
-  "main":"./lib/src/mth.js",
-  "typings":"./lib/src/mth.d.ts",
-  "dependencies":{
-    "three":"*"
+  "main": "./lib/src/mth.js",
+  "typings": "./lib/src/mth.d.ts",
+  "dependencies": {
+    "quickhull3d": "*",
+    "three": "*"
   },
-  "devDependencies":{
-    "nodeunit":"*"
+  "devDependencies": {
+    "nodeunit": "*"
   }
 }
