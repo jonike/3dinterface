@@ -109,39 +109,39 @@ module geo {
                 // );
 
 
-                if (this.beginning === true && next.size < this.chunk) {
+                // if (this.beginning === true && next.size < this.chunk) {
 
-                    this.beginning = false;
-                    config = this.generator.generateMainConfig(cameraFrustum, recommendationClicked);
+                //     this.beginning = false;
+                //     config = this.generator.generateMainConfig(cameraFrustum, recommendationClicked);
 
-                }
+                // }
 
-                var fillElements = this.nextElements(config, this.chunk - next.size);
+                // var fillElements = this.nextElements(config, this.chunk - next.size);
 
-                next.buffers = fillElements.buffers;
-                next.data.push.apply(next.data, fillElements.data);
-                next.size += fillElements.size;
+                // next.buffers = fillElements.buffers;
+                // next.data.push.apply(next.data, fillElements.data);
+                // next.size += fillElements.size;
 
                 // Chunk is not empty, compute fill config
-                if (next.size < this.chunk) {
+                // if (next.size < this.chunk) {
 
-                    config = this.generator.generateFillingConfig(config, next, cameraFrustum, recommendationClicked);
-                    fillElements = this.nextElements(config, this.chunk - next.size);
+                //     config = this.generator.generateFillingConfig(config, next, cameraFrustum, recommendationClicked);
+                //     fillElements = this.nextElements(config, this.chunk - next.size);
 
-                    next.data.push.apply(next.data, fillElements.data);
-                    next.size += fillElements.size;
+                //     next.data.push.apply(next.data, fillElements.data);
+                //     next.size += fillElements.size;
 
-                }
+                // }
 
-                // If still not empty, fill linear
-                if (next.size < this.chunk) {
+                // // If still not empty, fill linear
+                // if (next.size < this.chunk) {
 
-                    fillElements = this.nextElements([], this.chunk - next.size);
+                //     fillElements = this.nextElements([], this.chunk - next.size);
 
-                    next.data.push.apply(next.data, fillElements.data);
-                    next.size += fillElements.size;
+                //     next.data.push.apply(next.data, fillElements.data);
+                //     next.size += fillElements.size;
 
-                }
+                // }
 
             } else {
 
