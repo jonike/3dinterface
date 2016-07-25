@@ -211,6 +211,9 @@ module geo {
 
         breakAt : number;
 
+        /** Indicates wether we should compute hidden points removal to optimize streaming */
+        HPR : boolean;
+
         /**
          * @param {string} path to the mesh
          */
@@ -232,6 +235,8 @@ module geo {
             this.previousReco = 0;
 
             this.breakAt = 0.9;
+
+            this.HPR = false;
 
             if (path !== undefined) {
                 this.mesh = Meshes.dict[path];
@@ -323,6 +328,10 @@ module geo {
 
             if (loadingConfig.chunkSize !== undefined) {
                 this.chunk = loadingConfig.chunkSize;
+            }
+
+            if (loadingConfig.HPR === true) {
+                this.HPR = true;
             }
 
             this.mesh = Meshes.dict[path];
@@ -779,7 +788,11 @@ module geo {
             }
 
             this.fillCullingBuffers(config, buffers);
-            // this.truncateHPR(config, buffers);
+
+            if (this.HPR === true) {
+                this.truncateHPR(config, buffers);
+            }
+
             this.fillSmartBuffers(config, buffers);
 
             return this.truncateBuffers(config, buffers, chunk);

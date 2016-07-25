@@ -32,7 +32,7 @@ let argv = require('yargs')
 const width = 1134;
 const height = 768;
 
-export function main(configScene : config.Scene, prefetchingPolicy = config.PrefetchingPolicy.NV_PN, verbose : boolean, next ?: Function) {
+export function main(configScene : config.Scene, loadingConfig : config.LoadingConfig, verbose : boolean, next ?: Function) {
 
     if (verbose)
         process.stderr.write('Initializing elements, please wait...\n');
@@ -87,10 +87,7 @@ export function main(configScene : config.Scene, prefetchingPolicy = config.Pref
             camera,
             () => {},
             () => {},
-            {
-                prefetchingPolicy: prefetchingPolicy,
-                chunkSize: 12500
-            }
+            loadingConfig
         );
 
         loader.load(() => {
@@ -158,11 +155,13 @@ export function main(configScene : config.Scene, prefetchingPolicy = config.Pref
                 fs.mkdirSync('curves');
             }
 
-            if (!fs.existsSync('curves/' + config.PrefetchingPolicy[prefetchingPolicy])) {
-                fs.mkdirSync('curves/' + config.PrefetchingPolicy[prefetchingPolicy]);
+            let dirName = config.PrefetchingPolicy[loadingConfig.prefetchingPolicy] + (loadingConfig.HPR ? '_HPR' : '');
+
+            if (!fs.existsSync('curves/' + dirName)) {
+                fs.mkdirSync('curves/' + dirName);
             }
 
-            fs.writeFileSync('curves/' + config.PrefetchingPolicy[prefetchingPolicy] + '/' + config.Scene[configScene] + recommendationId + '.json', JSON.stringify(output));
+            fs.writeFileSync('curves/' + dirName + '/' + config.Scene[configScene] + recommendationId + '.json', JSON.stringify(output));
 
             f(recommendationId + 1);
 
@@ -181,6 +180,8 @@ if (require.main === module) {
     let scene : config.Scene = argv.scene || argv.s;
     let prefetchName = argv.p || argv.prefetch;
 
+    let HPR = argv.HPR;
+
     let prefetchingPolicy : config.PrefetchingPolicy;
 
     switch(argv.p || argv.prefetch) {
@@ -189,6 +190,6 @@ if (require.main === module) {
         default:      throw new UndefinedPrefetchingPolicyError('Only NV-PN or V-PD is allowed here');
     };
 
-    main(scene, prefetchingPolicy, verbose);
+    main(scene, {prefetchingPolicy:prefetchingPolicy, chunkSize:12500, HPR:HPR}, verbose);
 
 }
