@@ -23,8 +23,7 @@ webpack({
         exclude: /node_modules/
     },
     externals: {
-        three : 'THREE',
-        quickhull3d : 'QuickHull'
+        three : 'THREE'
     },
     plugins: [
         require('webpack-fail-plugin')

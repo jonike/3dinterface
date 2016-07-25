@@ -556,7 +556,7 @@ module geo {
 
         }
 
-        fillCullingBuffers(config : Config, buffers : {data:any[], size:number}[]) {
+        fillCullingBuffers(config : Config, buffers : {data:Face[], size:number}[]) {
 
             faceloop:
             for (var faceIndex = 0; faceIndex < this.mesh.faces.length; faceIndex++) {
@@ -593,7 +593,65 @@ module geo {
 
         }
 
-        fillSmartBuffers(config : Config, buffers : {data:any[],size:number}[]) {
+        truncateHPR(config : Config, buffers : {data:Face[], size:number}[]) {
+
+            // Traverse the faces to collect the vertices
+            let verticesToKeep : boolean[] = [];
+            let vertexCounter = 0;
+
+            for (let configIndex = 0; configIndex < config.length; configIndex++) {
+
+                let currentConfig = config[configIndex];
+                let data : Face[] = buffers[configIndex].data;
+
+                // Do not compute HPR on smart configs
+                if (currentConfig.smart === true)
+                    continue;
+
+                for (let face of data) {
+
+                    if (!verticesToKeep[face.a]) vertexCounter++;
+                    if (!verticesToKeep[face.b]) vertexCounter++;
+                    if (!verticesToKeep[face.c]) vertexCounter++;
+
+                    verticesToKeep[face.a] = true;
+                    verticesToKeep[face.b] = true;
+                    verticesToKeep[face.c] = true;
+
+                }
+
+                // Do not compute HPR if less than 5 vertices
+                if (vertexCounter < 5) {
+                    continue;
+                }
+
+
+                // Prepare the array of vertices for HPR
+                let vertices : mth.Vector3[] = [];
+
+                for (let v in verticesToKeep) {
+                    vertices.push(this.mesh.vertices[v]);
+                }
+
+                // Compute the HPR
+                let visibleVertices = mth.computeVisiblePoints(vertices, currentConfig.frustum.position);
+
+                // Erase elements in buffers
+                for (let i = 0; i < data.length; i++) {
+
+                    if (!visibleVertices[data[i].a] && !visibleVertices[data[i].b] && !visibleVertices[data[i].c]) {
+
+                        data[i] = undefined;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        fillSmartBuffers(config : Config, buffers : {data:Face[],size:number}[]) {
 
             for (var configIndex = 0; configIndex < config.length; configIndex++) {
 
@@ -644,7 +702,7 @@ module geo {
 
         }
 
-        truncateBuffers(config : Config, buffers : {data:any[],size:number}[], chunk : number) {
+        truncateBuffers(config : Config, buffers : {data:Face[],size:number}[], chunk : number) {
 
             var data : any[] = [];
             var totalSize = 0;
@@ -665,6 +723,9 @@ module geo {
 
                 // Fill chunk
                 for(var i = 0; i < buffers[configIndex].data.length; i++) {
+
+                    if (buffers[configIndex].data[i] === undefined)
+                        continue;
 
                     // console.log(buffers[configIndex][i]);
                     var size = this.pushFace(buffers[configIndex].data[i], data);
@@ -718,6 +779,7 @@ module geo {
             }
 
             this.fillCullingBuffers(config, buffers);
+            // this.truncateHPR(config, buffers);
             this.fillSmartBuffers(config, buffers);
 
             return this.truncateBuffers(config, buffers, chunk);

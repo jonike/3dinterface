@@ -5,6 +5,12 @@ import { Vector3, sum, diff, mul, dot, cross, copy } from './Tools';
 
 module mth {
 
+    export interface Vector3Id extends Vector3 {
+
+        index ?: number;
+
+    }
+
     export function belongsToTriangle(P : Vector3, [A,B,C] : [Vector3, Vector3, Vector3], epsilon : number) {
 
         let AP = diff(P,A);
@@ -58,16 +64,16 @@ module mth {
         return false;
     }
 
-    export function computeVisiblePoints(points : Vector3[], cameraCenter : Vector3, param = 1) {
+    export function computeVisiblePoints(points : Vector3Id[], cameraCenter : Vector3, param = 1) {
 
         // Compute norms and max norm
         let tmpVertices : THREE.Vector3[] = [];
-        let newPoints : Vector3[] = [];
+        let newPoints : Vector3Id[] = [];
         let norms : number[] = [];
-        let maxNorm : number = Infinity;
+        let maxNorm : number = 0;
 
         let numPoints = points.length;
-        let returnValue : Vector3[] = [];
+        let returnValue : boolean[] = [];
 
         // First loop : compute norms and maxNorm
         for (let i = 0; i < numPoints; i++) {
@@ -106,7 +112,7 @@ module mth {
 
         for (let i = 0; i < numPoints; i++) {
             if (belongsToHull(newPoints[i], hull, newPoints)) {
-                returnValue.push(points[i]);
+                returnValue[points[i].index] = true;
             }
         }
 
