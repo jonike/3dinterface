@@ -10,13 +10,13 @@ function main() {
     console.log("Generation finished : merging");
 
     let NV_PN_curves : number[][] = [];
-    let SV_PN_curves : number[][] = [];
+    let NV_PN_HPR_curves : number[][] = [];
     let V_PD_curves : number[][] = [];
 
     let max_length = 0;
 
     let NV_PN_avg : number[] = [];
-    let SV_PN_avg : number[] = [];
+    let NV_PN_HPR_avg : number[] = [];
     let V_PD_avg : number[] = [];
 
     // Get every information
@@ -38,12 +38,12 @@ function main() {
             curve =
                 JSON.parse(
                     fs.readFileSync(
-                        './curves/SV_PN/' + config.Scene[scene] + bookmarkId + '.json',
+                        './curves/NV_PN_HPR/' + config.Scene[scene] + bookmarkId + '.json',
                         'utf-8'
                     )
                 );
 
-            SV_PN_curves.push(curve);
+            NV_PN_HPR_curves.push(curve);
             max_length = Math.max(max_length, curve.length);
 
 
@@ -66,26 +66,30 @@ function main() {
     for (let j = 0; j < max_length; j++) {
 
         let NV_PN_sum = 0;
-        let SV_PN_sum = 0;
+        let NV_PN_HPR_sum = 0;
         let V_PD_sum = 0;
 
         for (let i = 0; i < NV_PN_curves.length; i++) {
 
             NV_PN_sum += NV_PN_curves[i][j] === undefined ? 1 : NV_PN_curves[i][j];
-            SV_PN_sum += SV_PN_curves[i][j] === undefined ? 1 : SV_PN_curves[i][j];
+            NV_PN_HPR_sum += NV_PN_HPR_curves[i][j] === undefined ? 1 : NV_PN_HPR_curves[i][j];
             V_PD_sum += V_PD_curves[i][j] === undefined ? 1 : V_PD_curves[i][j];
 
         }
 
         NV_PN_avg.push(NV_PN_sum / NV_PN_curves.length);
-        SV_PN_avg.push(SV_PN_sum / NV_PN_curves.length);
+        NV_PN_HPR_avg.push(NV_PN_HPR_sum / NV_PN_curves.length);
         V_PD_avg.push(V_PD_sum / NV_PN_curves.length);
 
     }
 
-    fs.writeFileSync('curves/NV_PN.json', JSON.stringify(NV_PN_avg));
-    fs.writeFileSync('curves/SV_PN.json', JSON.stringify(SV_PN_avg));
-    fs.writeFileSync('curves/V_PD.json', JSON.stringify(V_PD_avg));
+    fs.writeFileSync('curves/NV_PN.json',     JSON.stringify(NV_PN_avg));
+    fs.writeFileSync('curves/NV_PN_HPR.json', JSON.stringify(NV_PN_HPR_avg));
+    fs.writeFileSync('curves/V_PD.json',      JSON.stringify(V_PD_avg));
+
+    fs.writeFileSync('curves/NV_PN.txt',     NV_PN_avg    .reduce((a,b) => a + '\n' + b, ''));
+    fs.writeFileSync('curves/NV_PN_HPR.txt', NV_PN_HPR_avg.reduce((a,b) => a + '\n' + b, ''));
+    fs.writeFileSync('curves/V_PD.txt',      V_PD_avg     .reduce((a,b) => a + '\n' + b, ''));
 
 }
 

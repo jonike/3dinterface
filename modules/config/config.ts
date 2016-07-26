@@ -57,6 +57,7 @@ module config {
         prefetchingPolicy : PrefetchingPolicy;
         chunkSize ?: number;
         lowRes ?: boolean;
+        HPR ?: boolean;
 
     }
 
