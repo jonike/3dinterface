@@ -66,7 +66,7 @@ module geo {
             this.callback = typeof callback === 'function' ? callback : function(){};
 
             if (path !== undefined) {
-                this.loadFromFile('./' + path);
+                this.loadFromFile(path);
             }
 
         }

@@ -23,7 +23,7 @@ module geo {
 
     export function readIt(sceneNumber : number, recoId : number) : {index : number, area : number}[] {
 
-        var toZip = JSON.parse(fs.readFileSync('./generated/scene-info/' + config.Scene[sceneNumber] + '/bookmark' + recoId + '.json', 'utf-8'));
+        var toZip = JSON.parse(fs.readFileSync(__dirname + '/../generated/scene-info/' + config.Scene[sceneNumber] + '/bookmark' + recoId + '.json', 'utf-8'));
 
         var ret : {index: number, area: number}[] = [];
 
@@ -55,9 +55,9 @@ module geo {
     try
     {
         predictionTables = [
-            JSON.parse(fs.readFileSync('./generated/prefetch-info/mat1.json', 'utf-8')),
-            JSON.parse(fs.readFileSync('./generated/prefetch-info/mat2.json', 'utf-8')),
-            JSON.parse(fs.readFileSync('./generated/prefetch-info/mat3.json', 'utf-8')),
+            JSON.parse(fs.readFileSync(__dirname + '/../generated/prefetch-info/mat1.json', 'utf-8')),
+            JSON.parse(fs.readFileSync(__dirname + '/../generated/prefetch-info/mat2.json', 'utf-8')),
+            JSON.parse(fs.readFileSync(__dirname + '/../generated/prefetch-info/mat3.json', 'utf-8')),
             [[1,1],
                 [1,2]]
         ];
