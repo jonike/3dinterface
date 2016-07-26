@@ -1,3 +1,4 @@
+import { join } from 'path';
 import * as THREE from 'three';
 import * as l3d from 'l3d';
 
@@ -46,7 +47,7 @@ module geo {
 
                 // Load corresponding model
                 let container = new MeshContainer(
-                    name.substring(1, name.length),
+                    join(__dirname, '../', name.substring(1, name.length)),
                     MeshNames.dict[name].transformation,
                     () => {
 
