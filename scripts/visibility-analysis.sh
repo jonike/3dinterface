@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 cd ../modules/analysis/bin
 
 prefetchs=(NV-PN NV-PN V-PD)
