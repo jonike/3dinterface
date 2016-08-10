@@ -2,7 +2,10 @@ import express = require('express');
 import http = require('http');
 import yargs = require('yargs');
 
-var argv = yargs.argv;
+/**
+ * @hidden
+ */
+let argv = yargs.argv;
 
 module log {
 
