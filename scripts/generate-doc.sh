@@ -5,6 +5,7 @@ typedoc \
     --out doc \
     --mode file \
     --module commonjs \
+    --name 3dinterface \
     modules/server/typings/typings/*.d.ts \
     custom_typings/*.d.ts \
     custom_typings/*/*.d.ts \
