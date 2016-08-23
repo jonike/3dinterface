@@ -135,13 +135,23 @@ function main() {
 
     }
 
-    fs.writeFileSync('curves/NV_PN.json',     JSON.stringify(NV_PN_avg));
-    fs.writeFileSync('curves/NV_PN_HPR.json', JSON.stringify(NV_PN_HPR_avg));
-    fs.writeFileSync('curves/V_PD.json',      JSON.stringify(V_PD_avg));
+    // fs.writeFileSync('curves/NV_PN.json',     JSON.stringify(NV_PN_avg));
+    // fs.writeFileSync('curves/NV_PN_HPR.json', JSON.stringify(NV_PN_HPR_avg));
+    // fs.writeFileSync('curves/V_PD.json',      JSON.stringify(V_PD_avg));
 
-    fs.writeFileSync('curves/NV_PN.txt',     NV_PN_avg    .reduce((a,b) => a + '\n' + b, ''));
-    fs.writeFileSync('curves/NV_PN_HPR.txt', NV_PN_HPR_avg.reduce((a,b) => a + '\n' + b, ''));
-    fs.writeFileSync('curves/V_PD.txt',      V_PD_avg     .reduce((a,b) => a + '\n' + b, ''));
+    // We give null has argument so typescript doesn't throw an error
+    // fs.writeFileSync('curves/NV_PN.txt',     NV_PN_avg    .reduce((a,b) => a + '\n' + b, null));
+    // fs.writeFileSync('curves/NV_PN_HPR.txt', NV_PN_HPR_avg.reduce((a,b) => a + '\n' + b, null));
+    // fs.writeFileSync('curves/V_PD.txt',      V_PD_avg     .reduce((a,b) => a + '\n' + b, null));
+
+    // Generate a .dat file with all curves
+    fs.writeFileSync(
+        'curves/visibility-analysis.dat',
+        NV_PN_avg.map((a,i) => [i+1, NV_PN_avg[i], NV_PN_HPR_avg[i], V_PD_avg[i]])
+                 .reduce((a,b) => a + '\n' + b[0] + ' ' + b[1] + ' ' + b[2] + ' ' + b[3], 'x nv_pn nv_pn_hpr v_pd')
+    );
+
+
 
 }
 
