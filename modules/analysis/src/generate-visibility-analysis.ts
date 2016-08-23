@@ -147,7 +147,7 @@ function main() {
     // Generate a .dat file with all curves
     fs.writeFileSync(
         'curves/visibility-analysis.dat',
-        NV_PN_avg.map((a,i) => [i+1, NV_PN_avg[i], NV_PN_HPR_avg[i], V_PD_avg[i]])
+        NV_PN_avg.map((a,i) => [i+1, a, NV_PN_HPR_avg[i], V_PD_avg[i]])
                  .reduce((a,b) => a + '\n' + b[0] + ' ' + b[1] + ' ' + b[2] + ' ' + b[3], 'x nv_pn nv_pn_hpr v_pd')
     );
 
