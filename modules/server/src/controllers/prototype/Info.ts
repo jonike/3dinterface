@@ -100,7 +100,7 @@ module DBReq {
             };
 
             this.redCoins = [];
-            this.finalResult = {};
+            this.finalResult = {redCoins : [], events : []};
             this.finishAction = finishAction;
             this.client = null;
 
@@ -157,8 +157,6 @@ module DBReq {
          * Merges the results of the different SQL requests and prepare final result.
          */
         merge() {
-
-            this.finalResult = {redCoins : [], events : []};
 
             for (;;) {
                 // Find next element
@@ -506,7 +504,7 @@ module DBReq {
                     } else {
                         this.finalResult.sceneInfo = {
                             recommendationStyle : result.rows[0].recommendationStyle,
-                            sceneId : result.rows[0].sceneId
+                            sceneId : result.rows[0].sceneId-1
                         };
                     }
                     this.ready.sceneInfo = true;
