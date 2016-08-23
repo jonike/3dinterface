@@ -1,13 +1,27 @@
 import * as fs from 'fs';
+import * as child_process from 'child_process';
 
-import * as vm from 'vm';
 import * as config from 'config';
 import * as l3dp from 'l3dp';
 
+import * as visibility from './visibility-analysis';
+
 function main() {
 
-    // Merge everything
-    console.log("Generation finished : merging");
+    let options : config.LoadingConfig[] = [
+        {
+            prefetchingPolicy: config.PrefetchingPolicy.NV_PN,
+            HPR: false,
+        },
+        {
+            prefetchingPolicy: config.PrefetchingPolicy.NV_PN,
+            HPR: true,
+        },
+        {
+            prefetchingPolicy: config.PrefetchingPolicy.V_PD,
+            HPR: false,
+        },
+    ];
 
     let NV_PN_curves : number[][] = [];
     let NV_PN_HPR_curves : number[][] = [];
@@ -24,43 +38,81 @@ function main() {
 
         for (let bookmarkId = 0; bookmarkId < l3dp.RecommendationData.dict[scene].length + 1; bookmarkId++) {
 
-            let curve : number[] =
-                JSON.parse(
-                    fs.readFileSync(
-                        './curves/NV_PN/' + config.Scene[scene] + bookmarkId + '.json',
-                        'utf-8'
-                    )
-                );
+            for (let optionIndex in options) {
 
-            NV_PN_curves.push(curve);
-            max_length = Math.max(max_length, curve.length);
+                let option = options[optionIndex];
+                let dirName : string;
+                let curves : number[][];
 
-            curve =
-                JSON.parse(
-                    fs.readFileSync(
-                        './curves/NV_PN_HPR/' + config.Scene[scene] + bookmarkId + '.json',
-                        'utf-8'
-                    )
-                );
+                if (option.prefetchingPolicy === config.PrefetchingPolicy.NV_PN) {
 
-            NV_PN_HPR_curves.push(curve);
-            max_length = Math.max(max_length, curve.length);
+                    if (option.HPR === true) {
+                        // NV_PN_HPR
+                        dirName = 'NV_PN_HPR';
+                        curves = NV_PN_HPR_curves;
+                    } else {
+                        // NV_PN
+                        dirName = 'NV_PN';
+                        curves = NV_PN_curves;
+                    }
 
+                } else {
+                    // V_PD
+                    dirName = 'V_PD';
+                    curves = V_PD_curves;
+                }
 
-            curve =
-                JSON.parse(
-                    fs.readFileSync(
-                        './curves/V_PD/' + config.Scene[scene] + bookmarkId + '.json',
-                        'utf-8'
-                    )
-                );
+                let curve : number[];
 
-            V_PD_curves.push(curve);
-            max_length = Math.max(max_length, curve.length);
+                try {
+
+                    // Try to read the curve from the file
+                    curve =
+                        JSON.parse(
+                            fs.readFileSync(
+                                './curves/' + dirName + '/' + config.Scene[scene] + bookmarkId + '.json',
+                                'utf-8'
+                            )
+                        );
+
+                } catch (e) {
+
+                    // If it fails, generate the file by spawning the right script ...
+                    process.stderr.write('Data not existing, generating...\n');
+
+                    child_process.spawnSync('node', [
+                        'visibility-analysis',
+                        '-v',
+                        '-i', 'img',
+                        '-s', scene + '',
+                        '-p', config.PrefetchingPolicy[option.prefetchingPolicy].replace('_','-'),
+                        option.HPR ? '--HPR': ''
+                    ], {
+                        cwd: __dirname,
+                        stdio: 'pipe'
+                    });
+
+                    // ... and then read the data from the file
+                    curve =
+                        JSON.parse(
+                            fs.readFileSync(
+                                './curves/' + dirName + '/' + config.Scene[scene] + bookmarkId + '.json',
+                                'utf-8'
+                            )
+                        );
+
+                }
+
+                curves.push(curve);
+                max_length = Math.max(max_length, curve.length);
+
+            }
 
         }
 
     }
+
+    process.stderr.write('Generating finished : computing averages\n');
 
     // Compute the averages
     for (let j = 0; j < max_length; j++) {
@@ -71,9 +123,9 @@ function main() {
 
         for (let i = 0; i < NV_PN_curves.length; i++) {
 
-            NV_PN_sum += NV_PN_curves[i][j] === undefined ? 1 : NV_PN_curves[i][j];
+            NV_PN_sum     += NV_PN_curves[i][j]     === undefined ? 1 : NV_PN_curves[i][j];
             NV_PN_HPR_sum += NV_PN_HPR_curves[i][j] === undefined ? 1 : NV_PN_HPR_curves[i][j];
-            V_PD_sum += V_PD_curves[i][j] === undefined ? 1 : V_PD_curves[i][j];
+            V_PD_sum      += V_PD_curves[i][j]      === undefined ? 1 : V_PD_curves[i][j];
 
         }
 
@@ -94,5 +146,7 @@ function main() {
 }
 
 if (require.main === module) {
+
     main();
+
 }
