@@ -43,12 +43,14 @@ let argv = require('yargs')
 const width = 1134;
 const height = 768;
 
-export function main(camera : l3d.ReplayCamera, loadingConfig : config.LoadingConfig, verbose : boolean, next ?: Function) {
+export function main(camera : l3d.ReplayCamera, replayId : number, loadingConfig : config.LoadingConfig, verbose : boolean, next ?: Function) {
 
     if (verbose)
         process.stderr.write('Initializing elements, please wait...\n');
 
     let configScene : config.Scene = camera.data.sceneInfo.sceneId;
+    let dirName = (loadingConfig.prefetchingPolicy === config.PrefetchingPolicy.NV_PN) ? 'NV_PN' : 'V_PD';
+
 
     let {
         sceneElements,
@@ -66,6 +68,7 @@ export function main(camera : l3d.ReplayCamera, loadingConfig : config.LoadingCo
     camera.start();
 
     let iterations = 0;
+    let curve : number[] = [];
 
     if (verbose)
         process.stderr.write(`Initialization finished : ${config.Scene[configScene]} has ${counter} faces\n`);
@@ -82,7 +85,7 @@ export function main(camera : l3d.ReplayCamera, loadingConfig : config.LoadingCo
 
     loader.onBeforeEmit = () => {
 
-        console.log("Computing...");
+        process.stderr.write("Computing frame " + iterations + "... ");
 
         // update camera
         for (let i = 0; i < 10; i++)
@@ -93,7 +96,7 @@ export function main(camera : l3d.ReplayCamera, loadingConfig : config.LoadingCo
 
         // Compute rendering
         let { array, pixels } = analyse(renderer, scene, camera);
-        pixelsToFile(pixels, width, height, 'img/' + iterations + '.png');
+        // pixelsToFile(pixels, width, height, 'img/' + iterations + '.png');
         iterations++;
 
         let num = 0;
@@ -110,13 +113,25 @@ export function main(camera : l3d.ReplayCamera, loadingConfig : config.LoadingCo
 
         }
 
-        console.log(num, denom, 100*num/denom);
+        let score = num / denom;
+        process.stderr.write(100 * score + '\n');
+        curve.push(score);
+
 
     };
 
     loader.load(() => {
 
         console.log("Done !");
+
+        // Write curve to file
+        fs.writeFileSync(
+            'curves/' + dirName + '/' + replayId + '.txt',
+            'expId=' + replayId + '\nsceneId='  + configScene  + '\nprefetch=' + dirName +
+                curve.reduce((a,b)=>a+'\n'+b,'')
+        );
+
+        process.exit(0);
 
     });
 
@@ -129,8 +144,6 @@ if (require.main === module) {
 
     let scene : config.Scene = argv.scene || argv.s;
     let prefetchName = argv.p || argv.prefetch;
-
-    let HPR = argv.HPR;
 
     let prefetchingPolicy : config.PrefetchingPolicy;
     let camera = new l3d.ReplayCamera(50, width/height,0.001, 1000000, [], "{}",()=>{});
@@ -145,10 +158,15 @@ if (require.main === module) {
     xhr.open("GET", 'http://localhost:4000/prototype/replay-info/' + replayId, true);
 
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            camera.data = JSON.parse(xhr.responseText);
-            camera.path = camera.data.events;
-            main(camera, {prefetchingPolicy:prefetchingPolicy, chunkSize:1250, HPR:HPR}, verbose);
+        if (xhr.readyState === 4) {
+            if(xhr.status === 200) {
+                camera.data = JSON.parse(xhr.responseText);
+                camera.path = camera.data.events;
+                main(camera, replayId, {prefetchingPolicy:prefetchingPolicy, chunkSize:1250}, verbose);
+            } else {
+                process.stderr.write("Could not connect to the server... is it running ?\n");
+                process.exit(-1);
+            }
         }
     };
 
