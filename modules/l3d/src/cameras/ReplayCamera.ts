@@ -118,12 +118,11 @@ module l3d {
 
         nextEvent() {
 
-            var self = this;
 
-            if (self.isArrow) {
-                self.isArrow = false;
-                if (typeof self.logReco === 'function') {
-                    var info = self.logReco(false, self.totalTime);
+            if (this.isArrow) {
+                this.isArrow = false;
+                if (typeof this.logReco === 'function') {
+                    var info = this.logReco(false, this.totalTime);
                     // require('fs').appendFileSync(info.path, info.value);
                 }
                 // process.stderr.write('\033[31mArrowclicked finished !\033[0m\n');
@@ -143,7 +142,6 @@ module l3d {
             }
 
             this.event = this.path[this.counter];
-            // console.log(this.event.type);
 
             if (this.event.type == 'camera') {
 

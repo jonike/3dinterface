@@ -117,7 +117,7 @@ module l3d {
         /**
          * A map that indicates if a face has been already received
          */
-        mapFace : {[id:string] : boolean};
+        mapFace : {[id:string] : number};
 
         /**
          * Indicates which type of prefetch is used
@@ -200,7 +200,7 @@ module l3d {
 
         hasFace(face : mth.Face3) : boolean {
 
-            return this.mapFace[(face.a) + '-' + (face.b) + '-' + (face.c)] === true;
+            return this.mapFace[(face.a) + '-' + (face.b) + '-' + (face.c)] !== undefined;
 
         }
 
@@ -312,7 +312,7 @@ module l3d {
 
                 this.numberOfFacesReceived++;
 
-                this.mapFace[elt.a + '-' + elt.b + '-' + elt.c] = true;
+                this.mapFace[elt.a + '-' + elt.b + '-' + elt.c] = elt.index;
 
                 if (!this.parts[elt.mesh].added) {
 

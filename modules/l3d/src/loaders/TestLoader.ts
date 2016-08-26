@@ -62,6 +62,7 @@ module l3d {
          * A map that indicates if a face has been already received
          */
         mapFace : {[id:string] : number};
+        reverseMapFace : boolean[];
 
         /**
          * Indicates which type of prefetch is used
@@ -81,7 +82,7 @@ module l3d {
          * order)
          * @param callback callback to call on the objects when they're created
          */
-        constructor(path : string, scene : THREE.Scene, camera : SphericCamera, callback : Function, log : Function, loadingConfig : config.LoadingConfig) {
+        constructor(path : string, scene : THREE.Scene, camera : SphericCamera, callback : Function, log : Function, loadingConfig : config.LoadingConfig, testConnection = true) {
 
             this.objPath = path;
 
@@ -94,13 +95,14 @@ module l3d {
             this.loadingConfig = loadingConfig;
 
             // If node, use require, otherwise, use global io
-            this.socket = typeof module !== 'undefined' && module.exports ? require('socket.io-client').connect('http://localhost:4000?isTest=1', {multiplex: false}) : io();
+            this.socket = typeof module !== 'undefined' && module.exports ? require('socket.io-client').connect('http://localhost:4000' + (testConnection ? '?isTest=1' : ''), {multiplex: false}) : io();
 
             this.initIOCallbacks();
 
             this.camera = camera;
 
             this.mapFace = {};
+            this.reverseMapFace = [];
 
         }
 
@@ -154,6 +156,7 @@ module l3d {
             } else if (elt.type === StreamedElementType.FACE) {
 
                 this.mapFace[elt.a + '-' + elt.b + '-' + elt.c] = elt.index;
+                this.reverseMapFace[elt.index] = true;
 
             } else if (elt.type === StreamedElementType.GLOBAL) {
 
@@ -182,7 +185,10 @@ module l3d {
 
                 }
 
-                this.socket.emit('next', this.getCamera());
+                if (typeof this.onBeforeEmit === 'function') {
+                    this.onBeforeEmit();
+                    this.socket.emit('next', this.getCamera());
+                }
 
             });
 
