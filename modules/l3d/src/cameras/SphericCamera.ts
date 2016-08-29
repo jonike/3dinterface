@@ -16,56 +16,50 @@ module l3d {
      */
     export class SphericCamera extends BaseCamera {
 
-        /**
-         * Time that it takes to move to a bookmark (in s)
-         */
+        /** Time that it takes to move to a bookmark (in s) */
         transitionDuration : number;
 
-        /**
-         * Theta angle of the camera
-         */
+        /** Theta angle of the camera */
         theta : number;
 
-        /**
-         * Phi angle of the camera
-         */
+        /** Phi angle of the camera */
         phi : number;
 
-        /**
-         * Current position of the camera (optical center)
-         */
+        /** Current position of the camera (optical center) */
         position : THREE.Vector3;
 
-        /**
-         * Point that the camera is targeting
-         */
+        /** Point that the camera is targeting */
         target : THREE.Vector3;
 
-        /**
-         * The camera we will move to when we'll reset the camera
-         */
+        /** The camera we will move to when we'll reset the camera */
         resetElements : CameraItf;
 
-        /**
-         * Speed of the camera
-         */
+        /** Speed of the camera */
         speed : number;
 
-        /**
-         * Id of the recommendation to move to
-         */
+        /** Id of the recommendation to move to */
         movingToRecommendation : number;
 
-        /**
-         * Id of the recommendation that is currently clicked (null if no recommendation are clicked)
+        /*
+         * Id of the recommendation that is currently clicked (null if no
+         * recommendation are clicked)
          */
         recommendationClicked : number;
 
+        /**
+         * Instant of the curve if the object is traversing a curve, NaN otherwise
+         */
         t : number;
 
+        /** Curve that the center of the camera is following */
         curvePosition  : mth.Curve<THREE.Vector3>;
+
+        /** Curve that the direction vector of the camera is following */
         curveDirection : mth.Curve<THREE.Vector3>;
 
+        /**
+         * Creates a simple SphericCamera
+         */
         constructor(arg0 : any, arg1 : any, arg2 : any, arg3 : any) {
 
             super(arg0, arg1, arg2, arg3);
@@ -149,8 +143,7 @@ module l3d {
 
         /**
          * Creates a linear motion to another camera
-         * @param recommendation Camera to move to
-         * @param true if you want to save the current state of the camera
+         * @param destination Camera to move to
          */
         startLinearMotion(destination : CameraItf) : void {
 
@@ -170,8 +163,7 @@ module l3d {
 
         /**
          * Creates a hermite motion to another camera
-         * @param recommendation Camera to move to
-         * @param toSave if you want to save the current state of the camera
+         * @param destination Camera to move to
          */
         startHermiteMotion(destination : CameraItf) : void {
 
@@ -191,6 +183,10 @@ module l3d {
 
         }
 
+        /**
+         * Creates a teleportation to another camera
+         * @param destination Camera to move to
+         */
         startInstantMotion(destination : CameraItf) : void {
 
             this.t = NaN;
@@ -201,6 +197,11 @@ module l3d {
 
         }
 
+        /**
+         * Creates an hermite motion to a recommendation
+         * @param recommendation Recommendation to go to
+         * @param toSave Indicates wether it should be saved in the history
+         */
         moveHermite(recommendation : BaseRecommendation, toSave ?: boolean) : void {};
 
         /**

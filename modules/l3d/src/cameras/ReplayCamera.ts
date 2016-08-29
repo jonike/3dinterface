@@ -7,44 +7,46 @@ import { SphericCamera } from './SphericCamera';
 
 module l3d {
 
+    /** Camera that replays an experiment */
     export class ReplayCamera extends SphericCamera {
 
+        /** Array of the coins that are in this experiment */
         coins : any;
 
-        /**
-         * Indicates if the replay has started
-         */
+        /** Indicates if the replay has started */
         started : boolean;
 
+        /** Number of the current event */
         counter : number;
 
+        /** The data (JSON object) that has been collected from the server */
         data : any;
 
+        /** Callback that is called when the replay is finished */
         callback : () => any;
-        recoverCallback : () => any;
 
-        recovering : boolean;
-
+        /** The list of the events of the replay */
         path : any;
 
-        shouldRecover : boolean;
-
+        /** The number of the recommendation that is clicked */
         recommendationClicked : number;
 
-        isArrow : boolean;
-
+        /** The total time since the beginning of the replay */
         totalTime : number;
 
+        /** The time when the replay finished*/
         quittingTime : number;
 
+        /** Current event */
         event : any;
 
+        /** Indicates wether the replay is finished */
         finished : boolean;
 
+        /** The recommendations that may be clicked on */
         cameras : BaseRecommendation[];
 
-        logReco : (b : boolean, n : number) => any;
-
+        /** The duration of a replayed motion */
         motionDuration : number;
 
         constructor(
@@ -69,11 +71,7 @@ module l3d {
             this.started = true;
             this.path = this.data.events;
 
-            this.shouldRecover = false;
-
             this.recommendationClicked = null;
-
-            this.isArrow = false;
 
             this.totalTime = 0;
 
@@ -83,16 +81,17 @@ module l3d {
 
         }
 
-        look() {
-            this.lookAt(this.target);
-        }
-
+        /** Starts the replay */
         start() {
             this.counter = 0;
             this.started = true;
             this.nextEvent();
         }
 
+        /**
+         * Moves the camera for a certain duration
+         * @param time time of the step that the camera will make
+         */
         update(time : number) : boolean {
 
             var wasNaN = isNaN(this.t);
@@ -116,17 +115,9 @@ module l3d {
             return this.finished;
         }
 
+        /** Handle the next event */
         nextEvent() {
 
-
-            if (this.isArrow) {
-                this.isArrow = false;
-                if (typeof this.logReco === 'function') {
-                    var info = this.logReco(false, this.totalTime);
-                    // require('fs').appendFileSync(info.path, info.value);
-                }
-                // process.stderr.write('\033[31mArrowclicked finished !\033[0m\n');
-            }
 
             this.counter++;
 
@@ -181,6 +172,7 @@ module l3d {
             }
         }
 
+        /** Starts an hermite motion to a recommendation */
         moveHermite(recommendation : BaseRecommendation, toSave ?: boolean) : void {
 
             this.recommendationClicked = recommendation.recommendationId + 1;
@@ -191,6 +183,7 @@ module l3d {
 
         }
 
+        /** Starts a motion to a recommendation */
         moveReco(recommendationId : number) {
 
             this.recommendationClicked = recommendationId;
