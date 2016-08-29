@@ -60,7 +60,7 @@ function main() {
     require('./lib/controllers')(app);
 
     // Static files
-    app.use('/static', express.static('./static/'));
+    app.use('/static', express.static(path.join(__dirname, 'static/')));
 
     // Favicon
     app.use(require('serve-favicon')(path.join(__dirname, 'static/ico/favicon.ico')));
