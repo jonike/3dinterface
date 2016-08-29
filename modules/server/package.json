@@ -25,5 +25,6 @@
     "repository" : {
         "type" : "git",
         "url" : "https://github.com/tforgione/3dinterface.git"
-    }
+    },
+    "main":"bin/server.js"
 }
