@@ -1,46 +1,81 @@
 module l3d {
 
+    /**
+     * Types of the streamed element
+     */
     export enum StreamedElementType {
-
+        /** A 3d vertex */
         VERTEX,
+        /** A 2D texture coordinates*/
         TEX_COORD,
+        /** A 3d face with indices of vertices */
         FACE,
+        /** A 3d vector that represent a normal */
         NORMAL,
+        /** A usemtl instruction */
         USEMTL,
+        /** A custom element for giving global information */
         GLOBAL
 
     }
 
+    /**
+     * A streamed element
+     */
     export interface StreamedElement {
 
+        /** The type of the streamed element */
         type : StreamedElementType;
 
+        /** The index of the element in the obj file for example */
         index ?: number;
 
+        /** Its x coordinate */
         x ?: number;
+        /** Its y coordinate */
         y ?: number;
+        /** Its z coordinate */
         z ?: number;
 
+        /** The id of the mesh the elements belongs to */
         mesh ?: number;
 
+        /** The index of the first vertex of the face */
         a ?: number;
+        /** The index of the second vertex of the face */
         b ?: number;
+        /** The index of the third vertex of the face */
         c ?: number;
 
+        /** The index of the texture coordinate of the first vertex of the face */
         aTexture ?: number;
+        /** The index of the texture coordinate of the second vertex of the face */
         bTexture ?: number;
+        /** The index of the texture coordinate of the third vertex of the face */
         cTexture ?: number;
 
+        /** The index of the normal of the first vertex of the face */
         aNormal ?: number;
+        /** The index of the normal of the second vertex of the face */
         bNormal ?: number;
+        /** The index of the normal of the third vertex of the face */
         cNormal ?: number;
 
+        /** The name of the material */
         materialName ?: string;
+
+        /** The number of vertices of the current mesh part (which is also the total number of vertices)  */
         vLength ?: number;
+        /** The number of faces of the current mesh part */
         fLength ?: number;
+
+        /** Indicates wether the model contains texture coordinates */
         texCoordsExist ?: boolean;
+
+        /** Indicates wether the model contains normals */
         normalsExist ?: boolean;
 
+        /** The number of faces of the mesh */
         numberOfFaces ?: number;
 
     }

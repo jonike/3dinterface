@@ -83,14 +83,12 @@ export function main(configScene : config.Scene, loadingConfig : config.LoadingC
 
         let loader = new l3d.TestLoader(
             sceneElements.loaderPath,
-            new THREE.Scene(),
-            camera,
-            () => {},
-            () => {},
             loadingConfig
         );
 
-        loader.load(() => {
+        loader.setCamera(camera);
+
+        loader.onFinished = () => {
 
             if (verbose)
                 console.log("Loading finished, analysing");
@@ -165,7 +163,9 @@ export function main(configScene : config.Scene, loadingConfig : config.LoadingC
 
             f(recommendationId + 1);
 
-        });
+        };
+
+        loader.load();
 
     };
 

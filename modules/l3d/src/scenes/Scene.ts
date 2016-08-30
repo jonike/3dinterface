@@ -88,7 +88,7 @@ module l3d {
             this.camera.reset();
 
             if (this.loader instanceof ProgressiveLoader)
-                this.loader.camera = camera;
+                this.loader.setCamera(camera);
 
         }
 
