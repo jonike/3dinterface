@@ -86,6 +86,8 @@ module l3d {
                 this.addElement(arr.shift());
             }
 
+            this.askNewElements();
+
         }
 
     }

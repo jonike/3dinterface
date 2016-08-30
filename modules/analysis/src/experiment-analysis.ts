@@ -75,8 +75,10 @@ export function main(camera : l3d.ReplayCamera, replayId : number, loadingConfig
 
     let loader = new l3d.TestLoader(
         sceneElements.loaderPath,
-        loadingConfig,
+        loadingConfig
     );
+
+    loader.setCamera(camera);
 
     loader.onBeforeEmit = () => {
 

@@ -181,7 +181,6 @@ module l3d {
                 this.socket.disconnect();
 
                 this.finished = true;
-                this.callback();
 
                 if (typeof BaseLoader.onFinished === 'function') {
                     BaseLoader.onFinished();

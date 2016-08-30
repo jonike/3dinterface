@@ -86,6 +86,8 @@ export function main(configScene : config.Scene, loadingConfig : config.LoadingC
             loadingConfig
         );
 
+        loader.setCamera(camera);
+
         loader.onFinished = () => {
 
             if (verbose)
