@@ -10,19 +10,27 @@ import { SphericCamera } from './SphericCamera';
 import { BaseRecommendation } from '../recommendations/BaseRecommendation';
 
 module l3d {
+
     /**
-     * Mouse cursor
+     * Position of the mouse cursor
      */
     export interface MouseCursor {
-
+        /** x coordinate of the position */
         x : number;
+        /** y coordinate of the position */
         y : number;
 
     };
 
+    /**
+     * An object that a camera can move to
+     */
     export interface TargetMove {
 
+        /** Center of the camera */
         camera   : mth.Vector3;
+
+        /** Point that the camera is looking at */
         target   : mth.Vector3;
 
     }
@@ -33,14 +41,23 @@ module l3d {
      */
     export interface CameraMotion {
 
+        /** Indicates wether the user wants to increase phi */
         increasePhi   ? : boolean;
+        /** Indicates wether the user wants to decrease phi */
         decreasePhi   ? : boolean;
+        /** Indicates wether the user wants to increase theta */
         increaseTheta ? : boolean;
+        /** Indicates wether the user wants to decrease theta */
         decreaseTheta ? : boolean;
+        /** Indicates wether the user wants to boost the camera */
         boost         ? : boolean;
+        /** Indicates wether the user wants to move forward */
         moveForward   ? : boolean;
+        /** Indicates wether the user wants to move backward */
         moveBackward  ? : boolean;
+        /** Indicates wether the user wants to move to the left */
         moveLeft      ? : boolean;
+        /** Indicates wether the user wants to move to the right */
         moveRight     ? : boolean;
 
     }
@@ -136,23 +153,30 @@ module l3d {
          */
         shouldLogCameraAngles : boolean;
 
-
         /**
          * Id of the recommendation that is currently clicked (null if no recommendation are clicked)
          */
         recommendationClicked : number;
 
+        /** Indicates wether the mouse has moved since last update */
         mouseMoved : boolean;
 
+        /** Current position of the mouse */
         mousePointer : MousePointer;
+
+        /** Canvas that should be displayed at the beginning */
         startCanvas : any;
 
+        /** Indicates wether the pointer was locked at the previous frame*/
         wasLocked : boolean;
 
+        /** List of objects on which the camera should collide */
         collidableObjects : any[];
 
+        /** Indicates wether the camera has moved since last update */
         changed : boolean;
 
+        /** Creates a new PointerCamera */
         constructor(
             arg0 : any, arg1 : any, arg2 : any, arg3 : any,
             arg4 : THREE.Renderer,
@@ -426,9 +450,9 @@ module l3d {
         /**
          * Creates a linear motion to another camera
          * @param recommendation Camera to move to
-         * @param true if you want to save the current state of the camera
+         * @param toSave if you want to save the current state of the camera
          */
-        move(recommendation : CameraItf, toSave : boolean, recommendationId? : number) : void {
+        move(recommendation : CameraItf, toSave : boolean) : void {
 
             super.startLinearMotion(recommendation);
 
@@ -481,13 +505,6 @@ module l3d {
             }
 
             return false;
-        }
-
-        /**
-         * Look method. Equivalent to gluLookAt for the current camera
-         */
-        look() {
-            this.lookAt(this.target);
         }
 
         /**

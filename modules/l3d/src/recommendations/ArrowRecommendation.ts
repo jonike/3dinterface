@@ -8,8 +8,6 @@ module l3d {
 
     /**
      * Recommendation that is represented by an arrow
-     * @constructor
-     * @abstract
      */
     export class ArrowRecommendation extends BaseRecommendation {
 
@@ -33,6 +31,9 @@ module l3d {
          */
         object3D : THREE.Object3D;
 
+        /**
+         * Extremity of the arrow
+         */
         mesh : THREE.Mesh;
 
         /**
@@ -106,6 +107,7 @@ module l3d {
 
         /**
          * Initialize the extremity of the arrow
+         * @returns the extremity of the arrow
          */
         initExtremity() {
 
@@ -199,7 +201,7 @@ module l3d {
 
         /**
          * Updates the arrow. The arrow is moving according to the position of the camera
-         * @param {Object} a camera containing two THREE.Vector3 (position, and target)
+         * @param mainCamera the user's camera
          */
         update(mainCamera : THREE.Camera) {
             // Compute distance between center of camera and position
@@ -234,7 +236,7 @@ module l3d {
 
         /**
          * Regenerates the arrow according to the position of the camera
-         * @param {Object} a camera containing two THREE.Vector3 (position, and target)
+         * @param mainCamera the user's camera
          */
         regenerateArrow(mainCamera : THREE.Camera) {
             var i : number;
@@ -337,7 +339,7 @@ module l3d {
 
         /**
          * Add the camera and its mesh representation to the scene
-         * @param scene {THREE.Scene} scene to add the camera to
+         * @param scene scene to add the camera to
          */
         addToScene(scene : THREE.Scene) {
             scene.add(this);

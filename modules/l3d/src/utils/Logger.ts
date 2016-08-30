@@ -4,9 +4,14 @@ import { PointerCamera } from '../cameras/PointerCamera';
 
 module l3d {
 
+    /**
+     * Can be aassimilated to a camera with its position and target
+     */
     export interface CameraItf {
 
+        /** Center of the camera */
         position : mth.Vector3;
+        /** Point where the camera is looking at */
         target : mth.Vector3;
 
     }
@@ -59,6 +64,10 @@ module l3d {
             enabled = false;
         }
 
+        /**
+         * Check wether the logger is enabled
+         * @returns true if the logger is enabled, false otherwise
+         */
         export function isEnabled() : boolean {
             return enabled;
         }
@@ -102,7 +111,6 @@ module l3d {
                 arrowId : number;
 
                 constructor() {}
-
 
                 /**
                  * Sends the event to the correct url
@@ -149,8 +157,14 @@ module l3d {
                  */
                 camera : PointerCamera;
 
+                /**
+                 * Indicates wether the key was pressed or released
+                 */
                 keypressed : boolean;
 
+                /**
+                 * The code of the key that was pressed (-1 represents mouse event)
+                 */
                 keycode : number;
 
                 constructor() {}
@@ -202,6 +216,9 @@ module l3d {
                  */
                 camera : CameraItf;
 
+                /**
+                 * Indicates wether previous or next was clicked
+                 */
                 previous : boolean;
 
                 constructor() {}
