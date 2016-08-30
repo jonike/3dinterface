@@ -2,7 +2,7 @@ import * as config from 'config';
 import * as THREE from 'three';
 import * as mth from 'mth';
 
-import { PointerCamera } from '../cameras/PointerCamera';
+import { PointerCamera, TargetMove } from '../cameras/PointerCamera';
 import { SphericCamera } from '../cameras/SphericCamera';
 import { ProgressiveLoader } from '../loaders/ProgressiveLoader';
 import { BaseRecommendation, RecommendationInfo } from '../recommendations/BaseRecommendation';
@@ -49,6 +49,9 @@ module l3d {
          */
         onLoad : Function[];
 
+        /**
+         * Initializes the attributes and add lights to the scene
+         */
         constructor() {
 
             super();
@@ -93,17 +96,13 @@ module l3d {
          * Loads the models from the scene
          * @param prefetch prefetching policy
          */
-        load(loadingConfig : config.LoadingConfig) {
-
-            // Nothing to load for an empty scene
-
-        }
+        abstract load(loadingConfig : config.LoadingConfig) : void;
 
         /**
          * Gets the reset elements of the scene
-         * @return {Object} an object containing position and target, two THREE.Vector3
+         * @return an object containing position and target, two THREE.Vector3
          */
-        getResetElements() {
+        getResetElements() : CameraItf {
 
             return {
                 position: new THREE.Vector3(),
@@ -112,31 +111,20 @@ module l3d {
 
         }
 
+        /**
+         * Add the recommendations to the scene
+         * @param ClassToInstanciate class to use as recommendation. Should inherit BaseRecommendation
+         * @param width width of the view of the camera of the recommendation
+         * @param height height of the view of the camera of the recommendation
+         * @param recoSize size of the recommendation
+         * @returns the array of recommendations
+         */
         addRecommendations(ClassToInstanciate : any, width : number, height : number, recoSize ?: number) {
-
-            var createRecommendation = function(position : RecommendationInfo) {
-                var newReco = new ClassToInstanciate(
-                    50,
-                    width/height,
-                    1,
-                    100000,
-                    mth.copy(position.position),
-                    mth.copy(position.target)
-                );
-                newReco.recommendationId = position.recommendationId;
-                return newReco;
-            }
 
             // Access local recommendations
             for (var i = 0; i < this.getRawRecommendations().length; i++) {
 
-                var reco = createRecommendation(this.getRawRecommendations()[i]);
-                this.recommendations.push(reco);
-                reco.addToScene(this);
-                this.clickableObjects.push(reco);
-
-                if (recoSize !== undefined)
-                    reco.setSize(recoSize);
+                this.addRecommendation(ClassToInstanciate, width, height, i);
 
             }
 
@@ -144,29 +132,32 @@ module l3d {
 
         }
 
-        createRecommendation(ClassToInstanciate : any, width : number, height : number, id : number, recoSize ?: number) {
+        /**
+         * Adds a single recommendation to the scene
+         * @param ClassToInstanciate class to use as recommendation. Should inherit BaseRecommendation
+         * @param width width of the view of the camera of the recommendation
+         * @param height height of the view of the camera of the recommendation
+         * @param id the id of the recommendation in the raw recommendations
+         * @param recoSize size of the recommendation
+         * @returns the recommendation created
+         */
+        addRecommendation(ClassToInstanciate : any, width : number, height : number, id : number, recoSize ?: number) {
 
-            var createRecommendation = function(position : CameraItf) {
-                return new ClassToInstanciate(
-                    50,
-                    width/height,
-                    1,
-                    100000,
-                    mth.copy(position.position),
-                    mth.copy(position.target)
-                );
-            }
-
-            var reco = createRecommendation(this.getRawRecommendations()[id]);
+            var reco = this.createRecommendation(ClassToInstanciate, width, height, this.getRawRecommendations()[id], recoSize);
             this.recommendations.push(reco);
             reco.addToScene(this);
             this.clickableObjects.push(reco);
 
-            if (recoSize !== undefined)
-                reco.setSize(recoSize);
+            return reco;
+
         }
 
-        addEventListener(event : any, callback : Function) {
+        /**
+         * Adds a function that will be called on a certain event
+         * @param event a string representing the event (for the moment, only `onload` is supported)
+         * @param callback the function that will be called when the event occur
+         */
+        addEventListener(event : string, callback : Function) {
 
             switch (event) {
                 case 'onload':
@@ -179,13 +170,46 @@ module l3d {
 
         }
 
+        /**
+         * Calls the functions that must be called when the scene is fully loaded
+         */
         finish() {
 
             this.onLoad.map(function(f) { f(); });
 
         }
 
+        /**
+         * Returns the raw recommendations
+         * @returns the array of the positions of the recommendations
+         */
         abstract getRawRecommendations() : RecommendationInfo[];
+
+        /**
+         * Creates and return  a single recommendation
+         * @param ClassToInstanciate class to use as recommendation. Should inherit BaseRecommendation
+         * @param width width of the view of the camera of the recommendation
+         * @param height height of the view of the camera of the recommendation
+         * @param position the position of the recommendation
+         * @param recoSize size of the recommendation
+         * @returns the recommendation created
+         */
+        private createRecommendation(ClassToInstanciate : any, width : number, height : number, position : CameraItf, recoSize ?: number)  : BaseRecommendation {
+
+            var ret = new ClassToInstanciate(
+                    50,
+                    width/height,
+                    1,
+                    100000,
+                    mth.copy(position.position),
+                    mth.copy(position.target)
+            );
+
+            if (recoSize !== undefined)
+                ret.setSize(recoSize)
+
+            return ret;
+        }
 
     }
 }

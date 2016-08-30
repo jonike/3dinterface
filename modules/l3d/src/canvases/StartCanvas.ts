@@ -18,6 +18,7 @@ module l3d {
 
         /**
          * Creates a starting canvas and binds it to a camera
+         * @param camera the camera bound to this StartCanvas
          */
         constructor(camera : PointerCamera) {
 

@@ -153,7 +153,6 @@ module l3d {
          */
         shouldLogCameraAngles : boolean;
 
-
         /**
          * Id of the recommendation that is currently clicked (null if no recommendation are clicked)
          */
