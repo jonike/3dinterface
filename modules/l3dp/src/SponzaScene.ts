@@ -28,8 +28,7 @@ module l3dp {
 
             this.loader = new l3d.ProgressiveLoader(
                 '/static/data/sponza/sponza.obj',
-                this,
-                this.camera,
+                this.loadingConfig,
                 (object : THREE.Mesh) => {
 
                     this.clickableObjects.push(object);
@@ -44,10 +43,10 @@ module l3dp {
 
                     object.raycastable = true;
 
-                },
-                ()=>{},// l3d.LogFunction,
-                this.loadingConfig
+                }
             );
+
+            this.add(this.loader.obj);
 
             this.loader.onFinished = () => { this.finish(); }
             this.loader.load();

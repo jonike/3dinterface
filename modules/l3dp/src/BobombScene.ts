@@ -35,8 +35,7 @@ module l3dp {
 
             this.loader = new l3d.ProgressiveLoader(
                 path,
-                this,
-                this.camera,
+                this.loadingConfig,
                 (object : THREE.Mesh) => {
                     this.clickableObjects.push(object);
                     object.raycastable = true;
@@ -45,10 +44,10 @@ module l3dp {
                         object.material.transparent = true;
                     object.raycastable = false;
                     }
-                },
-                ()=>{},// l3d.LogFunction,
-                this.loadingConfig
+                }
             );
+
+            this.add(this.loader.obj);
 
             this.loader.onFinished = () => { this.finish(); }
             this.loader.load();

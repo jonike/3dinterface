@@ -39,8 +39,6 @@ let imageNumber = 0;
 let colorToFace : THREE.Face3[] = [];
 let triangleMeshes : { [id:string] : THREE.Mesh } = {};
 
-let loader : l3d.ProgressiveLoader;
-
 function main(configScene : config.Scene, generateImages : string, verbose : boolean) {
 
     if (verbose)
