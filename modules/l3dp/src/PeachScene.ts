@@ -31,8 +31,7 @@ module l3dp {
 
             this.loader = new l3d.ProgressiveLoader(
                 '/static/data/castle/princess peaches castle (outside).obj',
-                this,
-                this.camera,
+                this.loadingConfig,
                 (object : THREE.Mesh) => {
 
                     this.clickableObjects.push(object);
@@ -53,10 +52,10 @@ module l3dp {
                         object.raycastable = false;
                         object.material.side = THREE.FrontSide;
                     }
-                },
-                ()=>{},// l3d.LogFunction,
-                this.loadingConfig
+                }
             );
+
+            this.add(this.loader.obj);
 
             this.loader.onFinished = () => this.finish();
             this.loader.load();

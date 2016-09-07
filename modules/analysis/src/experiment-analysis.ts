@@ -75,13 +75,10 @@ export function main(camera : l3d.ReplayCamera, replayId : number, loadingConfig
 
     let loader = new l3d.TestLoader(
         sceneElements.loaderPath,
-        new THREE.Scene(),
-        camera,
-        () => {},
-        () => {},
-        loadingConfig,
-        false
+        loadingConfig
     );
+
+    loader.setCamera(camera);
 
     loader.onBeforeEmit = () => {
 
@@ -120,7 +117,7 @@ export function main(camera : l3d.ReplayCamera, replayId : number, loadingConfig
 
     };
 
-    loader.load(() => {
+    loader.onFinished = () => {
 
         console.log("Done !");
 
@@ -133,7 +130,9 @@ export function main(camera : l3d.ReplayCamera, replayId : number, loadingConfig
 
         process.exit(0);
 
-    });
+    };
+
+    loader.load();
 
 }
 

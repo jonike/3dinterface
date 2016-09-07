@@ -21,6 +21,9 @@ module l3d {
         /** current number of dots displayed after 'Loading' text */
         dots : string;
 
+        /**
+         * Creates a hidden loading canvas
+         */
         constructor() {
 
             this.domElement = document.createElement('canvas');
