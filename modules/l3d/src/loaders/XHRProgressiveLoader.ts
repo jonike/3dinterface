@@ -9,8 +9,9 @@ import { BaseRecommendation } from '../recommendations/BaseRecommendation';
 import { StreamedElementType, StreamedElement, parseList, parseLine } from './LoaderFunctions';
 import { BaseLoader } from './BaseLoader';
 
-var XMLHttpRequest : any;
-var XMLHttpRequest = eval("(require('xmlhttprequest').XMLHttpRequest)");
+if (typeof module !== undefined && module.exports) {
+    var XMLHttpRequest = eval("require('xmlhttprequest')");
+}
 // var XMLHttpRequest : {
 //     prototype: XMLHttpRequest;
 //     new (): XMLHttpRequest;
