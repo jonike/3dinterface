@@ -163,6 +163,72 @@ module l3d {
         return ret;
     };
 
+    export function parseLine(line : string) {
+
+        var arr = line.split(' ');
+        var ret : StreamedElement = { type : null };
+
+        if (arr[0] === 'v') {
+
+            ret.type = StreamedElementType.VERTEX;
+            ret.x = parseFloat(arr[1]);
+            ret.y = parseFloat(arr[2]);
+            ret.z = parseFloat(arr[3]);
+
+        } else if (arr[0] === 'vt') {
+
+            ret.type = StreamedElementType.TEX_COORD;
+            ret.x = parseFloat(arr[1]);
+            ret.y = parseFloat(arr[2]);
+
+        } else if (arr[0] === 'f') {
+
+            ret.type = StreamedElementType.FACE;
+
+            // Only Face3 are allowed
+            var v1 = arr[1].split('/');
+            var v2 = arr[2].split('/');
+            var v3 = arr[3].split('/');
+
+            // Vertex indices
+            ret.a = parseInt(v1[0], 10) - 1;
+            ret.b = parseInt(v2[0], 10) - 1;
+            ret.c = parseInt(v3[0], 10) - 1;
+
+            // Texutre indices (if they exist)
+            if (v1[1] !== undefined && v1[1] !== '') {
+                ret.aTexture = parseInt(v1[1], 10) - 1;
+                ret.bTexture = parseInt(v2[1], 10) - 1;
+                ret.cTexture = parseInt(v3[1], 10) - 1;
+            }
+
+            // Normal indices (if they exist)
+            if (v1[2] !== undefined && v1[2] !== '') {
+                ret.aNormal = parseInt(v1[2], 10) - 1;
+                ret.bNormal = parseInt(v2[2], 10) - 1;
+                ret.cNormal = parseInt(v3[2], 10) - 1;
+            }
+
+        } else if (arr[0] === 'vn') {
+
+            // Normal
+            ret.type = StreamedElementType.NORMAL;
+            ret.x = parseFloat(arr[1]);
+            ret.y = parseFloat(arr[2]);
+            ret.z = parseFloat(arr[3]);
+
+        } else if (arr[0] === 'usemtl') {
+
+            // usemtl
+            ret.index = -1;
+            ret.type = StreamedElementType.USEMTL;
+            ret.materialName = arr[1];
+
+        }
+
+        return ret;
+    }
+
 }
 
 export = l3d;

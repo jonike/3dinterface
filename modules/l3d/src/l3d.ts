@@ -4,6 +4,7 @@ export { StartCanvas } from './canvases/StartCanvas';
 export { Previewer } from './canvases/Previewer';
 export { LoadingCanvas } from './canvases/LoadingCanvas';
 export { ProgressiveLoader } from './loaders/ProgressiveLoader';
+export { XHRProgressiveLoader } from './loaders/XHRProgressiveLoader';
 export { TestLoader } from './loaders/TestLoader';
 export { ViewportRecommendation } from './recommendations/ViewportRecommendation';
 export { ArrowRecommendation } from './recommendations/ArrowRecommendation';
