@@ -141,7 +141,7 @@ module l3d {
 
             // If node, use require, otherwise, use global io
             if (typeof module !== 'undefined') {
-                this.socket = require('socket.io-client').connect('http://localhost:4000?isTest=1', {multiplex:false});
+                this.socket = require('socket.io-client').connect('http://localhost:4000', {multiplex:false});
             } else {
                 this.socket = io();
             }

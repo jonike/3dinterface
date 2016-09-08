@@ -5,6 +5,7 @@ import * as mth from 'mth';
 import { PointerCamera, TargetMove } from '../cameras/PointerCamera';
 import { SphericCamera } from '../cameras/SphericCamera';
 import { ProgressiveLoader } from '../loaders/ProgressiveLoader';
+import { BaseLoader } from '../loaders/BaseLoader';
 import { BaseRecommendation, RecommendationInfo } from '../recommendations/BaseRecommendation';
 import { CameraItf } from '../utils/Logger';
 
@@ -87,8 +88,9 @@ module l3d {
             this.camera.resetElements = this.getResetElements();
             this.camera.reset();
 
-            if (this.loader instanceof ProgressiveLoader)
+            if (this.loader instanceof BaseLoader) {
                 this.loader.setCamera(camera);
+            }
 
         }
 

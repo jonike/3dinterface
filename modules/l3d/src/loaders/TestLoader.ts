@@ -50,6 +50,20 @@ module l3d {
 
         }
 
+        load(): void {
+
+            // If node, use require, otherwise, use global io
+            if (typeof module !== 'undefined') {
+                this.socket = require('socket.io-client').connect('http://localhost:4000?isTest=1', {multiplex:false});
+            } else {
+                this.socket = io();
+            }
+
+            this.initIOCallbacks();
+            this.start();
+
+        }
+
         private addElement(elt : StreamedElement) {
 
             switch(elt.type) {

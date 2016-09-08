@@ -128,6 +128,8 @@ module l3d {
          */
         private addElement(elt : StreamedElement) {
 
+            console.log(StreamedElementType[elt.type]);
+
             if (elt.type === StreamedElementType.VERTEX) {
 
                 // New vertex arrived
@@ -140,13 +142,17 @@ module l3d {
                 }
 
                 this.vertices[elt.index] = new THREE.Vector3(elt.x, elt.y, elt.z);
-                (<THREE.Geometry>this.currentPart.mesh.geometry).verticesNeedUpdate = true;
+
+                if (this.currentPart !== undefined)
+                    (<THREE.Geometry>this.currentPart.mesh.geometry).verticesNeedUpdate = true;
 
             } else if (elt.type === StreamedElementType.TEX_COORD) {
 
                 // New texCoord arrived
                 this.texCoords[elt.index] = new THREE.Vector2(elt.x, elt.y);
-                (<THREE.Geometry>this.currentPart.mesh.geometry).uvsNeedUpdate = true;
+
+                if (this.currentPart !== undefined)
+                    (<THREE.Geometry>this.currentPart.mesh.geometry).uvsNeedUpdate = true;
 
             } else if (elt.type === StreamedElementType.NORMAL) {
 
@@ -154,6 +160,8 @@ module l3d {
                 this.normals[elt.index] = new THREE.Vector3(elt.x, elt.y, elt.z);
 
             } else if (elt.type === StreamedElementType.USEMTL) {
+
+                console.log("USEMTL");
 
                 // Create mesh material
                 var material : THREE.Material;
@@ -195,6 +203,9 @@ module l3d {
                 }
 
             } else if (elt.type === StreamedElementType.FACE) {
+
+                console.log(elt);
+                console.log(this.parts);
 
                 this.numberOfFacesReceived++;
 

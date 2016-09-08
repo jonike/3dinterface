@@ -97,8 +97,6 @@ $(function() {
             0.01, 100000, renderer, container
         );
 
-        scene.setCamera(camera);
-
         // scene.load(GLOB.prefetch, GLOB.lowRes);
 
         // scene.addRecommendations(GLOB.Recommendation);
@@ -114,6 +112,7 @@ $(function() {
         camera.onPointerLockChange();
 
         scene.load(LOADING_CONFIG);
+        scene.setCamera(camera);
     }
 
     function initCanvases() {
