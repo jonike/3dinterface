@@ -22,7 +22,7 @@ let XMLHttpRequest : {
     UNSENT: number;
     OPENED: number;
     HEADERS_RECEIVED: number;
-} = require('xmlhttprequest').XMLHttpRequest;
+} = eval("require('xmlhttprequest').XMLHttpRequest");
 
 let Canvas = require('canvas');
 let gl = require('gl');
