@@ -82,7 +82,6 @@ module l3d {
             this.parts = [];
             this.mtlLoader = typeof THREE.MTLLoader === 'function' ? new THREE.MTLLoader(this.texturesPath) : null;
 
-
             this.numberOfFaces = -1;
             this.numberOfFacesReceived = 0;
 
