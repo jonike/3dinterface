@@ -196,7 +196,7 @@ module l3d {
          * @param recoSize size of the recommendation
          * @returns the recommendation created
          */
-        private createRecommendation(ClassToInstanciate : any, width : number, height : number, position : CameraItf, recoSize ?: number)  : BaseRecommendation {
+        private createRecommendation(ClassToInstanciate : any, width : number, height : number, position : RecommendationInfo, recoSize ?: number)  : BaseRecommendation {
 
             var ret = new ClassToInstanciate(
                     50,
@@ -206,6 +206,8 @@ module l3d {
                     mth.copy(position.position),
                     mth.copy(position.target)
             );
+
+            ret.recommendationId = position.recommendationId;
 
             if (recoSize !== undefined)
                 ret.setSize(recoSize)

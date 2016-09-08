@@ -128,8 +128,6 @@ module l3d {
          */
         private addElement(elt : StreamedElement) {
 
-            console.log(StreamedElementType[elt.type]);
-
             if (elt.type === StreamedElementType.VERTEX) {
 
                 // New vertex arrived
@@ -160,8 +158,6 @@ module l3d {
                 this.normals[elt.index] = new THREE.Vector3(elt.x, elt.y, elt.z);
 
             } else if (elt.type === StreamedElementType.USEMTL) {
-
-                console.log("USEMTL");
 
                 // Create mesh material
                 var material : THREE.Material;
@@ -203,9 +199,6 @@ module l3d {
                 }
 
             } else if (elt.type === StreamedElementType.FACE) {
-
-                console.log(elt);
-                console.log(this.parts);
 
                 this.numberOfFacesReceived++;
 
