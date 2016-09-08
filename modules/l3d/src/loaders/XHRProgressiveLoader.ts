@@ -6,15 +6,27 @@ import * as mth from 'mth';
 import { SphericCamera } from '../cameras/SphericCamera';
 import { BaseRecommendation } from '../recommendations/BaseRecommendation';
 
-import { StreamedElementType, StreamedElement, parseList } from './LoaderFunctions';
+import { StreamedElementType, StreamedElement, parseList, parseLine } from './LoaderFunctions';
 import { BaseLoader } from './BaseLoader';
+
+var XMLHttpRequest : any;
+var XMLHttpRequest = eval("(require('xmlhttprequest').XMLHttpRequest)");
+// var XMLHttpRequest : {
+//     prototype: XMLHttpRequest;
+//     new (): XMLHttpRequest;
+//     LOADING: number;
+//     DONE: number;
+//     UNSENT: number;
+//     OPENED: number;
+//     HEADERS_RECEIVED: number;
+// } = require('xmlhttprequest').XMLHttpRequest;
 
 module l3d {
 
     /**
      * Loads a mesh from socket.io
      */
-    export class ProgressiveLoader extends BaseLoader {
+    export class XHRProgressiveLoader extends BaseLoader {
 
         /**
          * Path to the folder where the textures are
@@ -68,13 +80,33 @@ module l3d {
         log : Function;
 
         /**
+         * Size of the chunk for each xhr
+         */
+        chunkSize : number;
+
+        /**
+         * The index of the byte we're loading
+         */
+        currentByte : number;
+
+        /**
+         * The begining of the last line if it is broken
+         */
+        beginingOfCurrentLine : string;
+
+        /**
+         * The size of the obj file in bytes
+         */
+        size : number;
+
+        /**
          * Stores the materials
          */
         materialCreator : THREE.MTLLoader.MaterialCreator;
 
-        constructor(path : string, loadingConfig : config.LoadingConfig, callback ?: Function, log ?: Function) {
+        constructor(path : string, callback ?: Function, log ?: Function) {
 
-            super(path, loadingConfig, callback, log);
+            super(path, null, callback, log);
 
             this.texturesPath = this.objPath.substring(0, path.lastIndexOf('/')) + '/';
             this.mtlPath = this.objPath.replace('.obj', '.mtl');
@@ -84,6 +116,12 @@ module l3d {
 
             this.numberOfFaces = -1;
             this.numberOfFacesReceived = 0;
+
+            this.chunkSize = 1000;
+            this.currentByte = 0;
+            this.beginingOfCurrentLine = '';
+
+            this.size = Infinity;
 
         }
 
@@ -100,15 +138,58 @@ module l3d {
 
                     materialCreator.preload();
 
-                    super.load();
+                    this.loadModel();
 
                 });
 
             } else {
 
-                super.load();
+                this.loadModel();
 
             }
+
+        }
+
+        /**
+         * Loads the geometry and topology of the model
+         */
+        loadModel() { this.askNewElements(); }
+
+        onReadyStateChange(xhr : any) {
+
+            if (xhr.readyState != 4) {
+                return;
+            }
+
+            let lines = xhr.responseText.split('\n');
+            this.currentByte += this.chunkSize;
+
+            this.addElement(parseLine(this.beginingOfCurrentLine + lines.shift()));
+
+            this.beginingOfCurrentLine = lines[lines.length-1];
+            lines.length--;
+
+            for (let line of lines) {
+                this.addElement(parseLine(line));
+            }
+
+            if (xhr.getResponseHeader("Content-Length") < this.chunkSize) {
+                // console.log("Finished !");
+                return;
+            }
+
+            this.askNewElements();
+
+        }
+
+        askNewElements() {
+
+            // Send a new XHR
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:8000/' + this.objPath, true);
+            xhr.setRequestHeader('Range', 'bytes=' + this.currentByte + '-' + (this.currentByte + this.chunkSize - 1));
+            xhr.onreadystatechange = () => { this.onReadyStateChange(xhr); }
+            xhr.send(null);
 
         }
 
@@ -131,27 +212,23 @@ module l3d {
             if (elt.type === StreamedElementType.VERTEX) {
 
                 // New vertex arrived
+                this.vertices.push(new THREE.Vector3(elt.x, elt.y, elt.z));
 
-                // Fill the array of vertices with null vector (to avoid undefined)
-                while (elt.index > this.vertices.length) {
-
-                    this.vertices.push(new THREE.Vector3());
-
-                }
-
-                this.vertices[elt.index] = new THREE.Vector3(elt.x, elt.y, elt.z);
-                (<THREE.Geometry>this.currentPart.mesh.geometry).verticesNeedUpdate = true;
+                if (this.currentPart !== undefined)
+                    (<THREE.Geometry>this.currentPart.mesh.geometry).verticesNeedUpdate = true;
 
             } else if (elt.type === StreamedElementType.TEX_COORD) {
 
                 // New texCoord arrived
-                this.texCoords[elt.index] = new THREE.Vector2(elt.x, elt.y);
-                (<THREE.Geometry>this.currentPart.mesh.geometry).uvsNeedUpdate = true;
+                this.texCoords.push(new THREE.Vector2(elt.x, elt.y));
+
+                if (this.currentPart !== undefined)
+                    (<THREE.Geometry>this.currentPart.mesh.geometry).uvsNeedUpdate = true;
 
             } else if (elt.type === StreamedElementType.NORMAL) {
 
                 // New normal arrived
-                this.normals[elt.index] = new THREE.Vector3(elt.x, elt.y, elt.z);
+                this.normals.push(new THREE.Vector3(elt.x, elt.y, elt.z));
 
             } else if (elt.type === StreamedElementType.USEMTL) {
 
@@ -198,14 +275,14 @@ module l3d {
 
                 this.numberOfFacesReceived++;
 
-                if (!this.parts[elt.mesh].added) {
+                if (!this.currentPart.added) {
 
-                    this.parts[elt.mesh].added = true;
-                    this.obj.add(this.parts[elt.mesh].mesh);
+                    this.currentPart.added = true;
+                    this.obj.add(this.currentPart.mesh);
 
                 }
 
-                var currentPart = this.parts[elt.mesh];
+                var currentPart = this.currentPart;
                 var currentGeometry = (<THREE.Geometry>currentPart.mesh.geometry);
 
                 if (
@@ -213,6 +290,7 @@ module l3d {
                     currentGeometry.vertices[elt.b] === undefined ||
                     currentGeometry.vertices[elt.c] === undefined)
                 {
+                    console.log(currentGeometry.vertices);
                     console.warn("Face received before vertex");
                 }
 

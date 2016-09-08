@@ -111,6 +111,8 @@ module l3d {
             this.modulus = 150;
             this.log = log;
 
+            this.callback = callback;
+
         }
 
 
