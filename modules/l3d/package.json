@@ -2,12 +2,14 @@
   "name": "l3d",
   "version": "1.0.0",
   "dependencies": {
+    "child_process": "^1.0.2",
     "config": "file:../config",
     "mth": "file:../mth",
     "socket.io": "*",
     "socket.io-client": "*",
     "source-map-support": "*",
-    "three": "*"
+    "three": "*",
+    "xmlhttprequest": "*"
   },
   "main": "./lib/l3d.js",
   "typings": "./lib/src/l3d.d.ts"

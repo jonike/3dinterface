@@ -10,7 +10,7 @@ import { StreamedElementType, StreamedElement, parseList, parseLine } from './Lo
 import { BaseLoader } from './BaseLoader';
 
 if (typeof module !== undefined && module.exports) {
-    var XMLHttpRequest = eval("require('xmlhttprequest')");
+    var XMLHttpRequest = require('xmlhttprequest');
 }
 // var XMLHttpRequest : {
 //     prototype: XMLHttpRequest;

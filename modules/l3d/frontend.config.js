@@ -35,7 +35,10 @@ webpack({
     ts: {
         configFileName:'./tsconfig-frontend.json',
         silent:true
-
+    },
+    node: {
+        fs: "empty",
+        child_process: "empty"
     }
 }, function(err, stats) {
     var log = stats.toString('errors-only');
