@@ -9,7 +9,7 @@ import { BaseRecommendation } from '../recommendations/BaseRecommendation';
 import { StreamedElementType, StreamedElement, parseList, parseLine } from './LoaderFunctions';
 import { BaseLoader } from './BaseLoader';
 
-if (typeof module !== undefined && module.exports) {
+if (typeof window === 'undefined') {
     var XMLHttpRequest = require('xmlhttprequest');
 }
 // var XMLHttpRequest : {
@@ -291,7 +291,6 @@ module l3d {
                     currentGeometry.vertices[elt.b] === undefined ||
                     currentGeometry.vertices[elt.c] === undefined)
                 {
-                    console.log(currentGeometry.vertices);
                     console.warn("Face received before vertex");
                 }
 
