@@ -10,7 +10,7 @@ import { StreamedElementType, StreamedElement, parseList, parseLine } from './Lo
 import { BaseLoader } from './BaseLoader';
 
 if (typeof window === 'undefined') {
-    var XMLHttpRequest = require('xmlhttprequest');
+    var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 }
 // var XMLHttpRequest : {
 //     prototype: XMLHttpRequest;
@@ -187,7 +187,7 @@ module l3d {
 
             // Send a new XHR
             let xhr = new XMLHttpRequest();
-            xhr.open('GET', 'http://localhost:8000/' + this.objPath, true);
+            xhr.open('GET', this.objPath, true);
             xhr.setRequestHeader('Range', 'bytes=' + this.currentByte + '-' + (this.currentByte + this.chunkSize - 1));
             xhr.onreadystatechange = () => { this.onReadyStateChange(xhr); }
             xhr.send(null);
