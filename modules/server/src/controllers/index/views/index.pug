@@ -1,4 +1,4 @@
-extends ../../../views/main
+extends ../../../views/main.pug
 
 block title
     title #{title} - Index
@@ -7,7 +7,7 @@ block content
     h2 Index
     ul
         li
-            a(href="#{urls.bouncing}") A bouncing cube that jumps when you click on it
+            a(href=urls.bouncing) A bouncing cube that jumps when you click on it
             p.
                 Jumps and bounce when you click on it.
 

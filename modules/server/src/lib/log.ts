@@ -122,9 +122,9 @@ export function debug(info? : any, force? : boolean) {
     }
 }
 
-export function jadeerror(error : any) {
+export function pugerror(error : any) {
     write(
-        '[JER] ' + new Date() + ' ' + error,
+        '[PER] ' + new Date() + ' ' + error,
         Color.RED
     );
 }

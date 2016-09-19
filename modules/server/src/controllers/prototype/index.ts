@@ -9,7 +9,7 @@ import * as config from 'config';
 export function index(req : express.Request, res : express.Response) {
     res.setHeader('Content-Type', 'text/html');
 
-    res.render('index.jade', res.locals, function(err, result) {
+    res.render('index.pug', res.locals, function(err, result) {
         res.send(result);
     });
 };
@@ -120,7 +120,7 @@ export function play(req : express.Request, res : express.Response) {
         module.exports.game(req, null);
 
         res.setHeader('Content-Type', 'text/html');
-        res.render('prototype_recommendation.jade', res.locals, function(err, result) {
+        res.render('prototype_recommendation.pug', res.locals, function(err, result) {
             res.send(result);
         });
     });
@@ -130,7 +130,7 @@ export function play(req : express.Request, res : express.Response) {
 export function sponza(req : express.Request, res : express.Response) {
     res.setHeader('Content-Type', 'text/html');
 
-    res.render('sponza.jade', res.locals, function(err, result) {
+    res.render('sponza.pug', res.locals, function(err, result) {
         res.send(result);
     });
 };
@@ -195,7 +195,7 @@ export function replay(req : express.Request, res : express.Response, render : F
             res.locals.config = JSON.stringify(conf);
             res.locals.loadingConf = JSON.stringify(loadingConf);
 
-            render('prototype_replays.jade');
+            render('prototype_replays.pug');
         }
     });
 };
@@ -205,7 +205,7 @@ export function replayIndex(req : express.Request, res : express.Response, rende
         res.locals.users = result;
 
         res.setHeader('Content-Type', 'text/html');
-        render('replay_index.jade');
+        render('replay_index.pug');
     });
 };
 
@@ -234,7 +234,7 @@ export function tutorial(req : express.Request, res : express.Response) {
                 req.session.save();
 
                 res.setHeader('Content-Type', 'text/html');
-                res.render('tutorial.jade', res.locals, function(err, result) {
+                res.render('tutorial.pug', res.locals, function(err, result) {
                     res.send(result);
                 });
             });
@@ -279,9 +279,9 @@ function editorHelper(templateName : string) {
 
 }
 
-module.exports.clicker = editorHelper('prototype_clicker.jade');
-module.exports.viewer = editorHelper('prototype_viewer.jade');
-module.exports.checker = editorHelper('prototype_checker.jade');
+module.exports.clicker = editorHelper('prototype_clicker.pug');
+module.exports.viewer = editorHelper('prototype_viewer.pug');
+module.exports.checker = editorHelper('prototype_checker.pug');
 
 export function userstudy(req : express.Request, res : express.Response) {
 
@@ -299,7 +299,7 @@ export function userstudy(req : express.Request, res : express.Response) {
     res.locals.workerId = req.session.workerId;
 
     res.setHeader('Content-Type', 'text/html');
-    res.render('user_study.jade', res.locals, function(err, result) {
+    res.render('user_study.pug', res.locals, function(err, result) {
         res.send(result);
     });
 
