@@ -3,7 +3,7 @@ import sourceMapSupport = require('source-map-support');
 sourceMapSupport.install();
 
 import express = require('express');
-import jade = require('jade');
+import pug = require('pug');
 import pg = require('pg');
 import r_io = require('socket.io');
 import http = require('http');
@@ -27,7 +27,7 @@ function main() {
 
     let isDev = app.get('env') === 'development';
 
-    app.set('view engine', 'jade');
+    app.set('view engine', 'pug');
     app.set('trust proxy', 1);
 
     let secret = require('./private');
@@ -69,7 +69,7 @@ function main() {
     app.use(function(req, res) {
         res.setHeader('Content-Type', 'text/html');
 
-        res.render('404.jade', res.locals, function(err, result) {
+        res.render('404.pug', res.locals, function(err, result) {
             if (err)
                 console.log(err);
             res.send(result);

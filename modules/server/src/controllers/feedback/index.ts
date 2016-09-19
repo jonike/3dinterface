@@ -6,7 +6,7 @@ export function index(req : express.Request, res : express.Response, render : Fu
     db.verifyUser(req.session.userId, function() {});
 
     res.setHeader('Content-Type', 'text/html');
-    render('index.jade');
+    render('index.pug');
 
 }
 

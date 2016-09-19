@@ -42,7 +42,7 @@ function main(app : express.Application) : void {
                         res.locals,
                         function(err : Error, out : string) {
                             if (err !== null) {
-                                log.jadeerror(err);
+                                log.pugerror(err);
                             }
                             res.send(out);
                         }

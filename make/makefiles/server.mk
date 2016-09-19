@@ -16,7 +16,7 @@ $(MODULES)/server/node_modules/.dirstamp: $(MODULES)/server/package.json $(L3D_D
 	@$(CD) $(MODULES)/server/ && $(NPM_UNINSTALL) l3d l3dp config mth && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)/server/bin/.dirstamp: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)/server/src/,*.ts) $(call FIND,$(MODULES)/server/src,*.jade) $(MODULES)/server/node_modules/.dirstamp $(MODULES)/server/typings
+$(MODULES)/server/bin/.dirstamp: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)/server/src/,*.ts) $(call FIND,$(MODULES)/server/src,*.pug) $(MODULES)/server/node_modules/.dirstamp $(MODULES)/server/typings
 	@$(call LOG_BUILDING,server)
 	@$(CD) $(MODULES)/server/ && $(TSC)
 	@$(TOUCH_DIRSTAMP)

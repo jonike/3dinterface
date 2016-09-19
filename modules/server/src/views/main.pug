@@ -1,7 +1,7 @@
-extends ./base.jade
+extends ./base.pug
 
 mixin button_link(href)
-    form.navbar-form.navbar-left(role="search", action="#{href}", method='GET')
+    form.navbar-form.navbar-left(role="search", action="href", method='GET')
         button.btn.btn-default(type="submit")
             block
 
@@ -9,27 +9,27 @@ block links
     //-div.navbar-collapse.collapse
         ul.nav.navbar-nav
             li
-                a(href="#{urls.bouncing}") Bouncing cube
+                a(href=urls.bouncing") Bouncing cube
             li
-                a(href="#{urls.multisphere}") Multisphere
+                a(href=urls.multisphere") Multisphere
             li
                 a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-expanded="false") Prototype
                     span.caret
                 ul.dropdown-menu(role="menu")
                     li
-                        a(href="#{urls.arrows}") Arrows
+                        a(href=urls.arrows) Arrows
                     li
-                        a(href="#{urls.reverse}") Reverse arrows
+                        a(href=urls.reverse) Reverse arrows
                     li
-                        a(href="#{urls.viewports}") Viewports
+                        a(href=urls.viewports) Viewports
                     li.divider
                     li
-                        a(href="#{urls.replay_index}") Replays
+                        a(href=urls.replay_index) Replays
                     li.divider
                     li
-                        a(href="#{urls.tutorial}") Tutorial
+                        a(href=urls.tutorial) Tutorial
             li
-                a(href="#{urls.stream}") Sphere streaming
+                a(href=urls.stream) Sphere streaming
             li.divider
             if (session && session.user_id)
                 li

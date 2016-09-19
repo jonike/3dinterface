@@ -1,15 +1,33 @@
-extends ../../../views/withjs
+extends ../../../views/withjs.pug
 
 block title
     title #{title} - Prototype
 
+block prepend js
+    script.
+        CONFIG = !{config};
+        LOADING_CONFIG = !{loadingConfig};
+        GLOB = typeof GLOB !== 'undefined' ? GLOB : {};
+        GLOB.DB_DISABLED = true;
+
 block extrajs
-    script(src="/static/js/l3dp.min.js")
+    script(src="/static/js/l3dp.js")
+    //-script.
+        GLOB = typeof GLOB !== 'undefined' ? GLOB : {};
+        GLOB.SceneClass = #{scene};
+        GLOB.Recommendation = #{bookmark};
+        GLOB.prefetch = "#{prefetch}";
+        GLOB.locked = #{session.locked === undefined ? 'true' : session.locked};
     block configjs
-    block mainjs
+    //-script.
+        GLOB = typeof GLOB !== 'undefined' ? GLOB : {};
+        GLOB.coinConfig={ids:[], type: Coin.Config.NONE};
+
+    script(src="/static/js/demo.js")
     script document.getElementById('music').volume = 0.5;
 
-block append extrahead
+
+block extrahead
     link(rel="stylesheet" href="/static/css/prototype.css")
 
 block content
@@ -43,7 +61,7 @@ block content
                 input#showarrows(type="checkbox", style={'margin-right': '10px', 'margin-bottom': '10px', 'display':'none'}, checked)
                 label(for="showarrows" style={'margin-right':'10px', 'display': 'none'}) Show arrows
 
-                block lastbutton
+                //- block lastbutton
 
                 //-input#recommendation(type="checkbox", style={'margin-right': '10px', 'margin-bottom': '10px'})
                 //-label(for="recommendation" style={'margin-right':'10px'}) Fixed prev

@@ -6,6 +6,6 @@ export function index(req : express.Request, res : express.Response, render : Fu
     req.session.save();
 
     res.setHeader('Content-Type', 'text/html');
-    render('index.jade');
+    render('index.pug');
 };
 

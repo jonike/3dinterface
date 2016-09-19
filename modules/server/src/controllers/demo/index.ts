@@ -4,7 +4,7 @@ import * as config from 'config';
 export function demoConfig(req : express.Request, res : express.Response, render : Function) {
 
     res.setHeader('Content-Type', 'text/html');
-    render('demo-config.jade');
+    render('demo-config.pug');
 
 };
 
@@ -54,6 +54,6 @@ export function demo(req : express.Request, res : express.Response, render : Fun
     res.locals.config = JSON.stringify(conf);
     res.locals.loadingConfig = JSON.stringify(loadingConf);
 
-    render('demo.jade');
+    render('demo.pug');
 };
 
