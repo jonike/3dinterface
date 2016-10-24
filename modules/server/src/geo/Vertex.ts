@@ -26,7 +26,7 @@ module geo {
         * Builds a 3D vertex
         * @param arg A string like in the .obj file (e.g. 'v 1.1 0.2 3.4')
         */
-        constructor(arg : string) {
+        constructor(arg : string | String) {
 
             let split = arg.replace(/[ \t]+/g, ' ').split(' ');
 

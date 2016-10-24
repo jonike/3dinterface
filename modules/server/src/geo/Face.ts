@@ -46,7 +46,7 @@ module geo {
         /**
          * @param {String} A string like in a .obj file (e.g. 'f 1/1/1 2/2/2 3/3/3' or 'f 1 2 3').
          */
-        constructor(arg : string) {
+        constructor(arg : string | String) {
 
             if (arg.indexOf('/') === -1) {
 
@@ -141,7 +141,7 @@ module geo {
          * @returns a single 3-vertices face or two 3-vertices face if the
          * input was a 4-vertices face
          */
-         static parseFace(arg : string) : Face[] {
+         static parseFace(arg : string | String) : Face[] {
 
             let split = arg.trim().split(' ');
             let ret : Face[] = [];
