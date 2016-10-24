@@ -22,7 +22,7 @@ module geo {
         /**
          * @param {String} a string like in the .obj file (e.g. 'vt 0.5 0.5')
          */
-        constructor(arg : string) {
+        constructor(arg : string | String) {
 
             let split = arg.replace(/\s+/g,' ').split(' ');
 

@@ -46,7 +46,7 @@ module geo {
         /**
          * @param {String} A string like in a .obj file (e.g. 'f 1/1/1 2/2/2 3/3/3' or 'f 1 2 3').
          */
-        constructor(arg : string) {
+        constructor(arg : string | String) {
 
             if (arg.indexOf('/') === -1) {
 
