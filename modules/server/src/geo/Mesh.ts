@@ -144,7 +144,7 @@ module geo {
 
             if (normal instanceof Normal) {
                 this.normals.push(normal);
-            } else if (typeof normal === 'string' || normal instanceof Normal) {
+            } else if (typeof normal === 'string' || normal instanceof String) {
                 this.normals.push(new Normal(normal));
             } else {
                 throw new Error('Can only add normal from geo.Normal or string');
