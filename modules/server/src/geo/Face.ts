@@ -141,7 +141,7 @@ module geo {
          * @returns a single 3-vertices face or two 3-vertices face if the
          * input was a 4-vertices face
          */
-         static parseFace(arg : string) : Face[] {
+         static parseFace(arg : string | String) : Face[] {
 
             let split = arg.trim().split(' ');
             let ret : Face[] = [];
