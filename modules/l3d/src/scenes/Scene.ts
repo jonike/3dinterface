@@ -5,6 +5,7 @@ import * as mth from 'mth';
 import { PointerCamera, TargetMove } from '../cameras/PointerCamera';
 import { SphericCamera } from '../cameras/SphericCamera';
 import { ProgressiveLoader } from '../loaders/ProgressiveLoader';
+import { GenericLoader } from '../loaders/GenericLoader';
 import { BaseLoader } from '../loaders/BaseLoader';
 import { BaseRecommendation, RecommendationInfo } from '../recommendations/BaseRecommendation';
 import { CameraItf } from '../utils/Logger';
@@ -33,7 +34,7 @@ module l3d {
         /**
          * The progressive loader that will load the elements from the scene
          */
-        protected loader : ProgressiveLoader;
+        protected loader : BaseLoader;
 
         /**
          * Default prefetching policy

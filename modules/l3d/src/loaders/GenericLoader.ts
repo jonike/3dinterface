@@ -8,14 +8,14 @@ import { BaseRecommendation } from '../recommendations/BaseRecommendation';
 
 import { StreamedElementType, StreamedElement, parseList } from './LoaderFunctions';
 import { BaseLoader } from './BaseLoader';
-import { Model } from './Model';
+import { Model, BufferGeometryModel } from './Model';
 
 module l3d {
 
     /**
      * Loads a mesh from socket.io
      */
-    export class ProgressiveLoader extends BaseLoader {
+    export class GenericLoader extends BaseLoader {
 
         /**
          * Path to the folder where the textures are
@@ -73,6 +73,11 @@ module l3d {
          */
         materialCreator : THREE.MTLLoader.MaterialCreator;
 
+        /**
+         *
+         */
+        model : Model;
+
         constructor(path : string, loadingConfig : config.LoadingConfig, callback ?: Function, log ?: Function) {
 
             super(path, loadingConfig, callback, log);
@@ -85,6 +90,8 @@ module l3d {
 
             this.numberOfFaces = -1;
             this.numberOfFacesReceived = 0;
+
+            this.model = new BufferGeometryModel();
 
         }
 
@@ -128,132 +135,8 @@ module l3d {
          * @param elt element to add
          */
         private addElement(elt : StreamedElement) {
-
-            if (elt.type === StreamedElementType.VERTEX) {
-
-                // New vertex arrived
-
-                // Fill the array of vertices with null vector (to avoid undefined)
-                while (elt.index > this.vertices.length) {
-
-                    this.vertices.push(new THREE.Vector3());
-
-                }
-
-                this.vertices[elt.index] = new THREE.Vector3(elt.x, elt.y, elt.z);
-
-                if (this.currentPart !== undefined)
-                    (<THREE.Geometry>this.currentPart.mesh.geometry).verticesNeedUpdate = true;
-
-            } else if (elt.type === StreamedElementType.TEX_COORD) {
-
-                // New texCoord arrived
-                this.texCoords[elt.index] = new THREE.Vector2(elt.x, elt.y);
-
-                if (this.currentPart !== undefined)
-                    (<THREE.Geometry>this.currentPart.mesh.geometry).uvsNeedUpdate = true;
-
-            } else if (elt.type === StreamedElementType.NORMAL) {
-
-                // New normal arrived
-                this.normals[elt.index] = new THREE.Vector3(elt.x, elt.y, elt.z);
-
-            } else if (elt.type === StreamedElementType.USEMTL) {
-
-                // Create mesh material
-                var material : THREE.Material;
-
-                if (elt.materialName === null || this.materialCreator === undefined) {
-
-                    // If no material, create a default material
-                    material = new THREE.MeshLambertMaterial({color: 'red'});
-
-                } else {
-
-                    // If material name exists, load if from material, and do a couple of settings
-                    material = this.materialCreator.materials[elt.materialName.trim()];
-
-                    material.side = THREE.DoubleSide;
-
-                    if (material.map)
-                        material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
-                }
-
-                // Create mesh geometry
-                this.uvs = [];
-                var geometry = new THREE.Geometry();
-                geometry.vertices = this.vertices;
-                geometry.faces = [];
-
-                // If texture coords, init faceVertexUvs attribute
-                if (elt.texCoordsExist) {
-                    geometry.faceVertexUvs = [this.uvs];
-                }
-
-                // Create mesh
-                var mesh = new THREE.Mesh(geometry, material);
-                this.parts.push({mesh : mesh, added : false, faceNumber : elt.fLength});
-                this.currentPart = this.parts[this.parts.length - 1];
-
-                if (typeof this.callback === 'function') {
-                    this.callback(mesh);
-                }
-
-            } else if (elt.type === StreamedElementType.FACE) {
-
-                this.numberOfFacesReceived++;
-
-                if (!this.parts[elt.mesh].added) {
-
-                    this.parts[elt.mesh].added = true;
-                    this.obj.add(this.parts[elt.mesh].mesh);
-
-                }
-
-                var currentPart = this.parts[elt.mesh];
-                var currentGeometry = (<THREE.Geometry>currentPart.mesh.geometry);
-
-                if (
-                    currentGeometry.vertices[elt.a] === undefined ||
-                    currentGeometry.vertices[elt.b] === undefined ||
-                    currentGeometry.vertices[elt.c] === undefined)
-                {
-                    console.warn("Face received before vertex");
-                }
-
-                if (elt.aNormal !== undefined) {
-                    currentGeometry.faces.push(new THREE.Face3(elt.a, elt.b, elt.c, [this.normals[elt.aNormal], this.normals[elt.bNormal], this.normals[elt.cNormal]]));
-                } else {
-                    currentGeometry.faces.push(new THREE.Face3(elt.a, elt.b, elt.c));
-                    currentGeometry.computeFaceNormals();
-                    currentGeometry.computeVertexNormals();
-                }
-
-                if (elt.aTexture !== undefined) {
-
-                    currentGeometry.faceVertexUvs[0].push([this.texCoords[elt.aTexture], this.texCoords[elt.bTexture], this.texCoords[elt.cTexture]]);
-
-                }
-
-                currentGeometry.verticesNeedUpdate = true;
-                currentGeometry.uvsNeedUpdate = true;
-                currentGeometry.normalsNeedUpdate = true;
-                currentGeometry.groupsNeedUpdate = true;
-
-                if (currentPart.faceNumber === currentGeometry.faces.length || typeof module === 'object') {
-
-                    currentGeometry.computeBoundingSphere();
-
-                }
-
-            } else if (elt.type === StreamedElementType.GLOBAL) {
-
-                this.numberOfFaces = elt.numberOfFaces;
-                this.modulus = Math.floor(this.numberOfFaces / 200);
-
-            }
+            this.model.addElement(elt);
         }
-
 
         /**
          * Add the streamed elements to the model
@@ -324,9 +207,9 @@ module l3d {
          * Compute the bounding spheres of the sub meshes
          */
         computeBoundingSphere() {
-            for (var m of this.parts) {
-                (<THREE.Geometry>m.mesh.geometry).computeBoundingSphere();
-            }
+            // for (var m of this.parts) {
+            //     (<THREE.Geometry>m.mesh.geometry).computeBoundingSphere();
+            // }
         }
 
     }
