@@ -1,11 +1,12 @@
 {
   "name": "mth",
-  "dependencies": {},
+  "dependencies": {
+    "nodeunit": "registry:dt/nodeunit"
+  },
   "devDependencies": {},
   "globalDependencies": {
     "jquery": "registry:dt/jquery",
     "node": "registry:dt/node",
-    "nodeunit": "registry:dt/nodeunit",
     "socket.io": "registry:dt/socket.io",
     "socket.io-client": "registry:dt/socket.io-client",
     "three": "registry:dt/three"

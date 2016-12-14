@@ -4,6 +4,8 @@ export { StartCanvas } from './canvases/StartCanvas';
 export { Previewer } from './canvases/Previewer';
 export { LoadingCanvas } from './canvases/LoadingCanvas';
 export { ProgressiveLoader } from './loaders/ProgressiveLoader';
+export { GenericLoader } from './loaders/GenericLoader';
+export { Model, BufferGeometryModel } from './loaders/Model';
 export { XHRProgressiveLoader } from './loaders/XHRProgressiveLoader';
 export { TestLoader } from './loaders/TestLoader';
 export { ViewportRecommendation } from './recommendations/ViewportRecommendation';

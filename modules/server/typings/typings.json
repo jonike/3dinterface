@@ -1,25 +1,26 @@
 {
-  "dependencies": {},
+  "dependencies": {
+    "body-parser": "registry:dt/body-parser",
+    "errorhandler": "registry:dt/errorhandler",
+    "express": "registry:dt/express",
+    "method-override": "registry:dt/method-override",
+    "mime": "registry:dt/mime",
+    "pg": "registry:dt/pg",
+    "pg-types": "github:DefinitelyTyped/DefinitelyTyped/pg-types/index.d.ts",
+    "serve-static": "registry:dt/serve-static",
+    "source-map-support": "registry:dt/source-map-support",
+    "yargs": "registry:dt/yargs"
+  },
   "devDependencies": {},
   "globalDependencies": {
     "async": "registry:dt/async",
-    "body-parser": "registry:dt/body-parser",
-    "errorhandler": "registry:dt/errorhandler",
     "es6-promise": "registry:dt/es6-promise#0.0.0+20160614011821",
-    "express": "registry:dt/express",
     "express-serve-static-core": "registry:dt/express-serve-static-core",
-    "pug": "registry:dt/pug",
     "jquery": "registry:dt/jquery",
-    "method-override": "registry:dt/method-override",
-    "mime": "registry:dt/mime",
     "node": "registry:dt/node",
-    "pg": "registry:dt/pg",
-    "pg-types": "registry:dt/pg-types",
-    "serve-static": "registry:dt/serve-static",
+    "pug": "registry:dt/pug",
     "socket.io": "registry:dt/socket.io",
     "socket.io-client": "registry:dt/socket.io-client",
-    "source-map-support": "registry:dt/source-map-support",
-    "three": "registry:dt/three",
-    "yargs": "registry:dt/yargs"
+    "three": "registry:dt/three"
   }
 }
