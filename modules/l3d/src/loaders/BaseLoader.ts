@@ -140,7 +140,7 @@ module l3d {
         load() : void {
 
             // If node, use require, otherwise, use global io
-            if (typeof module !== 'undefined' && module.exports) {
+            if (typeof io !== 'function') {
                 this.socket = require('socket.io-client').connect('http://localhost:4000', {multiplex:false});
             } else {
                 this.socket = io();
