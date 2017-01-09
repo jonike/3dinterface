@@ -9,13 +9,13 @@
     "pg-types": "github:DefinitelyTyped/DefinitelyTyped/pg-types/index.d.ts",
     "serve-static": "registry:dt/serve-static",
     "source-map-support": "registry:dt/source-map-support",
+    "express-serve-static-core": "registry:dt/express-serve-static-core",
     "yargs": "registry:dt/yargs"
   },
   "devDependencies": {},
   "globalDependencies": {
     "async": "registry:dt/async",
     "es6-promise": "registry:dt/es6-promise#0.0.0+20160614011821",
-    "express-serve-static-core": "registry:dt/express-serve-static-core",
     "jquery": "registry:dt/jquery",
     "node": "registry:dt/node",
     "pug": "registry:dt/pug",
