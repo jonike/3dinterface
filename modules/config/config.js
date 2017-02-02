@@ -17,7 +17,7 @@ webpack({
         extensions: ['.webpack.js', '.web.js', '.ts', '.js', '.json']
     },
     module: {
-        loaders: [{
+        rules: [{
             test: /\.ts(x?)$/,
             use: 'ts-loader?' + tsOptions
         },

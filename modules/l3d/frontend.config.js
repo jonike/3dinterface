@@ -11,19 +11,21 @@ webpack({
     output: {
         libraryTarget: 'var',
         library: 'l3d',
-        filename: './bin/l3d.js',
+        filename: 'bin/l3d.js',
     },
     resolve: {
         extensions: ['.webpack.js', '.web.js', '.ts', '.js', '.json']
     },
     module: {
-        loaders: [{
+        rules: [{
             test: /\.ts(x?)$/,
-            use: 'ts-loader?' + tsOptions
+            use: 'ts-loader?' + tsOptions,
+            exclude: /node_modules/
         },
         {
             test: /\.json$/,
-            use: 'json-loader'
+            use: 'json-loader',
+            exclude: /node_modules/
         }]
     },
     externals: {
