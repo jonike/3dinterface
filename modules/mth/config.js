@@ -1,26 +1,30 @@
 var webpack = require('webpack');
 var path = require('path');
 
+var tsOptions = JSON.stringify({
+    configFileName:'./tsconfig.json',
+    silent:true
+});
+
 webpack({
     entry: './src/mth.ts',
     output: {
         libraryTarget: 'var',
         library: 'mth',
-        filename: path.join(__dirname, './bin/mth.js'),
+        filename: './bin/mth.js',
     },
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']
+        extensions: ['.webpack.js', '.web.js', '.ts', '.js', '.json']
     },
     module: {
         loaders: [{
             test: /\.ts(x?)$/,
-            loader: 'ts-loader'
+            use: 'ts-loader?' + tsOptions
         },
         {
             test: /\.json$/,
-            loader: 'json-loader'
-        }],
-        exclude: /node_modules/
+            use: 'json-loader'
+        }]
     },
     externals: {
         three : 'THREE'
@@ -28,12 +32,8 @@ webpack({
     plugins: [
         require('webpack-fail-plugin')
     ],
-    devtool:'sourcemap',
-    ts: {
-        configFileName:'./tsconfig.json',
-        silent:true
+    devtool:'sourcemap'
 
-    }
 }, function(err, stats) {
     var log = stats.toString('errors-only');
     if (log.length !== 0)

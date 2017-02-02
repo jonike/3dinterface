@@ -1,5 +1,10 @@
 var webpack = require('webpack');
 
+var tsOptions = JSON.stringify({
+    configFileName:'./tsconfig-frontend.json',
+    silent:true
+});
+
 webpack({
     entry: './src/l3dp.ts',
     output: {
@@ -8,18 +13,17 @@ webpack({
         filename: './bin/l3dp.js',
     },
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']
+        extensions: ['.webpack.js', '.web.js', '.ts', '.js', '.json']
     },
     module: {
         loaders: [{
             test: /\.ts(x?)$/,
-            loader: 'ts-loader'
+            use: 'ts-loader?' + tsOptions
         },
         {
             test: /\.json$/,
-            loader: 'json-loader'
-        }],
-        exclude: /node_modules/
+            use: 'json-loader'
+        }]
     },
     externals: {
         three : 'THREE',
@@ -33,12 +37,8 @@ webpack({
     plugins: [
         require('webpack-fail-plugin')
     ],
-    devtool:'sourcemap',
-    ts: {
-        configFileName: './tsconfig-frontend.json',
-        silent:true
+    devtool:'sourcemap'
 
-    }
 }, function(err, stats) {
     var log = stats.toString('errors-only');
     if (log.length !== 0)

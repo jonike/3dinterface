@@ -1,26 +1,30 @@
 var webpack = require('webpack');
 var path = require('path');
 
+var tsOptions = JSON.stringify({
+    configFileName:'./tsconfig.json',
+    silent:true
+});
+
 webpack({
     entry: path.join(__dirname, './main.ts'),
     output: {
         libraryTarget: 'var',
         library: 'config',
-        filename: path.join(__dirname, './bin/replay.js'),
+        filename: './bin/replay.js',
     },
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']
+        extensions: ['.webpack.js', '.web.js', '.ts', '.js', '.json']
     },
     module: {
         loaders: [{
             test: /\.ts(x?)$/,
-            loader: 'ts-loader'
+            use: 'ts-loader?' + tsOptions
         },
         {
             test: /\.json$/,
-            loader: 'json-loader'
-        }],
-        exclude: /node_modules/
+            use: 'json-loader'
+        }]
     },
     externals: {
         "config":"config",
@@ -32,12 +36,8 @@ webpack({
     plugins: [
         require('webpack-fail-plugin')
     ],
-    devtool:'sourcemap',
-    ts: {
-        configFileName:'./tsconfig.json',
-        silent:true
+    devtool:'sourcemap'
 
-    }
 }, function(err, stats) {
 
     var log = stats.toString('errors-only');
