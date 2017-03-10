@@ -6,15 +6,19 @@ module l3d {
 
     /**
      * Reprensents a simple rotating camera
-     * @constructor
-     * @memberof l3d
-     * @extends THREE.PerspectiveCamera
      */
     export class Camera extends BaseCamera {
 
+        /** Angle of the camera */
         theta : number;
+
+        /** Center of the camera */
         position : THREE.Vector3;
 
+        /**
+         * Creates a BaseCamera
+         * @see {THREE.PerspectiveCamera} for the parameters
+         */
         constructor(fov : number, aspect : number, near : number, far : number) {
 
             super(fov, aspect, near, far);
@@ -38,7 +42,7 @@ module l3d {
 
         /**
          * Updates the position of the camera
-         * @param time {Number} time elapsed since the last update in millisec
+         * @param time time elapsed since the last update in millisec
          */
         update(time : number) : void {
 
@@ -60,15 +64,13 @@ module l3d {
 
         /**
          * @static
-         * @type {Number}
-         * @description radiusof the circle where the camera is rotating
+         * radius of the circle where the camera is rotating
          */
         static DISTANCE_X = 1000;
 
         /**
          * @static
-         * @type {Number}
-         * @description Altitude of the camera
+         * Altitude of the camera
          */
         static DISTANCE_Z = 300;
 

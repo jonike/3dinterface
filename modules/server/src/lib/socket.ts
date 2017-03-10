@@ -8,13 +8,15 @@ export = function(io : SocketIO.Server) {
 
     io.on('connection', function(socket : SocketIO.Socket) {
 
-        log.socket.connection(socket);
+        let isTest = socket.handshake.query.isTest === "1";
+
+        log.socket.connection(socket, isTest);
 
         socket.on('disconnect', function() {
-            log.socket.disconnect(socket);
+            log.socket.disconnect(socket, isTest);
         });
 
-        var streamer = new geo.MeshStreamer();
+        var streamer = isTest ? new geo.MeshStreamerTest() : new geo.MeshStreamer();
 
         streamer.start(socket);
 

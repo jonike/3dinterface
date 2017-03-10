@@ -1,0 +1,15 @@
+extends ./prototype.pug
+
+block title
+    title #{title} - Prototype
+
+block mainjs
+    script GLOB.SceneClass = #{scene};
+    script GLOB.Recommendation = l3d.ArrowRecommendation;
+
+    script(src="/static/js/coinchecker.min.js")
+
+block extrabutton
+    //-button#save.btn.btn-primary.navbar-btn(style={'margin-right': '10px', 'margin-bottom':'10px'}, onclick="saveCoins();") Save coins
+    button#coins-remaining.btn.btn-primary.navbar-btn(style={'margin-right':'10px', 'margin-bottom':'10px'}) Lol coins remaining
+

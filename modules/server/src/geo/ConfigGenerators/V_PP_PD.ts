@@ -3,6 +3,8 @@ import { ConfigGenerator, Config } from './ConfigGenerator';
 import { MeshStreamer } from '../MeshStreamer';
 import { V_PP_Generator } from './V_PP';
 
+import * as log from '../../lib/log';
+
 module geo {
 
     /**
@@ -36,22 +38,22 @@ module geo {
                 }
 
                 // Case full reco
-                console.log("Going to " + recommendationClicked);
-                console.log("Recommendation is clicking : full for " + JSON.stringify(this.streamer.mesh.recommendations[recommendationClicked].position));
+                log.debug("Going to " + recommendationClicked);
+                // log.debug("Recommendation is clicking : full for " + JSON.stringify(this.streamer.mesh.recommendations[recommendationClicked].position));
                 config = [{recommendationId : recommendationClicked, proportion: 1, smart:true}];
 
 
 
             } else if (this.streamer.beginning === true) {
 
-                console.log('Begining : full init');
+                log.debug('Begining : full init');
                 config = [{recommendationId : 0, proportion:1, smart: true}];
 
 
             } else {
 
                 // Case full prefetch
-                console.log("Allow some prefetching");
+                log.debug("Allow some prefetching");
 
                 config = [{ frustum: cameraFrustum, proportion : this.streamer.frustumPercentage}];
 
@@ -113,7 +115,7 @@ module geo {
             for (var i = 0; i < previousConfig.length; i++) {
 
                 // Check if previousConfig was full
-                if (previousData.configSizes[i] >= this.streamer.chunk * previousConfig[i].proportion) {
+                if (previousData.buffers[i].size >= this.streamer.chunk * previousConfig[i].proportion) {
 
                     newConfig.push(previousConfig[i]);
                     sum += previousConfig[i].proportion;

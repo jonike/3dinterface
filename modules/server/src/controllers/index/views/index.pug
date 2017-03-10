@@ -1,0 +1,23 @@
+extends ../../../views/main.pug
+
+block title
+    title #{title} - Index
+
+block content
+    h2 Index
+    ul
+        li
+            a(href=urls.bouncing) A bouncing cube that jumps when you click on it
+            p.
+                Jumps and bounce when you click on it.
+
+        li
+            a(href="/prototype/replay/") Watch the replays of other exp
+
+        li
+            a(href="/intro/") Do an experiment
+
+        li
+            a(href="/demo-config/") The demo of prefetching
+            p.
+                Demo of prefetching and stuff !

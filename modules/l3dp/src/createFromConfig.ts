@@ -13,7 +13,7 @@ import { SponzaScene } from './SponzaScene';
 
 module l3dp {
 
-    export function createSceneFromConfig(config : ExpConfig) {
+    export function createSceneFromConfig(config : ExpConfig, width ?: number, height ?: number) {
 
         let scene : SceneWithCoins;
 
@@ -29,8 +29,9 @@ module l3dp {
 
         scene.addCoins(config.coinConfig);
 
-        let params : [any, number, number] =
-            [undefined, window.containerSize.width(), window.containerSize.height()];
+        let params : [any, number, number] = [undefined,0,0];
+        params[1] = width === undefined ? window.containerSize.width() : width;
+        params[2] = height === undefined ? window.containerSize.height() : height;
 
         switch(config.recommendationStyle) {
 

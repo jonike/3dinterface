@@ -40,6 +40,10 @@ module l3dp {
                 this.coinScale = coinScale;
             }
 
+            if (coinConfig === undefined) {
+                return;
+            }
+
             if (typeof coinConfig.visible !== 'boolean') {
                 coinConfig.visible = true;
             }
@@ -86,7 +90,7 @@ module l3dp {
 
         }
 
-        abstract getRawRecommendations() : l3d.CameraItf[];
+        abstract getRawRecommendations() : l3d.RecommendationInfo[];
 
         abstract getRawCoins() : mth.Vector3[];
 

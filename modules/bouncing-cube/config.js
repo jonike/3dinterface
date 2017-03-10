@@ -1,24 +1,28 @@
 var webpack = require('webpack');
 var path = require('path');
 
+var tsOptions = JSON.stringify({
+    configFileName:path.join(__dirname, './tsconfig.json'),
+    silent:true
+});
+
 webpack({
     entry: path.join(__dirname, 'src/main.ts'),
     output: {
-        filename: path.join(__dirname, './bin/bouncing.min.js'),
+        filename: './bin/bouncing.min.js',
     },
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']
+        extensions: ['.webpack.js', '.web.js', '.ts', '.js', '.json']
     },
     module: {
         loaders: [{
             test: /\.ts(x?)$/,
-            loader: 'ts-loader'
+            loader: 'ts-loader?' + tsOptions
         },
         {
             test: /\.json$/,
             loader: 'json-loader'
-        }],
-        exclude: /node_modules/
+        }]
     },
     externals: {
         three : 'THREE',
@@ -29,12 +33,8 @@ webpack({
     devtool:'sourcemap',
     plugins: [
         require('webpack-fail-plugin')
-    ],
-    ts: {
-        configFileName:path.join(__dirname, './tsconfig.json'),
-        silent:true
+    ]
 
-    }
 }, function(err, stats) {
     var log = stats.toString('errors-only');
     if (log.length !== 0)

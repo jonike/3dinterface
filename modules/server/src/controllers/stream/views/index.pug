@@ -1,0 +1,48 @@
+extends ../../../views/main.pug
+
+block title
+    title #{title} - Sphere streaming
+
+block extrajs
+    script params = {}; params.get= {}; params.get.res = #{resolution}
+    script(src="/static/js/three.min.js")
+    script(src="/static/js/socket.io.min.js")
+    script(src="/static/js/l3d.min.js")
+    script(src="/static/js/streamingsimulator.min.js")
+    script(type='text/javascript').
+        $(function() {
+            var filterInt = function (value) {
+                if(/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+                    return Number(value);
+                        return NaN;
+            }
+
+            $('#form').submit(function(e) {
+                e.preventDefault();
+                var val = filterInt(document.getElementById('num').value);
+                window.location.href = "/stream/" + val;
+            });
+        });
+
+block content
+    h2 Sphere streaming
+
+    p.
+        <s>In fact, it's not really streaming. The sphere is fully preloaded
+        and then, a mesh is created and vertices and faces are dynamically
+        added to this mesh as time goes by.</s>
+
+    p.
+        In fact, it is acutally streaming. If you web browser supports
+        WebSocket, you'll connect to the server and the mesh will be streamed
+        onto the socket and the faces will be displayed as soon as you receive
+        them.
+
+    form.form-inline#form
+        .form-group
+            label Try another resolution (between 1 and 25)
+            input#num(type='number', min=1, max=25, value=5, style={"margin-left":"10px"})
+        .form-group
+            button#submit.btn.btn-primary(type='submit', style={"margin-left":"10px"}) Go
+
+    #container

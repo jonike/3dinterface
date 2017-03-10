@@ -50,7 +50,7 @@ module DBReq {
         /**
          * Container of the result
          */
-        results : any;
+        results : {[id : string] : any[]};
 
         /**
          * Callback to call on finalResult when the loading is complete
@@ -88,8 +88,19 @@ module DBReq {
                 sceneInfo: false
             };
 
+            this.results = {
+                cameras : [],
+                coins : [],
+                arrows : [],
+                resets : [],
+                previousNext : [],
+                hovered : [],
+                pointerLocked : [],
+                switchedLockOption : []
+            };
+
             this.redCoins = [];
-            this.results = {};
+            this.finalResult = {redCoins : [], events : []};
             this.finishAction = finishAction;
             this.client = null;
 
@@ -147,19 +158,18 @@ module DBReq {
          */
         merge() {
 
-            this.finalResult = {redCoins : [], events : []};
-
             for (;;) {
                 // Find next element
-                let nextIndex : number = null;
+                let nextIndex : string = null;
+                let index : string;
 
-                for (let index = 0; index < this.results.length; index++) {
-                    let i = this.results[index];
+                for (let index in this.results) {
+
                     // The next element is placed at the index 0 (since the elements
                     // gotten from the database are sorted)
-                    if (this.results[i].length !== 0 &&
-                        (nextIndex === null || this.results[i][0].time < this.results[nextIndex][0].time)) {
-                        nextIndex = i;
+                    if (this.results[index].length !== 0 &&
+                        (nextIndex === null || this.results[index][0].time < this.results[nextIndex][0].time)) {
+                        nextIndex = index;
                     }
                 }
 
@@ -199,9 +209,8 @@ module DBReq {
                     if (err !== null) {
                         Log.dberror(err + ' in loadCameras');
                     } else {
-                        this.results.cameras = [];
                         for (let i in result.rows) {
-                            this.results.cameras.push(
+                            this.results["cameras"].push(
                                 {
                                     type: 'camera',
                                     position : {
@@ -237,10 +246,9 @@ module DBReq {
                     if (err !== null) {
                         Log.dberror(err + ' in loadCoins');
                     } else {
-                        this.results.coins = [];
                         let i = 0;
                         for (; i < result.rows.length; i++) {
-                            this.results.coins.push(
+                            this.results["coins"].push(
                                 {
                                     type: 'coin',
                                     time: result.rows[i].time,
@@ -267,10 +275,9 @@ module DBReq {
                     if (err !== null) {
                         Log.dberror(err + ' in loadArrows');
                     } else {
-                        this.results.arrows = [];
                         let i = 0;
                         for (; i < result.rows.length; i++) {
-                            this.results.arrows.push(
+                            this.results["arrows"].push(
                                 {
                                     type: 'arrow',
                                     time: result.rows[i].time,
@@ -297,10 +304,9 @@ module DBReq {
                     if (err !== null) {
                         Log.dberror(err + ' in loadResets');
                     } else {
-                        this.results.resets = [];
                         let i = 0;
                         for (; i < result.rows.length; i++) {
-                            this.results.resets.push(
+                            this.results["resets"].push(
                                 {
                                     type: 'reset',
                                     time: result.rows[i].time
@@ -333,10 +339,9 @@ module DBReq {
                     if (err !== null) {
                         Log.dberror(err + ' in loadPreviousNext');
                     } else {
-                        this.results.previousNext = [];
                         let i = 0;
                         for (; i < result.rows.length; i++) {
-                            this.results.previousNext.push(
+                            this.results["previousNext"].push(
                                 {
                                     type: 'previousnext',
                                     time: result.rows[i].time,
@@ -373,10 +378,9 @@ module DBReq {
                     if (err !== null) {
                         Log.dberror(err + ' in loadHovered');
                     } else {
-                        this.results.hovered = [];
                         let i = 0;
                         for (; i < result.rows.length; i++) {
-                            this.results.hovered.push(
+                            this.results["hovered"].push(
                                 {
                                     type: "hovered",
                                     time: result.rows[i].time,
@@ -404,12 +408,11 @@ module DBReq {
                     if (err !== null) {
                         Log.dberror(err + ' in loadPointerLocked');
                     } else {
-                        this.results.pointerlocked = [];
                         let i = 0;
                         for (; i < result.rows.length; i++) {
-                            this.results.pointerlocked.push(
+                            this.results["pointerLocked"].push(
                                 {
-                                    type: "pointerlocked",
+                                    type: "pointerLocked",
                                     locked: result.rows[i].locked,
                                     time: result.rows[i].time
                                 }
@@ -434,10 +437,9 @@ module DBReq {
                     if (err !== null) {
                         Log.dberror(err + ' in loadSwitchedLockOption');
                     } else {
-                        this.results.switchedlockoption = [];
                         let i = 0;
                         for (; i < result.rows.length; i++) {
-                            this.results.switchedlockoption.push(
+                            this.results["switchedLockOption"].push(
                                 {
                                     type: "switchedlockoption",
                                     locked: result.rows[i].locked,
@@ -502,7 +504,7 @@ module DBReq {
                     } else {
                         this.finalResult.sceneInfo = {
                             recommendationStyle : result.rows[0].recommendationStyle,
-                            sceneId : result.rows[0].sceneId
+                            sceneId : result.rows[0].sceneId-1
                         };
                     }
                     this.ready.sceneInfo = true;

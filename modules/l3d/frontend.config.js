@@ -1,26 +1,32 @@
 var webpack = require('webpack');
 var path = require('path');
 
+var tsOptions = JSON.stringify({
+    configFileName:'./tsconfig-frontend.json',
+    silent:true
+});
+
 webpack({
     entry: './src/l3d.ts',
     output: {
         libraryTarget: 'var',
         library: 'l3d',
-        filename: path.join(__dirname, './bin/l3d.js'),
+        filename: 'bin/l3d.js',
     },
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.js', '.json']
+        extensions: ['.webpack.js', '.web.js', '.ts', '.js', '.json']
     },
     module: {
-        loaders: [{
+        rules: [{
             test: /\.ts(x?)$/,
-            loader: 'ts-loader'
+            use: 'ts-loader?' + tsOptions,
+            exclude: /node_modules/
         },
         {
             test: /\.json$/,
-            loader: 'json-loader'
-        }],
-        exclude: /node_modules/
+            use: 'json-loader',
+            exclude: /node_modules/
+        }]
     },
     externals: {
         three : 'THREE',
@@ -32,10 +38,9 @@ webpack({
         require('webpack-fail-plugin')
     ],
     devtool:'sourcemap',
-    ts: {
-        configFileName:'./tsconfig-frontend.json',
-        silent:true
-
+    node: {
+        fs: "empty",
+        child_process: "empty"
     }
 }, function(err, stats) {
     var log = stats.toString('errors-only');

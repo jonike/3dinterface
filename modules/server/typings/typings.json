@@ -1,23 +1,26 @@
 {
-  "dependencies": {},
+  "dependencies": {
+    "body-parser": "registry:dt/body-parser",
+    "errorhandler": "registry:dt/errorhandler",
+    "express": "registry:dt/express",
+    "method-override": "registry:dt/method-override",
+    "mime": "registry:dt/mime",
+    "pg": "registry:dt/pg",
+    "pg-types": "github:DefinitelyTyped/DefinitelyTyped/pg-types/index.d.ts",
+    "serve-static": "registry:dt/serve-static",
+    "source-map-support": "registry:dt/source-map-support",
+    "express-serve-static-core": "registry:dt/express-serve-static-core",
+    "yargs": "registry:dt/yargs"
+  },
   "devDependencies": {},
   "globalDependencies": {
-    "async": "registry:dt/async#1.4.2+20160501155344",
-    "body-parser": "registry:dt/body-parser#0.0.0+20160317120654",
-    "errorhandler": "registry:dt/errorhandler#0.0.0+20160316155526",
-    "express": "registry:dt/express#4.0.0+20160317120654",
-    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160322035842",
-    "jade": "registry:dt/jade#0.0.0+20160316155526",
-    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
-    "method-override": "registry:dt/method-override#0.0.0+20160317120654",
-    "mime": "registry:dt/mime#0.0.0+20160316155526",
-    "node": "registry:dt/node#6.0.0+20160514165920",
-    "pg": "registry:dt/pg#0.0.0+20160514172051",
-    "serve-static": "registry:dt/serve-static#0.0.0+20160501131543",
-    "socket.io": "registry:dt/socket.io#1.4.4+20160317120654",
-    "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654",
-    "source-map-support": "registry:dt/source-map-support#0.2.10+20160316155526",
-    "three": "registry:dt/three#0.0.0+20160517065351",
-    "yargs": "registry:dt/yargs#0.0.0+20160326124407"
+    "async": "registry:dt/async",
+    "es6-promise": "registry:dt/es6-promise#0.0.0+20160614011821",
+    "jquery": "registry:dt/jquery",
+    "node": "registry:dt/node",
+    "pug": "registry:dt/pug",
+    "socket.io": "registry:dt/socket.io",
+    "socket.io-client": "registry:dt/socket.io-client",
+    "three": "registry:dt/three"
   }
 }

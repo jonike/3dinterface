@@ -1,0 +1,36 @@
+extends ../../../views/base.pug
+
+block content
+    h1 Thank you for everything !
+    audio(autoplay)
+        source(src="/static/data/music/thankyou.ogg")
+        source(src="/static/data/music/thankyou.mp3")
+
+    p We are verifying that the experiment was correctly done...
+        #vcode
+
+    script.
+        function tryVcode() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/vcode', true);
+            xhr.onreadystatechange = function (aEvt) {
+                if (xhr.readyState == 4) {
+                    if(xhr.status == 200) {
+                        changeHtml(xhr.responseText);
+                    }
+                }
+            };
+            xhr.send(null);
+        }
+
+        function changeHtml(vcode) {
+            if (vcode === 'not ready') {
+                setTimeout(tryVcode, 1000);
+            } else if (vcode === 'no vcode') {
+                $('#vcode').html('Sorry, the experiment has not been correctly done ! You have no vcode.');
+            } else {
+                $('#vcode').html('Your vcode is ' + vcode);
+            }
+        }
+
+        tryVcode();

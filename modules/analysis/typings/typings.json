@@ -1,0 +1,9 @@
+{
+  "globalDependencies": {
+    "jquery": "registry:dt/jquery",
+    "node": "registry:dt/node",
+    "socket.io": "registry:dt/socket.io",
+    "socket.io-client": "registry:dt/socket.io-client",
+    "three": "registry:dt/three"
+  }
+}

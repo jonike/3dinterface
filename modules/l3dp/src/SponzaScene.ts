@@ -20,16 +20,15 @@ module l3dp {
 
         }
 
-        load(prefetch : config.PrefetchingPolicy) {
+        load(loadingConfig : config.LoadingConfig) {
 
-            if (prefetch !== undefined) {
-                this.prefetchType = prefetch;
+            if (loadingConfig !== undefined) {
+                this.loadingConfig = loadingConfig;
             }
 
             this.loader = new l3d.ProgressiveLoader(
                 '/static/data/sponza/sponza.obj',
-                this,
-                this.camera,
+                this.loadingConfig,
                 (object : THREE.Mesh) => {
 
                     this.clickableObjects.push(object);
@@ -44,11 +43,10 @@ module l3dp {
 
                     object.raycastable = true;
 
-                },
-                ()=>{},// l3d.LogFunction,
-                false,
-                this.prefetchType
+                }
             );
+
+            this.add(this.loader.obj);
 
             this.loader.onFinished = () => { this.finish(); }
             this.loader.load();
@@ -106,7 +104,7 @@ module l3dp {
 
         }
 
-        getRawRecommendations() : l3d.CameraItf[] { return []; }
+        getRawRecommendations() : l3d.RecommendationInfo[] { return []; }
         getRawCoins() : mth.Vector3[] { return []; }
 
     }

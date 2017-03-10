@@ -1,0 +1,85 @@
+extends ../../../views/base.pug
+
+mixin message
+    span(style={'margin-bottom':'10px', 'margin-right': '10px'})
+        block
+        br
+
+mixin question(id, qu, info)
+    label(for="#{id}", style={'margin-right':'10px'}) #{qu}
+    if (info !== undefined)
+        span.glyphicon.glyphicon-question-sign(type='button', data-toggle='tooltip', data-placement='top', title='#{info}')
+    input.form-control(name="answer#{id}", type="text", placeholder="Answer")
+
+mixin rate(id, qu, info)
+    div
+        label(for="anwser#{id}", style={'margin-right':'10px'}) #{qu}
+        if (info !== undefined)
+            span.glyphicon.glyphicon-question-sign(type='button', data-toggle='tooltip', data-placement='top', title='#{info}')
+                //-input.rating(id="answer#{id}", name="answer#{id}", type="number", min='0', max='5', step='1', default='3')
+
+        br
+        input(type='radio', name='answerItem#{id}', value='1', style={'margin-right':'10px'})
+        +message Very easy
+        input(type='radio', name='answerItem#{id}', value='2', style={'margin-right':'10px'})
+        +message Easy
+        input(type='radio', name='answerItem#{id}', value='3', style={'margin-right':'10px'})
+        +message Medium
+        input(type='radio', name='answerItem#{id}', value='4', style={'margin-right':'10px'})
+        +message Hard
+        input(type='radio', name='answerItem#{id}', value='5', style={'margin-right':'10px'})
+        +message Very hard
+        div(style={'margin-bottom':'10px'})
+
+block extrahead
+    link(rel="stylesheet", href="/static/css/feedback.css")
+    link(rel="stylesheet", href="/static/css/star-rating.min.css")
+
+//-block extrajs
+    script(src="/static/js/star-rating.min.js")
+    script $(function () { $('[data-toggle="tooltip"]').tooltip() })
+    script.
+        var liste = [1,2];
+        for (var i = 0; i < liste.length; i++) {
+            $("#answer" + liste[i]).rating({showClear: false, showCaption: false, size:'xs'});
+            $("#answer" + liste[i]).rating('update', 3);
+        }
+
+block content
+    script.
+        function checkForm() {
+            var allAnswered = true;
+            $("input:radio").each(function(){
+                var name = $(this).attr("name");
+                if($("input:radio[name="+name+"]:checked").length == 0)
+                {
+                    allAnswered = false;
+                }
+            });
+            $("input:text").each(function(){
+                if ($(this).val().length === 0) {
+                    allAnswered = false;
+                }
+            });
+            if (!allAnswered) {
+                alert('You did not answer all the questions');
+                return false;
+            }
+        }
+
+    form.form-signin(method="POST", action='/feedback-target', onsubmit='return checkForm()')
+        h2 Please give us your feedback
+
+        +rate(1, "What was the difficulty level WITHOUT recommendation ?")
+        +rate(2, "What was the difficulty level WITH recommendation ?")
+        +question(3, "Did the recommendations help you to find the coins ?")
+        +question(4, "Did the recommendations help you to browse the scene ?")
+        +question(5, "Do you think recommendations can be helpful ?")
+        +question(6, "Which recommendation style do you prefer and why ?")
+        +question(7, "Did you enjoy this ?")
+
+        //-label(for='input1') Did you have trouble to find the coins during the first step ?
+        //-input#input1.form-control(name="input1", type="text", placeholder='Id')
+
+        button.btn.btn-lg.btn-primary.btn-block(type='submit') Submit
+

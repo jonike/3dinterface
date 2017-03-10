@@ -23,16 +23,15 @@ module l3dp {
 
         }
 
-        load(prefetch : config.PrefetchingPolicy) {
+        load(loadingConfig : config.LoadingConfig) {
 
-            if (prefetch !== undefined) {
-                this.prefetchType = prefetch;
+            if (loadingConfig !== undefined) {
+                this.loadingConfig = loadingConfig;
             }
 
             this.loader = new l3d.ProgressiveLoader(
                 '/static/data/castle/princess peaches castle (outside).obj',
-                this,
-                this.camera,
+                this.loadingConfig,
                 (object : THREE.Mesh) => {
 
                     this.clickableObjects.push(object);
@@ -53,11 +52,10 @@ module l3dp {
                         object.raycastable = false;
                         object.material.side = THREE.FrontSide;
                     }
-                },
-                ()=>{},// l3d.LogFunction,
-                    false,
-                this.prefetchType
+                }
             );
+
+            this.add(this.loader.obj);
 
             this.loader.onFinished = () => this.finish();
             this.loader.load();
@@ -100,8 +98,8 @@ module l3dp {
 
         }
 
-        getRawRecommendations() : l3d.CameraItf[] {
-            return RecommendationData.peachRecommendations;
+        getRawRecommendations() : l3d.RecommendationInfo[] {
+            return RecommendationData.dict[config.Scene.PeachCastle];
         }
 
         getRawCoins() : mth.Vector3[] {

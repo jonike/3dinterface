@@ -1,2 +1,3 @@
-export { Vector3, Face3, clamp, sum, diff, dot, cross, mul, norm2, norm, copy, equals } from './Tools';
-export { Hermite } from './Hermite';
+export { Vector3, Face3, clamp, sum, diff, dot, cross, mul, norm2, norm, copy, equals, filterInt } from './Tools';
+export { Hermite, Line, Curve } from './Hermite';
+export { belongsToTriangle, belongsToHull, computeVisiblePoints } from './hull';

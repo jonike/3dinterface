@@ -48,6 +48,11 @@ module l3d {
         /** Indicates wether the canvas needs to be cleared or not */
         clearNeeded : boolean;
 
+        /**
+         * Creates the previewer
+         * @param renderer The webgl renderer to draw on
+         * @param scene the scene
+         */
         constructor(renderer : THREE.WebGLRenderer, scene : THREE.Scene) {
             this.domElement = document.createElement('canvas');
             this.ctx = this.domElement.getContext('2d');

@@ -156,6 +156,10 @@ module l3d {
 
     }
 
+    /**
+     * Converts a color to string
+     * @param c the color to convert
+     */
     function toString(c : Color) : string {
 
         switch(c) {

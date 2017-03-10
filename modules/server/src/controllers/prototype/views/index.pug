@@ -1,0 +1,17 @@
+extends ../../../views/main.pug
+
+block title
+    title #{title} - Prototype
+
+block content
+    h2 Index
+    p The tutorial is available <a href="#{urls.tutorial}">here</a>.
+    p There are three prototypes here :
+        ul
+            li
+                a(href="arrows/") Arrows
+            li
+                a(href="reverse/") Reversed arrows looking like funnel
+            li
+                a(href="viewports/") Viewports
+    p You can also watch replays of previous experiences <a href="#{urls.replayIndex}">here</a>.

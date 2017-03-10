@@ -21,7 +21,7 @@ $(MODULES)$/l3d$/node_modules$/.dirstamp: $(MODULES)$/l3d$/package.json $(MTH_CO
 
 $(MODULES)$/l3d$/lib$/.dirstamp: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)$/l3d$/src$/,*) $(MODULES)$/l3d$/node_modules$/.dirstamp $(MODULES)$/l3d$/tsconfig-backend.json $(MODULES)$/l3d$/backend.config.js $(MODULES)$/l3d$/typings$/typings$/.dirstamp $(MODULES)$/l3d$/typings$/custom$/.dirstamp
 	@$(call LOG_BUILDING,l3d)
-	@$(NODE) $(MODULES)$/l3d$/backend.config.js
+	@$(CD) $(MODULES)$/l3d$/ && $(NODE) backend.config.js
 	@$(TOUCH_DIRSTAMP)
 	@$(call LOG_BUILT,l3d)
 

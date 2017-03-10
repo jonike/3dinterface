@@ -23,10 +23,10 @@ module l3dp {
 
         }
 
-        load(prefetch : config.PrefetchingPolicy, lowRes = false) {
+        load(loadingConfig : config.LoadingConfig, lowRes = false) {
 
-            if (prefetch !== undefined) {
-                this.prefetchType = prefetch;
+            if (loadingConfig !== undefined) {
+                this.loadingConfig = loadingConfig;
             }
 
             var path = lowRes === true ?
@@ -36,8 +36,7 @@ module l3dp {
 
             this.loader = new l3d.ProgressiveLoader(
                 path,
-                this,
-                this.camera,
+                this.loadingConfig,
                 (object : THREE.Mesh) => {
 
                     this.clickableObjects.push(object);
@@ -64,11 +63,10 @@ module l3dp {
                         object.material.opacity = 0.5;
                     }
 
-                },
-                ()=>{},// l3d.LogFunction,
-                false,
-                this.prefetchType
+                }
             );
+
+            this.add(this.loader.obj);
 
             this.loader.onFinished = () => { this.finish(); }
             this.loader.load();
@@ -88,8 +86,8 @@ module l3dp {
 
         }
 
-        getRawRecommendations() : l3d.CameraItf[] {
-            return RecommendationData.mountainRecommendations;
+        getRawRecommendations() : l3d.RecommendationInfo[] {
+            return RecommendationData.dict[config.Scene.CoolCoolMountain];
         }
 
         getRawCoins() : mth.Vector3[] {

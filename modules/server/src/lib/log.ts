@@ -2,7 +2,10 @@ import express = require('express');
 import http = require('http');
 import yargs = require('yargs');
 
-var argv = yargs.argv;
+/**
+ * @hidden
+ */
+let argv = yargs.argv;
 
 module log {
 
@@ -71,18 +74,18 @@ export function request(req : express.Request, res : Express.Response, time : nu
 
 export module socket {
 
-    export function connection(socket : SocketIO.Socket) {
+    export function connection(socket : SocketIO.Socket, isTest ?: boolean) {
         write(
             '[SOK] ' + new Date() + ' ' +
-                (socket.handshake.headers['x-forwarded-for'] || socket.handshake.address) + ' connection',
+                (socket.handshake.headers['x-forwarded-for'] || socket.handshake.address) + (isTest ? ' test' : '') + ' connection',
             Color.MAGENTA
         );
     }
 
-    export function disconnect(socket : SocketIO.Socket) {
+    export function disconnect(socket : SocketIO.Socket, isTest ?: boolean) {
         write(
             '[SOK] ' + new Date() + ' ' +
-                (socket.handshake.headers['x-forwarded-for'] || socket.handshake.address) + ' disconnect',
+                (socket.handshake.headers['x-forwarded-for'] || socket.handshake.address) + (isTest ? ' test' : '') + ' disconnect',
             Color.MAGENTA
         );
     }
@@ -119,9 +122,9 @@ export function debug(info? : any, force? : boolean) {
     }
 }
 
-export function jadeerror(error : any) {
+export function pugerror(error : any) {
     write(
-        '[JER] ' + new Date() + ' ' + error,
+        '[PER] ' + new Date() + ' ' + error,
         Color.RED
     );
 }
@@ -131,6 +134,15 @@ export function warning(message : any) {
     write(
         '[WRN] ' + new Date() + ' ' + message,
         Color.ORANGE
+    );
+
+}
+
+export function faceerror(message : any) {
+
+    write(
+        '[FER] ' + new Date() + ' ' + message,
+        Color.RED
     );
 
 }

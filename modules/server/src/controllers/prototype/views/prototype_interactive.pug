@@ -1,0 +1,53 @@
+extends ./prototype.pug
+
+block title
+    title #{title} - Prototype
+
+block mainjs
+    script GLOB.SceneClass = #{scene};
+    script GLOB.locked = #{session.locked === undefined ? 'true' : session.locked};
+    script(src="/static/js/prototypeinteractive.min.js")
+
+block description
+    //-#instructions.panel.panel-default
+        .panel-heading
+            h4.panel-title
+                a(href="#", data-target="#collapseInstructions", data-toggle="collapse",onclick="setTimeout(onWindowResize,500);") Instructions
+
+        .panel-collapse.collapse.in#collapseInstructions
+            .panel-body
+                p
+                    | This is the prototype of a 3D interface. You can move
+                    | the camera with the arrow keys of your keyboard (or
+                    | WASD if you like FPS-games, and by the way, if you
+                    | use azerty keyboard, you can also use ZQSD instead),
+                    | and change the angle of the camera by dragging and
+                    | dropping the scene around it (you can also use your
+                    | numpad, 2 to look lower, 8 to look higher, 4 to look
+                    | on the left and 6 to look on the right, but if you're
+                    | more comfortable with non-numpad keys, you can also
+                    | use i for up, j for left, k for down, and l for
+                    | right).
+
+                p
+                    | This is a re-creation of the Bob-omb Battlefield
+                    | level from Super Mario 64, and with its 8 red coins.
+                    | You can click on them to get them, and once you got
+                    | them all, you get... well you get nothing but the
+                    | sound of the star is played (but the star doesn't
+                    | appear... sorry guys)
+
+                p
+                    | It contains <em>recommended views</em> : 3D objects
+                    | here to guide you through this coin search.
+
+                block preciseDescription
+
+                p
+                    | You can click on a recommendation to move to the
+                    | recommended viewpoint. The recommendation will become
+                    | more and more transparent as you come closer, and
+                    | will disappear when you reach it.
+
+                p
+                    | You may now <a href="#" data-target="#collapseInstructions" data-toggle="collapse" onclick="setTimeout(onWindowResize,500);">hide this panel</a> and start playing !

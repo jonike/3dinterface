@@ -1,13 +1,15 @@
 import express = require('express');
-import tools = require('../../lib/filterInt');
 import pg = require('pg');
 import pgc = require('../../private');
 import db = require('./DBReq');
 
+import { filterInt } from 'mth';
+import * as config from 'config';
+
 export function index(req : express.Request, res : express.Response) {
     res.setHeader('Content-Type', 'text/html');
 
-    res.render('index.jade', res.locals, function(err, result) {
+    res.render('index.pug', res.locals, function(err, result) {
         res.send(result);
     });
 };
@@ -118,7 +120,7 @@ export function play(req : express.Request, res : express.Response) {
         module.exports.game(req, null);
 
         res.setHeader('Content-Type', 'text/html');
-        res.render('prototype_recommendation.jade', res.locals, function(err, result) {
+        res.render('prototype_recommendation.pug', res.locals, function(err, result) {
             res.send(result);
         });
     });
@@ -128,7 +130,7 @@ export function play(req : express.Request, res : express.Response) {
 export function sponza(req : express.Request, res : express.Response) {
     res.setHeader('Content-Type', 'text/html');
 
-    res.render('sponza.jade', res.locals, function(err, result) {
+    res.render('sponza.pug', res.locals, function(err, result) {
         res.send(result);
     });
 };
@@ -137,16 +139,16 @@ export function replayInfo(req : express.Request, res : express.Response) {
     res.setHeader('Content-Type', 'text/plain');
 
     // Parse id
-    var id = tools.filterInt(req.params.id);
+    var id = filterInt(req.params.id);
 
     db.getInfo(id, function(results) {
         res.send(JSON.stringify(results));
     });
 };
 
-export function replay(req : express.Request, res : express.Response, next : Function) {
+export function replay(req : express.Request, res : express.Response, render : Function, next:Function) {
     // Get id parameter
-    res.locals.id = tools.filterInt(req.params.id);
+    res.locals.id = filterInt(req.params.id);
 
     if (res.locals.id <= 0) {
         var err = new Error("This replay does not exist");
@@ -156,28 +158,54 @@ export function replay(req : express.Request, res : express.Response, next : Fun
     }
 
     db.checkExpId(res.locals.id, function(sceneId) {
+
         if (sceneId === null) {
+
             var err = new Error("This replay does not exist");
             err.status = 404;
             next(err);
+
         } else {
-            res.locals.initjs = sceneToFunction(sceneId);
-            res.setHeader('Content-Type', 'text/html');
-            res.render('prototype_replays.jade', res.locals, function(err, result) {
-                res.send(result);
-            });
+
+            let scene : config.Scene;
+            let recommendationStyle : config.RecommendationStyle;
+            let coinConfig : config.CoinConfig = { type : config.ConfigType.None };
+
+            switch (sceneId) {
+                case 1: scene = config.Scene.PeachCastle;       break;
+                case 2: scene = config.Scene.BobombBattlefield; break;
+                case 3: scene = config.Scene.CoolCoolMountain;  break;
+                case 4: scene = config.Scene.WhompFortress;     break;
+                case 5: scene = config.Scene.Sponza;            break;
+            }
+
+            recommendationStyle = config.RecommendationStyle.BaseRecommendation;
+
+            let conf : config.ExpConfig = {
+                scene : scene,
+                coinConfig : coinConfig,
+                recommendationStyle : recommendationStyle
+            };
+
+            let loadingConf : config.LoadingConfig = {
+                lowRes : true,
+                prefetchingPolicy : config.PrefetchingPolicy.NV_PN
+            };
+
+            res.locals.config = JSON.stringify(conf);
+            res.locals.loadingConf = JSON.stringify(loadingConf);
+
+            render('prototype_replays.pug');
         }
     });
 };
 
-export function replayIndex(req : express.Request, res : express.Response, next : Function) {
+export function replayIndex(req : express.Request, res : express.Response, render : Function) {
     db.getAllExps(function(result) {
         res.locals.users = result;
 
         res.setHeader('Content-Type', 'text/html');
-        res.render("replay_index.jade", res.locals, function(err, result) {
-            res.send(result);
-        });
+        render('replay_index.pug');
     });
 };
 
@@ -206,7 +234,7 @@ export function tutorial(req : express.Request, res : express.Response) {
                 req.session.save();
 
                 res.setHeader('Content-Type', 'text/html');
-                res.render('tutorial.jade', res.locals, function(err, result) {
+                res.render('tutorial.pug', res.locals, function(err, result) {
                     res.send(result);
                 });
             });
@@ -251,9 +279,9 @@ function editorHelper(templateName : string) {
 
 }
 
-module.exports.clicker = editorHelper('prototype_clicker.jade');
-module.exports.viewer = editorHelper('prototype_viewer.jade');
-module.exports.checker = editorHelper('prototype_checker.jade');
+module.exports.clicker = editorHelper('prototype_clicker.pug');
+module.exports.viewer = editorHelper('prototype_viewer.pug');
+module.exports.checker = editorHelper('prototype_checker.pug');
 
 export function userstudy(req : express.Request, res : express.Response) {
 
@@ -271,7 +299,7 @@ export function userstudy(req : express.Request, res : express.Response) {
     res.locals.workerId = req.session.workerId;
 
     res.setHeader('Content-Type', 'text/html');
-    res.render('user_study.jade', res.locals, function(err, result) {
+    res.render('user_study.pug', res.locals, function(err, result) {
         res.send(result);
     });
 

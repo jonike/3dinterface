@@ -1,0 +1,17 @@
+extends ./prototype_interactive.pug
+
+block title
+    title #{title} - Prototype - Reverse
+
+block configjs
+    script GLOB.Recommendation = l3d.ReverseRecommendation;
+
+//-block preciseDescription
+    p
+        | Recommended views are displayed with a strange
+        | blue object.  Basically, the curve at the
+        | begining of this weird object shows the motion
+        | that starts from where you are and leads to the
+        | recommended view, and the extremity is in fact an
+        | object representing a camera.
+

@@ -11,7 +11,7 @@ module geo {
         /**
          * @param arg A string like in the .obj file (e.g. 'vn 1.1 2.2 3.3')
          */
-        constructor(arg : string) {
+        constructor(arg : string | String) {
             super(arg);
         }
 

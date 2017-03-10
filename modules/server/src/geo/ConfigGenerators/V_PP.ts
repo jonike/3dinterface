@@ -2,6 +2,8 @@ import { Frustum, Data } from '../Interfaces';
 import { ConfigGenerator, Config } from './ConfigGenerator';
 import { MeshStreamer } from '../MeshStreamer';
 
+import * as log from '../../lib/log';
+
 module geo {
 
     /**
@@ -29,13 +31,13 @@ module geo {
 
             if (this.streamer.beginning === true) {
 
-                console.log('Begining : full init');
+                log.debug('Begining : full init');
                 config = [{recommendationId : 0, proportion:1, smart: true}];
 
             } else {
 
                 // Case full prefetch
-                console.log("Allow some prefetching");
+                log.debug("Allow some prefetching");
 
                 config = [{ frustum: cameraFrustum, proportion : this.streamer.frustumPercentage}];
 
@@ -92,7 +94,7 @@ module geo {
             for (var i = 0; i < previousConfig.length; i++) {
 
                 // Check if previousConfig was full
-                if (previousData.configSizes[i] >= this.streamer.chunk * previousConfig[i].proportion) {
+                if (previousData.buffers[i].size >= this.streamer.chunk * previousConfig[i].proportion) {
 
                     newConfig.push(previousConfig[i]);
                     sum += previousConfig[i].proportion;

@@ -8,13 +8,13 @@ export function index(req : express.Request, res : express.Response, render : Fu
     if (req.session.workerId === undefined) {
 
         res.setHeader('Content-Type', 'text/html');
-        render('normal.jade');
+        render('normal.pug');
         return;
 
     }
 
     res.setHeader('Content-Type', 'text/html');
-    render('vcode.jade');
+    render('vcode.pug');
 
 }
 

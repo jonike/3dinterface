@@ -1,5 +1,9 @@
 declare module THREE {
 
+    export interface WebGLRendererParameters {
+        context?:any;
+    }
+
     export interface Material {
         map: any;
     }

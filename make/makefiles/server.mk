@@ -16,7 +16,7 @@ $(MODULES)$/server$/node_modules$/.dirstamp: $(MODULES)$/server$/package.json $(
 	@$(CD) $(MODULES)$/server$/ && $(NPM_UNINSTALL) l3d l3dp config mth && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
-$(MODULES)$/server$/bin$/.dirstamp: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)$/server$/src$/,*.ts) $(call FIND,$(MODULES)$/server$/src,*.jade) $(MODULES)$/server$/node_modules$/.dirstamp $(MODULES)$/server$/typings
+$(MODULES)$/server$/bin$/.dirstamp: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)$/server$/src$/,*.ts) $(call FIND,$(MODULES)$/server$/src,*.pug) $(MODULES)$/server$/node_modules$/.dirstamp $(MODULES)$/server$/typings
 	@$(call LOG_BUILDING,server)
 	@$(CD) $(MODULES)$/server$/ && $(TSC)
 	@$(TOUCH_DIRSTAMP)
@@ -49,7 +49,7 @@ $(MODULES)$/server$/bin$/generated$/.dirstamp:
 	@$(MERGE) generated $(MODULES)$/server$/bin$/generated$/
 	@$(TOUCH_DIRSTAMP)
 
-server: $(MODULES)$/server$/bin$/.dirstamp $(MODULES)$/server$/bin$/views$/.dirstamp $(MODULES)$/server$/bin$/static$/.dirstamp $(OBJ_VIEWS) $(MODULES)$/server$/bin$/static$/js$/l3d.js $(MODULES)$/server$/bin$/static$/js$/l3dp.js $(MODULES)$/server$/bin$/static$/js$/config.js $(MODULES)$/server$/bin$/static$/js$/mth.js $(MODULES)$/server$/bin$/static$/js$/demo.js $(MODULES)$/server$/bin$/generated$/.dirstamp $(MODULES)$/server$/bin$/static$/js$/bouncing.min.js $(MODULES)$/server$/bin$/static$/js$/mth.js $(MODULES)$/server$/bin$/static$/js$/config.js $(MODULES)$/server$/bin$/static$/js$/demo.js $(MODULES)$/server$/bin$/static$/js$/l3d.js $(MODULES)$/server$/bin$/static$/js$/l3dp.js
+server: $(MODULES)$/server$/bin$/.dirstamp $(MODULES)$/server$/bin$/views$/.dirstamp $(MODULES)$/server$/bin$/static$/.dirstamp $(OBJ_VIEWS) $(MODULES)$/server$/bin$/static$/js$/l3d.js $(MODULES)$/server$/bin$/static$/js$/l3dp.js $(MODULES)$/server$/bin$/static$/js$/config.js $(MODULES)$/server$/bin$/static$/js$/mth.js $(MODULES)$/server$/bin$/static$/js$/demo.js $(MODULES)$/server$/bin$/generated$/.dirstamp $(MODULES)$/server$/bin$/static$/js$/bouncing.min.js $(MODULES)$/server$/bin$/static$/js$/mth.js $(MODULES)$/server$/bin$/static$/js$/config.js $(MODULES)$/server$/bin$/static$/js$/demo.js $(MODULES)$/server$/bin$/static$/js$/l3d.js $(MODULES)$/server$/bin$/static$/js$/l3dp.js  $(MODULES)$/server$/bin$/static$/js$/replay.js
 
 # APPS
 # CONFIG
@@ -71,6 +71,11 @@ $(MODULES)$/server$/bin$/static$/js$/mth.js: $(MODULES)$/mth$/bin$/mth.js
 $(MODULES)$/server$/bin$/static$/js$/demo.js: $(MODULES)$/demo$/bin$/demo.js
 	@$(MKDIRP) $(MODULES)$/server$/bin$/static$/js
 	@$(MERGE) $(MODULES)$/demo$/bin$/ $(MODULES)$/server$/bin$/static$/js
+
+# REPLAY
+$(MODULES)/server/bin/static/js/replay.js: $(MODULES)/replay/bin/replay.js
+	@$(MKDIRP) $(MODULES)/server/bin/static/js
+	@$(MERGE) $(MODULES)/replay/bin/ $(MODULES)/server/bin/static/js
 
 # L3D
 $(MODULES)$/server$/bin$/static$/js$/l3d.js: $(MODULES)$/l3d$/bin$/l3d.js

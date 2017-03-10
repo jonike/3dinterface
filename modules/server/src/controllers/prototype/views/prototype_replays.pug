@@ -1,0 +1,23 @@
+extends ../../../views/withjs.pug
+
+block title
+    title #{title} - Prototype
+
+block prepend js
+    script.
+        CONFIG = !{config};
+        LOADING_CONFIG = !{loadingConf};
+        REPLAY_ID = #{id};
+        GLOB = typeof GLOB !== 'undefined' ? GLOB : {};
+        GLOB.DB_DISABLED = true;
+
+block extrajs
+    script(src="/static/js/l3dp.js")
+    script(src="/static/js/replay.js")
+
+block extrahead
+    link(rel="stylesheet" href="/static/css/prototype.css")
+
+block content
+    #main-div.panel-group(style={'margin-top':'10px', 'margin-bottom':'10px'})
+        #container(style={'padding': '0px', 'margin': '0px'}, tabindex="1")

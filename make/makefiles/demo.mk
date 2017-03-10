@@ -22,7 +22,7 @@ $(MODULES)$/demo$/node_modules$/.dirstamp: $(MODULES)$/demo$/package.json $(L3D_
 
 $(MODULES)$/demo$/bin$/demo.js: $(PREPARE_DEPENDENCY) $(MODULES)$/demo$/main.ts $(MODULES)$/demo$/node_modules$/.dirstamp $(MODULES)$/demo$/tsconfig.json $(MODULES)$/demo$/typings$/.dirstamp $(MODULES)$/demo$/config.js $(MODULES)$/l3d$/bin$/l3d.js $(MODULES)$/l3dp$/bin$/l3dp.js $(MODULES)$/mth$/bin$/mth.js
 	@$(call LOG_BUILDING,demo)
-	@$(NODE) $(MODULES)$/demo$/config.js
+	@$(CD) $(MODULES)$/demo$/ && $(NODE) config.js
 	@$(call LOG_BUILT,demo)
 
 clean-demo:

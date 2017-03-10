@@ -1,0 +1,24 @@
+extends ../../../views/base.pug
+
+block content
+    h1 Now, things are getting serious
+    p.
+        You have successfully completed the tutorial ! Congratulations ! Now, things are getting
+        serious.
+    p.
+        You will be prompted with three successive scenes, each of which
+        containing 8 red coins. Your mission is simple: you have to collect the
+        8 red coins.
+    p.
+        There may be recommendations like the ones you saw in the tutorial :
+        they are here to help you navigate in the scene. Use them or ignore
+        them at your convenience.
+
+    button#next.btn.btn-success.navbar-btn(style={'margin-right':'10px', 'margin-bottom':'10px'})
+        span Go to the next step
+    script.
+        document.getElementById('next').onclick = function() {
+            document.getElementById('next').disabled = true;
+            window.location = '/prototype/play';
+        }
+

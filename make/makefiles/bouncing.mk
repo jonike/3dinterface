@@ -18,7 +18,7 @@ $(MODULES)$/bouncing-cube$/node_modules$/.dirstamp: $(PREPARE_DEPENDENCY) $(MODU
 
 $(MODULES)$/bouncing-cube$/bin$/bouncing.min.js: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)$/bouncing-cube$/src$/,*) $(MODULES)$/bouncing-cube$/node_modules$/.dirstamp $(MODULES)$/bouncing-cube$/tsconfig.json $(MODULES)$/bouncing-cube$/typings $(MODULES)$/bouncing-cube$/config.js
 	@$(call LOG_BUILDING,bouncing-cube)
-	@$(NODE) $(MODULES)$/bouncing-cube$/config.js
+	@$(CD) $(MODULES)$/bouncing-cube$/ && $(NODE) config.js
 	@$(call LOG_BUILT,bouncing-cube)
 
 BOUNCING_CUBE_DEPENDENCY=$(MODULES)$/bouncing-cube$/bin$/bouncing.min.js

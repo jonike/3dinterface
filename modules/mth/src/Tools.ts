@@ -18,6 +18,12 @@ module mth {
 
     }
 
+    export function filterInt(value : string) : number {
+        if(/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+            return Number(value);
+        return NaN;
+    }
+
     /**
      * Clamp a number between two others
      * @param num number to clamp

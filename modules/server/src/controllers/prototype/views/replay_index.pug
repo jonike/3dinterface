@@ -1,0 +1,13 @@
+extends ../../../views/main.pug
+
+block title
+    title #{title} - Prototype - Replays
+
+block content
+    h2 Replays available
+    if users.length == 0
+        p Sorry, there are no replays available... try later or do an experiment !
+    else
+        ol
+            each elt in users
+                li <a href="/prototype/replay/#{elt.expId}">User <em>#{elt.username} (#{elt.userId})</em> for scene <em>#{elt.scenename}</em></a>

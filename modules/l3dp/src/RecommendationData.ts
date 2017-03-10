@@ -1,15 +1,18 @@
 import * as THREE from 'three';
+import * as config from 'config';
 import * as l3d from 'l3d';
 
 module l3dp {
 
-    function create(a:number,b:number,c:number,d:number,e:number,f:number) : l3d.CameraItf {
-        return {position:{x:a,y:b,z:c}, target:{x:d,y:e,z:f}};
+    var recommendationId = 0;
+
+    function create(a:number,b:number,c:number,d:number,e:number,f:number) : l3d.RecommendationInfo {
+        return {position:{x:a,y:b,z:c}, target:{x:d,y:e,z:f}, recommendationId:++recommendationId};
     }
 
     export module RecommendationData {
 
-        export var peachRecommendations : l3d.CameraItf[] = [
+        var peachRecommendations : l3d.RecommendationInfo[] = [
 
             create(
                 -4.318087280217455,2.8007613084859253,1.5193437897009336,
@@ -41,7 +44,9 @@ module l3dp {
 
         ];
 
-        export var bobombRecommendations : l3d.CameraItf[] = [
+        recommendationId = 0;
+
+        var bobombRecommendations : l3d.RecommendationInfo[] = [
 
             create(
                 22.81974561274774,23.728166674516967,-23.50757340835654,
@@ -88,7 +93,9 @@ module l3dp {
                 35.82557966946029,-3.7247748037464845,-4.21695195820471)
         ];
 
-        export var mountainRecommendations : l3d.CameraItf[] = [
+        recommendationId = 0;
+
+        var mountainRecommendations : l3d.RecommendationInfo[] = [
             create(
                 -32.55470573684094,29.55322138048939,-17.59574199842915,
                 -2.6530082773148784,13.825746134447998,3.8176886333992925)
@@ -134,7 +141,9 @@ module l3dp {
                 1.1519844626168592,-18.896564555304533,17.820765028981576)
         ];
 
-        export var whompRecommendations : l3d.CameraItf[] = [
+        recommendationId = 0;
+
+        var whompRecommendations : l3d.RecommendationInfo[] = [
             create(
                 -9.183036772081453,3.0766349039394916,-10.631680881366988,
                 23.306020365359252,-17.647069934844886,0.09162197153512075)
@@ -175,6 +184,13 @@ module l3dp {
                 7.805400745480024,9.185305503970957,11.919240783005307,
                 -9.777424733344784,-5.603738432878275,-20.8241314870455)
         ];
+
+        export var dict : {[id : string]: l3d.RecommendationInfo[]} = {};
+
+        dict[config.Scene.PeachCastle] = peachRecommendations;
+        dict[config.Scene.BobombBattlefield] = bobombRecommendations;
+        dict[config.Scene.CoolCoolMountain] = mountainRecommendations;
+        dict[config.Scene.WhompFortress] = whompRecommendations;
 
     }
 

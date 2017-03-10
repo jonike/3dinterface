@@ -20,7 +20,9 @@ module l3d {
          */
         size : number;
 
-
+        /**
+         * Creates an empty history
+         */
         constructor() {
             this.states = [];
             this.index = -1;

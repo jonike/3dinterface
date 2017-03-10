@@ -3,6 +3,9 @@ import { PointerCamera } from '../cameras/PointerCamera';
 
 module l3d {
 
+    /**
+     * I don't remember what this is... I'm sorry :'(
+     */
     export interface CursorChangeEvent extends Event {
 
         cursor ?: string;
@@ -51,6 +54,10 @@ module l3d {
          */
         previousPointedObject : THREE.Intersection;
 
+        /**
+         * Creates an ObjectClicker
+         * @param domElement the dom element to which the ObjectClicker is bound
+         */
         constructor(domElement ?: HTMLElement) {
 
             this.mouse = {x:0, y:0};
@@ -82,6 +89,10 @@ module l3d {
         }
 
 
+        /**
+         * Get the object that is currently points
+         * @returns the object
+         */
         getPointedObject() {
 
             // Compute x and y for unprojection
@@ -112,6 +123,10 @@ module l3d {
 
         }
 
+        /**
+         * Update the object clicker according to a certain event
+         * @param event the event that was sent to the dom element
+         */
         update(event ?: any) {
 
             if (event !== undefined) {
@@ -161,6 +176,10 @@ module l3d {
 
         }
 
+        /**
+         * Calls the click function on the currently pointed object
+         * @param event
+         */
         click(event ?: any) {
 
             if (this.currentPointedObject !== undefined)
@@ -171,6 +190,9 @@ module l3d {
 
         }
 
+        /**
+         * Check if the camera is a PointerCamera and if its pointer locked
+         */
         private pointerCheck() : boolean {
             return this.camera instanceof PointerCamera && (<PointerCamera>this.camera).pointerLocked;
         }

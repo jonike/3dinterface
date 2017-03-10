@@ -23,20 +23,19 @@ module l3dp {
 
         }
 
-        load(prefetch : config.PrefetchingPolicy, lowRes = false) {
+        load(loadingConfig : config.LoadingConfig) {
 
-            if (prefetch !== undefined) {
-                this.prefetchType = prefetch;
+            if (loadingConfig !== undefined) {
+                this.loadingConfig = loadingConfig;
             }
 
-            var path = lowRes === true ?
+            var path = loadingConfig.lowRes === true ?
                 '/static/data/bobomb/bobomb battlefeild.obj' :
                 '/static/data/bobomb/bobomb battlefeild_sub.obj';
 
             this.loader = new l3d.ProgressiveLoader(
                 path,
-                this,
-                this.camera,
+                this.loadingConfig,
                 (object : THREE.Mesh) => {
                     this.clickableObjects.push(object);
                     object.raycastable = true;
@@ -45,11 +44,10 @@ module l3dp {
                         object.material.transparent = true;
                     object.raycastable = false;
                     }
-                },
-                ()=>{},// l3d.LogFunction,
-                    false,
-                this.prefetchType
+                }
             );
+
+            this.add(this.loader.obj);
 
             this.loader.onFinished = () => { this.finish(); }
             this.loader.load();
@@ -69,8 +67,8 @@ module l3dp {
 
         }
 
-        getRawRecommendations() : l3d.CameraItf[] {
-            return RecommendationData.bobombRecommendations;
+        getRawRecommendations() : l3d.RecommendationInfo[] {
+            return RecommendationData.dict[config.Scene.BobombBattlefield];
         }
 
         getRawCoins() : mth.Vector3[] {

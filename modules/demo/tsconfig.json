@@ -4,7 +4,7 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "declaration":true,
-        "outDir":"./lib/",
+        "outDir":"./bin/",
         "sourceMap": true,
         "rootDir":"./",
         "noEmitOnError":true

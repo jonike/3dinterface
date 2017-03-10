@@ -1,0 +1,13 @@
+extends ../../../views/withjs.pug
+block title
+    title #{title} - Bouncing cube
+
+block extrajs
+    script(src="/static/js/bouncing.min.js")
+
+block content
+    h2 Bouncing cube
+
+    p Click on the cube to make it jump !
+
+    #container

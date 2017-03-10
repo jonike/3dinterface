@@ -84,7 +84,6 @@ $(function() {
         // Initialize scene
 
         scene = l3dp.createSceneFromConfig(CONFIG);
-        scene.load(LOADING_CONFIG.prefetchingPolicy, LOADING_CONFIG.lowRes);
 
         // scene = new GLOB.SceneClass();
         scene.addEventListener('onload', function() { loadingCanvas.clear(); });
@@ -97,8 +96,6 @@ $(function() {
             window.containerSize.width() / window.containerSize.height(),
             0.01, 100000, renderer, container
         );
-
-        scene.setCamera(camera);
 
         // scene.load(GLOB.prefetch, GLOB.lowRes);
 
@@ -113,6 +110,9 @@ $(function() {
         $('#lock').prop('checked', true);
         camera.shouldLock = true;
         camera.onPointerLockChange();
+
+        scene.load(LOADING_CONFIG);
+        scene.setCamera(camera);
     }
 
     function initCanvases() {
@@ -167,7 +167,7 @@ $(function() {
             };
 
             a.onClick = function() {
-                camera.moveHermite(a.camera, true, scene.recommendations.indexOf(a) + 1);
+                camera.moveHermite(a, true);
             }
 
             objectClicker.objects.push(a);
