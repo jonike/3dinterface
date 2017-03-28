@@ -5,6 +5,7 @@
   },
   "devDependencies": {},
   "globalDependencies": {
+    "node": "registry:dt/node",
     "three": "registry:dt/three"
   }
 }

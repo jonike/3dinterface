@@ -1,15 +1,15 @@
 {
   "dependencies": {
     "body-parser": "registry:dt/body-parser",
+    "pg-types": "github:DefinitelyTyped/DefinitelyTyped/types/pg-types/index.d.ts",
     "errorhandler": "registry:dt/errorhandler",
     "express": "registry:dt/express",
+    "express-serve-static-core": "registry:dt/express-serve-static-core",
     "method-override": "registry:dt/method-override",
     "mime": "registry:dt/mime",
-    "pg": "registry:dt/pg",
-    "pg-types": "github:DefinitelyTyped/DefinitelyTyped/pg-types/index.d.ts",
+    "pg": "registry:dt/pg#6.1.0+20170324144432",
     "serve-static": "registry:dt/serve-static",
     "source-map-support": "registry:dt/source-map-support",
-    "express-serve-static-core": "registry:dt/express-serve-static-core",
     "yargs": "registry:dt/yargs"
   },
   "devDependencies": {},
