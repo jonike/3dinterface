@@ -8,6 +8,7 @@
     "socket.io": "*",
     "socket.io-client": "*",
     "three": "*",
+    "source-map-support": "*",
     "jquery": "*"
   },
   "typings": "./lib/src/l3dp.d.ts",
