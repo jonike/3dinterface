@@ -31,10 +31,10 @@ module l3d {
         fixed : boolean;
 
         /** true if the rendering as already been done  */
-        private drawn : boolean;
+        drawn : boolean;
 
         /** true if the rendering was done before */
-        private drawnBefore : boolean;
+        drawnBefore : boolean;
 
         /** position of the mouse */
         mouse : MouseCursor;
@@ -159,7 +159,7 @@ module l3d {
          * Update flags
          * @param arg if the update drew something
          */
-        private update(arg : boolean) {
+        update(arg : boolean) {
             this.drawnBefore = this.drawn;
             this.drawn = arg;
         };
