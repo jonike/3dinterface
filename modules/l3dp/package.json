@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "dependencies": {
     "l3d": "file:../l3d",
-    "config":"file:../config",
-    "mth":"file:../mth",
+    "config": "file:../config",
+    "mth": "file:../mth",
     "socket.io": "*",
     "socket.io-client": "*",
-    "three":"*",
-    "jquery":"*"
+    "three": "*",
+    "source-map-support": "*",
+    "jquery": "*"
   },
   "typings": "./lib/src/l3dp.d.ts",
   "main": "./lib/l3dp.js"

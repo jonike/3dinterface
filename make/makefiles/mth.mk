@@ -21,7 +21,7 @@ $(MODULES)/mth/bin/mth.js: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)/mth/src/
 	@$(CD) $(MODULES)/mth/ && $(NODE) config.js
 
 test-mth: $(PREPARE_DEPENDENCY) $(MTH_COMMONJS_DEPENDENCY)
-	@$(NODEUNIT) $(MODULES)/mth/lib/src/tests/main.js
+	@$(CD) $(MODULES)/mth/lib/src/tests/ && $(NODEUNIT) main.js
 
 clean-mth:
 	@$(RMRF) \

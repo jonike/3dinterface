@@ -17,7 +17,7 @@ $(MODULES)/replay/typings/.dirstamp: $(PREPARE_DEPENDENCY) $(MODULES)/replay/typ
 
 $(MODULES)/replay/node_modules/.dirstamp: $(MODULES)/replay/package.json $(L3D_DEPENDENCY) $(L3DP_DEPENDENCY) $(CONFIG_DEPENDENCY)
 	@$(call LOG_DEPENDENCIES,replay)
-	@$(CD) $(MODULES)/replay/ && $(NPM_UNINSTALL) config l3d l3dp && $(NPM_INSTALL)
+	@$(CD) $(MODULES)/replay/ && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
 $(MODULES)/replay/bin/replay.js: $(PREPARE_DEPENDENCY) $(MODULES)/replay/main.ts $(MODULES)/replay/node_modules/.dirstamp $(MODULES)/replay/tsconfig.json $(MODULES)/replay/typings/.dirstamp $(MODULES)/replay/config.js $(MODULES)/l3d/bin/l3d.js $(MODULES)/l3dp/bin/l3dp.js $(MODULES)/mth/bin/mth.js

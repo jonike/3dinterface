@@ -13,7 +13,7 @@ $(MODULES)/server/typings/custom/.dirstamp: ./custom_typings/*
 
 $(MODULES)/server/node_modules/.dirstamp: $(MODULES)/server/package.json $(L3D_DEPENDENCY) $(L3DP_DEPENDENCY) $(CONFIG_DEPENDENCY) $(MTH_DEPENDENCY)
 	@$(call LOG_DEPENDENCIES,server)
-	@$(CD) $(MODULES)/server/ && $(NPM_UNINSTALL) l3d l3dp config mth && $(NPM_INSTALL)
+	@$(CD) $(MODULES)/server/ && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
 $(MODULES)/server/bin/.dirstamp: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)/server/src/,*.ts) $(call FIND,$(MODULES)/server/src,*.pug) $(MODULES)/server/node_modules/.dirstamp $(MODULES)/server/typings

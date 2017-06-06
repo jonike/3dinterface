@@ -17,7 +17,7 @@ $(MODULES)/demo/typings/.dirstamp: $(PREPARE_DEPENDENCY) $(MODULES)/demo/typings
 
 $(MODULES)/demo/node_modules/.dirstamp: $(MODULES)/demo/package.json $(L3D_DEPENDENCY) $(L3DP_DEPENDENCY) $(CONFIG_DEPENDENCY)
 	@$(call LOG_DEPENDENCIES,demo)
-	@$(CD) $(MODULES)/demo/ && $(NPM_UNINSTALL) config l3d l3dp && $(NPM_INSTALL)
+	@$(CD) $(MODULES)/demo/ && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
 $(MODULES)/demo/bin/demo.js: $(PREPARE_DEPENDENCY) $(MODULES)/demo/main.ts $(MODULES)/demo/node_modules/.dirstamp $(MODULES)/demo/tsconfig.json $(MODULES)/demo/typings/.dirstamp $(MODULES)/demo/config.js $(MODULES)/l3d/bin/l3d.js $(MODULES)/l3dp/bin/l3dp.js $(MODULES)/mth/bin/mth.js

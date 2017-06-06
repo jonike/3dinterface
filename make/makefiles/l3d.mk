@@ -16,7 +16,7 @@ $(MODULES)/l3d/typings/custom/.dirstamp: $(CUSTOM_TYPINGS_SRC)
 
 $(MODULES)/l3d/node_modules/.dirstamp: $(MODULES)/l3d/package.json $(MTH_COMMONJS_DEPENDENCY) $(CONFIG_DEPENDENCY)
 	@$(call LOG_DEPENDENCIES,l3d)
-	@$(CD) $(MODULES)/l3d/ && $(NPM_UNINSTALL) mth config && $(NPM_INSTALL)
+	@$(CD) $(MODULES)/l3d/ && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
 $(MODULES)/l3d/lib/.dirstamp: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)/l3d/src/,*) $(MODULES)/l3d/node_modules/.dirstamp $(MODULES)/l3d/tsconfig-backend.json $(MODULES)/l3d/backend.config.js $(MODULES)/l3d/typings/typings/.dirstamp $(MODULES)/l3d/typings/custom/.dirstamp

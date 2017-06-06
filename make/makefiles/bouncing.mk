@@ -13,7 +13,7 @@ $(MODULES)/bouncing-cube/typings/custom/.dirstamp: $(PREPARE_DEPENDENCY) $(CUSTO
 
 $(MODULES)/bouncing-cube/node_modules/.dirstamp: $(PREPARE_DEPENDENCY) $(MODULES)/bouncing-cube/package.json $(L3D_DEPENDENCY)
 	@$(call LOG_DEPENDENCIES,bouncing-cube)
-	@$(CD) $(MODULES)/bouncing-cube/ && $(NPM_UNINSTALL) l3d && $(NPM_INSTALL)
+	@$(CD) $(MODULES)/bouncing-cube/ && $(NPM_INSTALL)
 	@$(TOUCH_DIRSTAMP)
 
 $(MODULES)/bouncing-cube/bin/bouncing.min.js: $(PREPARE_DEPENDENCY) $(call FIND,$(MODULES)/bouncing-cube/src/,*) $(MODULES)/bouncing-cube/node_modules/.dirstamp $(MODULES)/bouncing-cube/tsconfig.json $(MODULES)/bouncing-cube/typings $(MODULES)/bouncing-cube/config.js
